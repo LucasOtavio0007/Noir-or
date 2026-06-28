@@ -259,6 +259,30 @@
                 <button :class="['pref-font', { 'is-active': site.fonte === 'grande' }]" @click="site.setFonte('grande'); acessOpen = false"><span style="font-size:19px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Grande</span></button>
               </div>
             </fieldset>
+            <fieldset class="pref-group">
+          <legend class="pref-group__label">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Consultora IA
+          </legend>
+          <div class="pref-row">
+            <button
+              :class="['pref-toggle', { 'is-active': site.acess.ocultarIA }]"
+              @click="site.setAcess('ocultarIA', !site.acess.ocultarIA)"
+            >
+              <span class="pref-toggle__track" aria-hidden="true">
+                <span class="pref-toggle__thumb"></span>
+              </span>
+              <span class="pref-toggle__lbl">
+                {{ site.acess.ocultarIA ? 'Ícone oculto' : 'Ícone visível' }}
+              </span>
+            </button>
+          </div>
+        </fieldset>
+
             <div class="pref-watermark" aria-hidden="true">The Art of Silent Power</div>
           </div>
         </div>
@@ -1707,6 +1731,30 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .pref-font:hover,.pref-font.is-active { border-color:var(--or-gold);background:var(--or-gold-3); }
 .pref-font__lbl { font-family:var(--font-sans);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3); }
 .pref-watermark { text-align:center;padding:6px 0 2px;font-family:var(--font-serif,'Playfair Display',serif);font-size:8px;font-style:italic;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);opacity:.12;line-height:1.6;user-select:none; }
+
+.pref-toggle {
+  display:flex; align-items:center; gap:10px;
+  width:100%; padding:8px 10px;
+  background:none; border:0.5px solid var(--or-hair-2);
+  cursor:pointer; transition:border-color .25s;
+}
+.pref-toggle:hover { border-color:var(--or-gold); }
+.pref-toggle.is-active { border-color:var(--or-gold); background:var(--or-gold-3); }
+.pref-toggle__track {
+  width:28px; height:14px; border-radius:7px;
+  background:var(--or-hair-2); border:0.5px solid var(--or-hair);
+  display:flex; align-items:center; padding:0 2px;
+  transition:background .25s; flex-shrink:0;
+}
+.pref-toggle.is-active .pref-toggle__track { background:var(--or-gold-2); border-color:var(--or-gold); }
+.pref-toggle__thumb {
+  width:10px; height:10px; border-radius:50%;
+  background:var(--or-silk-3);
+  transition:transform .25s cubic-bezier(.16,1,.3,1), background .25s;
+}
+.pref-toggle.is-active .pref-toggle__thumb { transform:translateX(14px); background:var(--or-gold); }
+.pref-toggle__lbl { font-family:var(--font-sans); font-size:10px; letter-spacing:.1em; color:var(--or-silk-2); }
+.pref-toggle.is-active .pref-toggle__lbl { color:var(--or-gold); }
 
 /* ── TOAST ── */
 .toast-container { position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none; }

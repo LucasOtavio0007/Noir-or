@@ -1,5 +1,5 @@
 <template>
-  <div class="cia">
+  <div class="cia" v-show="!site.acess.ocultarIA">
 
     <!-- ══ BOTÃO PRINCIPAL ══ -->
     <div class="cia-menu-container">
@@ -268,8 +268,12 @@
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { useSiteStore } from '@/stores/site.js'
+
 let router = null
 try { router = useRouter() } catch {}
+
+const site = useSiteStore()
 
 // ════════════════════════════════════════════════════
 // ⚠️  CONFIGURAÇÃO — coloque sua chave aqui

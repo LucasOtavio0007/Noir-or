@@ -14,18 +14,19 @@ export const useSiteStore = defineStore('site', () => {
 
   // ── ACESSIBILIDADE ──
   const acessDefault = {
-    altoContraste:    false,
-    daltonismo:       'none',
-    reduzirAnimacoes: false,
-    fonteDislexia:    false,
-    espacamento:      'normal',
-    alturaLinha:      'normal',
-    sublinharLinks:   false,
-    cursorGrande:     false,
-    focoVisivel:      false,
-    larguraReduzida:  false,
-    saturacao:        'normal',
-  }
+  altoContraste:    false,
+  daltonismo:       'none',
+  reduzirAnimacoes: false,
+  fonteDislexia:    false,
+  espacamento:      'normal',
+  alturaLinha:      'normal',
+  sublinharLinks:   false,
+  cursorGrande:     false,
+  focoVisivel:      false,
+  larguraReduzida:  false,
+  saturacao:        'normal',
+  ocultarIA:        false,  // ← ADICIONE ESTA LINHA
+}
   const acess = ref({
     ...acessDefault,
     ...JSON.parse(localStorage.getItem('noir_acess') || '{}')
