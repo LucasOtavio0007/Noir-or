@@ -231,60 +231,152 @@
             </div>
           </header>
           <div class="pref-body">
-            <fieldset class="pref-group">
-              <legend class="pref-group__label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Realm</legend>
-              <div class="pref-row">
-                <button :class="['pref-realm', { 'is-active': site.tema === 'escuro' }]" @click="site.toggleTema('escuro'); acessOpen = false" data-realm="celestial">
-                  <span class="pref-realm__orb pref-realm__orb--celestial" aria-hidden="true"></span>
-                  <div class="pref-realm__body"><span class="pref-realm__name">Celestial</span><span class="pref-realm__sub">Noite dourada</span></div>
-                  <span class="pref-realm__kanji" aria-hidden="true">天</span>
-                </button>
-                <button :class="['pref-realm', { 'is-active': site.tema === 'claro' }]" @click="site.toggleTema('claro'); acessOpen = false" data-realm="autumn">
-                  <span class="pref-realm__orb pref-realm__orb--autumn" aria-hidden="true"></span>
-                  <div class="pref-realm__body"><span class="pref-realm__name">Autumn</span><span class="pref-realm__sub">Claridade fria</span></div>
-                  <span class="pref-realm__kanji" aria-hidden="true">秋</span>
-                </button>
-                <button :class="['pref-realm', { 'is-active': site.tema === 'gamer' }]" @click="site.toggleTema('gamer'); acessOpen = false" data-realm="ghost">
-                  <span class="pref-realm__orb pref-realm__orb--ghost" aria-hidden="true"></span>
-                  <div class="pref-realm__body"><span class="pref-realm__name">Ghost</span><span class="pref-realm__sub">Brasa sombria</span></div>
-                  <span class="pref-realm__kanji" aria-hidden="true">幽</span>
-                </button>
-              </div>
-            </fieldset>
-            <fieldset class="pref-group">
-              <legend class="pref-group__label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Tamanho do texto</legend>
-              <div class="pref-row pref-row--3">
-                <button :class="['pref-font', { 'is-active': site.fonte === 'pequena' }]" @click="site.setFonte('pequena'); acessOpen = false"><span style="font-size:11px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Pequeno</span></button>
-                <button :class="['pref-font', { 'is-active': site.fonte === 'normal' }]" @click="site.setFonte('normal'); acessOpen = false"><span style="font-size:15px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Normal</span></button>
-                <button :class="['pref-font', { 'is-active': site.fonte === 'grande' }]" @click="site.setFonte('grande'); acessOpen = false"><span style="font-size:19px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Grande</span></button>
-              </div>
-            </fieldset>
-            <fieldset class="pref-group">
-          <legend class="pref-group__label">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            Consultora IA
-          </legend>
-          <div class="pref-row">
-            <button
-              :class="['pref-toggle', { 'is-active': site.acess.ocultarIA }]"
-              @click="site.setAcess('ocultarIA', !site.acess.ocultarIA)"
-            >
-              <span class="pref-toggle__track" aria-hidden="true">
-                <span class="pref-toggle__thumb"></span>
-              </span>
-              <span class="pref-toggle__lbl">
-                {{ site.acess.ocultarIA ? 'Ícone oculto' : 'Ícone visível' }}
-              </span>
-            </button>
-          </div>
-        </fieldset>
 
-            <div class="pref-watermark" aria-hidden="true">The Art of Silent Power</div>
-          </div>
+  <!-- REALM -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Realm
+    </legend>
+    <div class="pref-row">
+      <button :class="['pref-realm', { 'is-active': site.tema === 'escuro' }]" @click="site.toggleTema('escuro'); acessOpen = false" data-realm="celestial">
+        <span class="pref-realm__orb pref-realm__orb--celestial" aria-hidden="true"></span>
+        <div class="pref-realm__body"><span class="pref-realm__name">Celestial</span><span class="pref-realm__sub">Noite dourada</span></div>
+        <span class="pref-realm__kanji" aria-hidden="true">天</span>
+      </button>
+      <button :class="['pref-realm', { 'is-active': site.tema === 'claro' }]" @click="site.toggleTema('claro'); acessOpen = false" data-realm="autumn">
+        <span class="pref-realm__orb pref-realm__orb--autumn" aria-hidden="true"></span>
+        <div class="pref-realm__body"><span class="pref-realm__name">Autumn</span><span class="pref-realm__sub">Claridade fria</span></div>
+        <span class="pref-realm__kanji" aria-hidden="true">秋</span>
+      </button>
+      <button :class="['pref-realm', { 'is-active': site.tema === 'gamer' }]" @click="site.toggleTema('gamer'); acessOpen = false" data-realm="ghost">
+        <span class="pref-realm__orb pref-realm__orb--ghost" aria-hidden="true"></span>
+        <div class="pref-realm__body"><span class="pref-realm__name">Ghost</span><span class="pref-realm__sub">Brasa sombria</span></div>
+        <span class="pref-realm__kanji" aria-hidden="true">幽</span>
+      </button>
+    </div>
+  </fieldset>
+
+  <!-- TAMANHO DO TEXTO -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      Tamanho do texto
+    </legend>
+    <div class="pref-row pref-row--3">
+      <button :class="['pref-font', { 'is-active': site.fonte === 'pequena' }]" @click="site.setFonte('pequena'); acessOpen = false"><span style="font-size:11px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Pequeno</span></button>
+      <button :class="['pref-font', { 'is-active': site.fonte === 'normal' }]"  @click="site.setFonte('normal');  acessOpen = false"><span style="font-size:15px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Normal</span></button>
+      <button :class="['pref-font', { 'is-active': site.fonte === 'grande' }]"  @click="site.setFonte('grande');  acessOpen = false"><span style="font-size:19px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Grande</span></button>
+    </div>
+  </fieldset>
+
+  <!-- DALTONISMO -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+      Daltonismo
+    </legend>
+    <div class="pref-row pref-row--3">
+      <button :class="['pref-font', { 'is-active': site.acess.daltonismo === 'none' }]"         @click="site.setAcess('daltonismo', 'none')"><span style="font-size:10px;line-height:1">●</span><span class="pref-font__lbl">Nenhum</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.daltonismo === 'protanopia' }]"    @click="site.setAcess('daltonismo', 'protanopia')"><span style="font-size:10px;line-height:1;color:#6699ff">●</span><span class="pref-font__lbl">Protanopia</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.daltonismo === 'deuteranopia' }]"  @click="site.setAcess('daltonismo', 'deuteranopia')"><span style="font-size:10px;line-height:1;color:#cc9900">●</span><span class="pref-font__lbl">Deuteran.</span></button>
+    </div>
+    <div class="pref-row" style="margin-top:6px;">
+      <button :class="['pref-font', { 'is-active': site.acess.daltonismo === 'tritanopia' }]" @click="site.setAcess('daltonismo', 'tritanopia')"><span style="font-size:10px;line-height:1;color:#ff6688">●</span><span class="pref-font__lbl">Tritanopia</span></button>
+    </div>
+  </fieldset>
+
+  <!-- TOGGLES DE ACESSIBILIDADE -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Opções visuais
+    </legend>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <button :class="['pref-toggle', { 'is-active': site.acess.altoContraste }]"    @click="site.setAcess('altoContraste',    !site.acess.altoContraste)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Alto contraste</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.reduzirAnimacoes }]" @click="site.setAcess('reduzirAnimacoes', !site.acess.reduzirAnimacoes)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Reduzir animações</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.fonteDislexia }]"    @click="site.setAcess('fonteDislexia',    !site.acess.fonteDislexia)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Fonte dislexia</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.sublinharLinks }]"   @click="site.setAcess('sublinharLinks',   !site.acess.sublinharLinks)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Sublinhar links</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.cursorGrande }]"     @click="site.setAcess('cursorGrande',     !site.acess.cursorGrande)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Cursor grande</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.focoVisivel }]"      @click="site.setAcess('focoVisivel',      !site.acess.focoVisivel)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Foco visível</span>
+      </button>
+      <button :class="['pref-toggle', { 'is-active': site.acess.larguraReduzida }]"  @click="site.setAcess('larguraReduzida',  !site.acess.larguraReduzida)">
+        <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+        <span class="pref-toggle__lbl">Largura reduzida</span>
+      </button>
+    </div>
+  </fieldset>
+
+  <!-- ESPAÇAMENTO -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      Espaçamento entre letras
+    </legend>
+    <div class="pref-row pref-row--3">
+      <button :class="['pref-font', { 'is-active': site.acess.espacamento === 'normal' }]" @click="site.setAcess('espacamento', 'normal')"><span style="font-size:10px;letter-spacing:0">Aa</span><span class="pref-font__lbl">Normal</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.espacamento === 'medio' }]"  @click="site.setAcess('espacamento', 'medio')"><span  style="font-size:10px;letter-spacing:2px">Aa</span><span class="pref-font__lbl">Médio</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.espacamento === 'grande' }]" @click="site.setAcess('espacamento', 'grande')"><span style="font-size:10px;letter-spacing:4px">Aa</span><span class="pref-font__lbl">Grande</span></button>
+    </div>
+  </fieldset>
+
+  <!-- ALTURA DE LINHA -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+      Altura de linha
+    </legend>
+    <div class="pref-row pref-row--3">
+      <button :class="['pref-font', { 'is-active': site.acess.alturaLinha === 'normal' }]" @click="site.setAcess('alturaLinha', 'normal')"><span style="font-size:10px;line-height:1.2;display:block">Aa</span><span class="pref-font__lbl">Normal</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.alturaLinha === 'media' }]"  @click="site.setAcess('alturaLinha', 'media')"><span  style="font-size:10px;line-height:1.8;display:block">Aa</span><span class="pref-font__lbl">Média</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.alturaLinha === 'grande' }]" @click="site.setAcess('alturaLinha', 'grande')"><span style="font-size:10px;line-height:2.4;display:block">Aa</span><span class="pref-font__lbl">Grande</span></button>
+    </div>
+  </fieldset>
+
+  <!-- SATURAÇÃO -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+      Saturação de cores
+    </legend>
+    <div class="pref-row pref-row--3">
+      <button :class="['pref-font', { 'is-active': site.acess.saturacao === 'normal' }]" @click="site.setAcess('saturacao', 'normal')"><span style="font-size:10px;color:var(--or-gold)">◆</span><span class="pref-font__lbl">Normal</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.saturacao === 'baixa' }]"  @click="site.setAcess('saturacao', 'baixa')"><span  style="font-size:10px;color:#aaa">◆</span><span class="pref-font__lbl">Baixa</span></button>
+      <button :class="['pref-font', { 'is-active': site.acess.saturacao === 'zero' }]"   @click="site.setAcess('saturacao', 'zero')"><span   style="font-size:10px;color:#888">◆</span><span class="pref-font__lbl">Cinza</span></button>
+    </div>
+  </fieldset>
+
+  <!-- CONSULTORA IA -->
+  <fieldset class="pref-group">
+    <legend class="pref-group__label">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Consultora IA
+    </legend>
+    <button :class="['pref-toggle', { 'is-active': site.acess.ocultarIA }]" @click="site.setAcess('ocultarIA', !site.acess.ocultarIA)">
+      <span class="pref-toggle__track"><span class="pref-toggle__thumb"></span></span>
+      <span class="pref-toggle__lbl">{{ site.acess.ocultarIA ? 'Ícone oculto' : 'Ícone visível' }}</span>
+    </button>
+  </fieldset>
+
+  <div class="pref-watermark" aria-hidden="true">The Art of Silent Power</div>
+</div>
         </div>
       </transition>
 
