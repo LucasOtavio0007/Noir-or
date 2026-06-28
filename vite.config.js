@@ -25,6 +25,8 @@ export default defineConfig({
             './src/views/AdminDashboard.vue',
             './src/views/Configuracoes.vue',
             './src/views/Sobre.vue',
+            './src/views/Gamer.vue',
+            './src/views/Store.vue',
           ],
         }
       }
