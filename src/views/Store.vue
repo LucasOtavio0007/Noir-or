@@ -2025,7 +2025,7 @@ onBeforeUnmount(()=>{
 /* ══ RESPONSIVO ══ */
 @media (max-width:1100px) {
   .store__hero { padding:calc(var(--navbar-h,72px)+44px) 44px 0; }
-  .store__hero-inner { grid-template-columns:1fr 260px; gap:40px; padding-left:calc(6%+24px); }
+  .store__hero-inner { grid-template-columns:1fr 260px; gap:40px; padding-left:calc(6% + 24px); }
   .store__strip { margin:0 -44px; padding:0 44px; }
 }
 @media (max-width:900px) {
