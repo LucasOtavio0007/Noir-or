@@ -73,7 +73,7 @@ app.use(cors({
       'http://localhost:5173',
       'http://localhost:3000',
       'https://tecnologia-xi.vercel.app',
-      'noir-or-rosy.vercel.app',
+      'https://noir-or-rosy.vercel.app', 
     ]
     if (
       !origin ||
