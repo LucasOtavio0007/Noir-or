@@ -967,3 +967,117 @@ label {
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   ACESSIBILIDADE — CLASSES DINÂMICAS
+   Aplicadas pelo site.js via body.acess--*
+═══════════════════════════════════════════════════════════ */
+
+/* ── Alto contraste ── */
+body.acess--alto-contraste {
+  --cor-texto:   #FFFFFF !important;
+  --cor-texto-2: #FFFFFF !important;
+  --cor-texto-3: rgba(255,255,255,0.85) !important;
+  --cor-fundo:   #000000 !important;
+  --cor-borda:   #FFFFFF !important;
+  --cor-borda-h: #FFFF00 !important;
+  --cor-primaria: #FFFF00 !important;
+  --or-silk:     #FFFFFF !important;
+  --or-silk-2:   rgba(255,255,255,0.90) !important;
+  --or-gold:     #FFFF00 !important;
+}
+body.acess--alto-contraste * {
+  border-color: currentColor !important;
+  text-shadow: none !important;
+}
+body.acess--alto-contraste button,
+body.acess--alto-contraste a {
+  outline: 2px solid currentColor !important;
+  outline-offset: 2px !important;
+}
+
+/* ── Daltonismo ── */
+body.acess--protanopia   { filter: url('#filter-protanopia'); }
+body.acess--deuteranopia { filter: url('#filter-deuteranopia'); }
+body.acess--tritanopia   { filter: url('#filter-tritanopia'); }
+
+/* ── Reduzir animações ── */
+body.acess--reduzir-animacoes *,
+body.acess--reduzir-animacoes *::before,
+body.acess--reduzir-animacoes *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ── Fonte dislexia ── */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.woff') format('woff');
+  font-weight: normal; font-style: normal;
+}
+body.acess--dislexia,
+body.acess--dislexia * {
+  font-family: 'OpenDyslexic', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+}
+
+/* ── Espaçamento entre letras ── */
+body.acess--espacamento-medio * { letter-spacing: 0.08em !important; }
+body.acess--espacamento-grande * { letter-spacing: 0.16em !important; }
+
+/* ── Altura de linha ── */
+body.acess--linha-media  * { line-height: 1.9 !important; }
+body.acess--linha-grande * { line-height: 2.4 !important; }
+
+/* ── Sublinhar links ── */
+body.acess--sublinhar-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+}
+
+/* ── Cursor grande ── */
+body.acess--cursor-grande,
+body.acess--cursor-grande * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M8 2 L8 26 L13 21 L17 30 L20 29 L16 20 L24 20 Z' fill='white' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E") 8 2, auto !important;
+}
+
+/* ── Foco visível ── */
+body.acess--foco-visivel *:focus {
+  outline: 3px solid var(--cor-primaria) !important;
+  outline-offset: 3px !important;
+  border-radius: 2px !important;
+}
+body.acess--foco-visivel *:focus:not(:focus-visible) {
+  outline: none !important;
+}
+body.acess--foco-visivel *:focus-visible {
+  outline: 3px solid var(--cor-primaria) !important;
+  outline-offset: 3px !important;
+}
+
+/* ── Largura reduzida ── */
+body.acess--largura-reduzida .container,
+body.acess--largura-reduzida [class*="__inner"],
+body.acess--largura-reduzida [class*="__content"] {
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ── Saturação ── */
+body.acess--saturacao-baixa { filter: saturate(0.4); }
+body.acess--saturacao-zero  { filter: grayscale(1); }
+
+/* ── Skip link ── */
+.skip-link {
+  position: fixed; top: -100%; left: 16px;
+  background: var(--cor-primaria); color: #000;
+  padding: 10px 20px; font-family: var(--font-sans);
+  font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; z-index: 99999;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 16px; }
