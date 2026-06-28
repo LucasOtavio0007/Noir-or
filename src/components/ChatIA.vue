@@ -6,40 +6,15 @@
       <button v-show="!chatAberto"
         class="cia-trigger"
         @click="toggleMenu"
-        :class="{ 'is-open': menuAberto, 'is-active': chatAberto }"
+        :class="{ 'is-open': menuAberto }"
         title="Assistente IA"
         :aria-expanded="menuAberto"
         aria-haspopup="true"
         aria-label="Abrir menu de assistência"
       >
-        <svg class="cia-stand" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- corpo -->
-          <rect x="10" y="18" width="28" height="20" rx="4" stroke="currentColor" stroke-width="1.2"/>
-          <!-- cabeça -->
-          <rect x="14" y="8" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.2"/>
-          <!-- antena -->
-          <line x1="24" y1="4" x2="24" y2="8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <circle cx="24" cy="3.5" r="1.5" fill="currentColor"/>
-          <!-- olhos -->
-          <rect x="17" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-          <rect x="27" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-          <!-- boca -->
-          <rect x="18" y="19" width="12" height="3" rx="1.5" fill="currentColor" opacity="0.6"/>
-          <!-- braços -->
-          <line x1="10" y1="24" x2="5"  y2="28" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="38" y1="24" x2="43" y2="28" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- pernas -->
-          <line x1="18" y1="38" x2="16" y2="44" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="30" y1="38" x2="32" y2="44" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- painel peito -->
-          <circle cx="20" cy="28" r="2" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-          <circle cx="28" cy="28" r="2" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-          <line x1="16" y1="33" x2="32" y2="33" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
-        </svg>
-
+        <i class="ti ti-brain" aria-hidden="true"></i>
         <span class="cia-badge" aria-hidden="true">IA</span>
         <span class="cia-dot-online" aria-hidden="true"></span>
-        <span class="cia-kanji-float" aria-hidden="true">AI</span>
       </button>
 
       <!-- ══ MENU FLUTUANTE ══ -->
@@ -54,19 +29,13 @@
 
           <button class="cia-menu-item" role="menuitem" @click="abrirChat">
             <span class="cia-menu-num" aria-hidden="true">一</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
+            <i class="ti ti-message-circle-2" aria-hidden="true"></i>
             Assistente IA
           </button>
 
           <button class="cia-menu-item" role="menuitem" @click="irParaSuporte">
             <span class="cia-menu-num" aria-hidden="true">二</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
+            <i class="ti ti-headset" aria-hidden="true"></i>
             Central de Suporte
           </button>
 
@@ -95,18 +64,7 @@
           </div>
 
           <div class="cia-header-avatar" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="10" y="18" width="28" height="20" rx="4" stroke="currentColor" stroke-width="1.5"/>
-              <rect x="14" y="8"  width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/>
-              <line x1="24" y1="4" x2="24" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <circle cx="24" cy="3.5" r="1.5" fill="currentColor"/>
-              <rect x="17" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-              <rect x="27" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-              <rect x="18" y="19" width="12" height="3" rx="1.5" fill="currentColor" opacity="0.6"/>
-              <circle cx="20" cy="28" r="2" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-              <circle cx="28" cy="28" r="2" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-              <line x1="16" y1="33" x2="32" y2="33" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
-            </svg>
+            <i class="ti ti-brain"></i>
           </div>
 
           <div class="cia-header-info">
@@ -119,16 +77,10 @@
 
           <div class="cia-header-acoes">
             <button class="cia-header-btn" @click="confirmarLimpar" title="Limpar conversa" aria-label="Limpar conversa">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-              </svg>
+              <i class="ti ti-trash" aria-hidden="true"></i>
             </button>
             <button class="cia-header-btn" @click="chatAberto = false" title="Fechar" aria-label="Fechar chat">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-                <line x1="5" y1="5" x2="19" y2="19"/>
-                <line x1="19" y1="5" x2="5" y2="19"/>
-              </svg>
+              <i class="ti ti-x" aria-hidden="true"></i>
             </button>
           </div>
         </header>
@@ -154,12 +106,7 @@
             :class="['cia-msg', msg.role === 'user' ? 'cia-msg--user' : 'cia-msg--ia']"
           >
             <div v-if="msg.role === 'assistant'" class="cia-msg-avatar" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
-                <rect x="10" y="18" width="28" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
-                <rect x="14" y="8"  width="20" height="14" rx="3" stroke="currentColor" stroke-width="2"/>
-                <rect x="17" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-                <rect x="27" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-              </svg>
+              <i class="ti ti-brain"></i>
             </div>
 
             <div
@@ -175,12 +122,7 @@
           <!-- typing indicator -->
           <div v-if="carregando" class="cia-msg cia-msg--ia" aria-label="Assistente digitando">
             <div class="cia-msg-avatar" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
-                <rect x="10" y="18" width="28" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
-                <rect x="14" y="8"  width="20" height="14" rx="3" stroke="currentColor" stroke-width="2"/>
-                <rect x="17" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-                <rect x="27" y="12" width="4" height="4" rx="1" fill="currentColor"/>
-              </svg>
+              <i class="ti ti-brain"></i>
             </div>
             <div class="cia-bubble cia-bubble--ia cia-bubble--loading">
               <span></span><span></span><span></span>
@@ -238,9 +180,7 @@
             :disabled="carregando || !inputMsg.trim()"
             aria-label="Enviar mensagem"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
           </button>
         </div>
 
@@ -256,6 +196,19 @@
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSiteStore } from '@/stores/site.js'
+
+/* ── Props ── */
+const props = defineProps({
+  /**
+   * Rota para a Central de Suporte.
+   * Passe a rota correta via prop: <ChatIA rota-suporte="/contato" />
+   * Padrão: '/suporte'
+   */
+  rotaSuporte: {
+    type: String,
+    default: '/suporte'
+  }
+})
 
 let router = null
 try { router = useRouter() } catch {}
@@ -323,7 +276,11 @@ const abrirChat = async () => {
 
 const irParaSuporte = () => {
   menuAberto.value = false
-  router?.push?.('/suporte')
+  if (router) {
+    router.push(props.rotaSuporte)
+  } else {
+    window.location.href = props.rotaSuporte
+  }
 }
 
 /* ── Scroll ── */
@@ -449,6 +406,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ══ Tabler Icons — carregado via CDN no index.html ou aqui via @import ══
+   Adicione no seu index.html:
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+   OU descomente a linha abaixo: */
+/* @import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css'); */
+
 .cia {
   position: fixed;
   bottom: 28px;
@@ -458,29 +421,25 @@ onUnmounted(() => {
 }
 
 /* ══ KEYFRAMES ══ */
-@keyframes robotFloat {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-5px); }
+@keyframes triggerPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(200,168,75,0.08), inset 0 0 18px rgba(200,168,75,0.04); }
+  50%       { box-shadow: 0 0 0 4px rgba(200,168,75,0.14), 0 0 22px rgba(200,168,75,0.18), inset 0 0 18px rgba(200,168,75,0.06); }
 }
-@keyframes robotPulse {
-  0%,100% { filter: drop-shadow(0 0 6px rgba(200,168,75,0.25)); }
-  50%      { filter: drop-shadow(0 0 14px rgba(200,168,75,0.55)); }
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-3px) rotate(-5deg); }
 }
 @keyframes badgeFloat {
-  0%,100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(-2px); }
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-2px); }
 }
 @keyframes dotBlink {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.38; }
-}
-@keyframes eyeBlink {
-  0%,90%,100% { transform: scaleY(1); }
-  95%          { transform: scaleY(0.1); }
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.38; }
 }
 @keyframes ciaDot {
-  0%,80%,100% { transform: scale(0.65); opacity: 0.45; }
-  40%          { transform: scale(1);    opacity: 1; }
+  0%, 80%, 100% { transform: scale(0.65); opacity: 0.45; }
+  40%            { transform: scale(1);    opacity: 1; }
 }
 @keyframes menuSlide {
   from { opacity: 0; transform: translateY(14px) scale(0.95); }
@@ -502,38 +461,43 @@ onUnmounted(() => {
 /* ══ BOTÃO ══ */
 .cia-trigger {
   width: 64px; height: 64px;
-  background: none; border: none; border-radius: 0; box-shadow: none;
+  background: rgba(200,168,75,0.08);
+  border: 0.5px solid var(--or-gold, #C8A84B);
+  border-radius: 50%;
   cursor: pointer; position: relative;
   display: flex; align-items: center; justify-content: center;
-  overflow: visible; padding: 0; outline: none;
+  padding: 0; outline: none;
+  animation: triggerPulse 3.5s ease-in-out infinite;
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
+  will-change: transform, box-shadow;
 }
-.cia-trigger:focus-visible { outline: 1px solid var(--or-gold, #F5A623); outline-offset: 3px; }
-
-.cia-stand {
-  position: relative; z-index: 2;
+.cia-trigger:focus-visible {
+  outline: 1px solid var(--or-gold, #C8A84B);
+  outline-offset: 4px;
+}
+.cia-trigger .ti {
+  font-size: 26px;
   color: var(--or-gold, #C8A84B);
-  animation: robotFloat 4s ease-in-out infinite, robotPulse 4s ease-in-out infinite;
-  transition: filter 0.35s;
-  will-change: transform, filter;
+  animation: iconFloat 4s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.3s;
+  will-change: transform;
 }
-.cia-trigger:hover .cia-stand {
+.cia-trigger:hover {
   animation: none;
-  filter: drop-shadow(0 0 18px rgba(200,168,75,0.8));
-  transform: scale(1.08);
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), filter 0.3s;
+  transform: scale(1.1);
+  border-color: rgba(200,168,75,0.9);
+  box-shadow: 0 0 0 3px rgba(200,168,75,0.2), 0 0 32px rgba(200,168,75,0.3);
 }
-
-/* piscar dos olhos */
-.cia-trigger .cia-stand rect:nth-child(5),
-.cia-trigger .cia-stand rect:nth-child(6) {
-  animation: eyeBlink 4s ease-in-out infinite;
-  transform-origin: center;
+.cia-trigger:hover .ti {
+  animation: none;
+  transform: rotate(-12deg) scale(1.15);
+  color: #F5A623;
 }
 
 .cia-badge {
-  position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
   background: rgba(200,168,75,0.12); border: 0.5px solid rgba(200,168,75,0.52);
-  border-radius: 3px; padding: 1px 6px;
+  border-radius: 3px; padding: 1px 7px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 8px; font-weight: 700; letter-spacing: 0.18em;
   color: rgba(200,168,75,0.92); pointer-events: none; z-index: 5;
@@ -543,26 +507,18 @@ onUnmounted(() => {
 
 .cia-dot-online {
   position: absolute; top: 4px; right: 4px;
-  width: 9px; height: 9px;
+  width: 10px; height: 10px;
   background: #2ecc71; border-radius: 50%;
-  border: 1.5px solid rgba(0,0,0,0.28);
+  border: 2px solid rgba(0,0,0,0.35);
   box-shadow: 0 0 8px rgba(46,204,113,0.9);
   animation: dotBlink 2.2s ease infinite; z-index: 6;
-}
-
-.cia-kanji-float {
-  position: absolute; top: 0; left: 2px;
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
-  color: rgba(200,168,75,0.65);
-  pointer-events: none; opacity: 0; z-index: 3;
 }
 
 /* ══ MENU FLUTUANTE ══ */
 .cia-menu-container { position: relative; }
 
 .cia-menu {
-  position: absolute; bottom: 76px; right: 0;
+  position: absolute; bottom: 80px; right: 0;
   background: var(--or-deep, #09090f);
   border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
   width: 218px;
@@ -612,8 +568,13 @@ onUnmounted(() => {
 .cia-menu-item:hover::before  { opacity: 0.65; }
 .cia-menu-item:hover::after   { transform: scaleX(1); }
 .cia-menu-item:hover { color: var(--or-silk, #ede8e0); padding-left: 22px; }
-.cia-menu-item svg  { flex-shrink: 0; opacity: 0.55; transition: opacity 0.25s; position: relative; z-index: 1; color: var(--or-gold, #F5A623); }
-.cia-menu-item:hover svg { opacity: 1; }
+.cia-menu-item .ti  {
+  flex-shrink: 0; font-size: 15px;
+  opacity: 0.55; transition: opacity 0.25s;
+  position: relative; z-index: 1;
+  color: var(--or-gold, #F5A623);
+}
+.cia-menu-item:hover .ti { opacity: 1; }
 .cia-menu-num {
   font-family: var(--font-jp, 'Noto Serif JP', serif);
   font-size: 11px; color: var(--or-gold, #F5A623);
@@ -634,16 +595,21 @@ onUnmounted(() => {
 .cia-menu-fade-enter-from,
 .cia-menu-fade-leave-to     { opacity: 0; transform: translateY(12px) scale(0.96); }
 
-/* ══ JANELA DO CHAT ══ */
+/* ══ JANELA DO CHAT ══
+   CORREÇÃO: removida a declaração duplicada de position: relative
+   que sobrescrevia o position: absolute e impedia o posicionamento correto ══ */
 .cia-janela {
-  position: absolute; bottom: 76px; right: 0;
-  width: 368px; height: 530px;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 368px;
+  height: 530px;
   background: var(--or-deep, #09090f);
   border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
-  display: flex; flex-direction: column;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   box-shadow: 0 24px 64px rgba(0,0,0,0.65), 0 0 28px rgba(200,168,75,0.07);
-  position: relative;
 }
 
 .cia-janela-realm-line {
@@ -669,17 +635,20 @@ onUnmounted(() => {
   display: flex; align-items: center; justify-content: center;
   color: #0A0A0A; flex-shrink: 0; position: relative; z-index: 1;
 }
+.cia-header-avatar .ti { font-size: 18px; }
 
 .cia-header-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
 .cia-header-nome {
   font-family: var(--font-serif, 'Playfair Display', serif);
   font-size: 12px; font-weight: 400; font-style: italic;
   color: var(--or-silk, #ede8e0); letter-spacing: 0.06em;
+  margin: 0;
 }
 .cia-header-status {
   display: flex; align-items: center; gap: 5px;
   font-size: 9px; color: var(--or-silk-3, rgba(237,232,224,0.22));
   margin-top: 2px; letter-spacing: 0.04em;
+  margin-bottom: 0;
 }
 .cia-status-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -696,6 +665,7 @@ onUnmounted(() => {
   cursor: pointer;
   transition: border-color 0.25s, color 0.25s, transform 0.35s;
 }
+.cia-header-btn .ti { font-size: 13px; }
 .cia-header-btn:hover { border-color: var(--or-gold, #F5A623); color: var(--or-gold, #F5A623); transform: rotate(15deg); }
 
 /* ── CONFIRMAÇÃO LIMPAR ── */
@@ -759,6 +729,7 @@ onUnmounted(() => {
   display: flex; align-items: center; justify-content: center;
   color: var(--or-gold, #F5A623); flex-shrink: 0;
 }
+.cia-msg-avatar .ti { font-size: 13px; }
 
 .cia-bubble {
   max-width: 82%; padding: 10px 13px;
@@ -878,6 +849,7 @@ onUnmounted(() => {
   flex-shrink: 0; position: relative; overflow: hidden;
   transition: color 0.45s; z-index: 0;
 }
+.cia-send .ti { font-size: 16px; position: relative; z-index: 1; }
 .cia-send::before {
   content: ''; position: absolute; inset: 0;
   background: var(--or-gold, #F5A623);
@@ -886,8 +858,7 @@ onUnmounted(() => {
 }
 .cia-send:hover:not(:disabled)::before { transform: scaleX(1); }
 .cia-send:hover:not(:disabled) { color: var(--or-void, #06060d); }
-.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: var(--or-hair-2); }
-.cia-send svg { position: relative; z-index: 1; }
+.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: var(--or-hair-2, rgba(237,232,224,0.07)); }
 
 .cia-footer-watermark {
   position: absolute; bottom: 58px; right: 10px;
@@ -904,14 +875,23 @@ onUnmounted(() => {
 /* ══ RESPONSIVO ══ */
 @media (max-width: 480px) {
   .cia { bottom: 16px; right: 16px; }
-  .cia-janela { width: calc(100vw - 32px); height: calc(100dvh - 100px); right: -8px; bottom: 80px; }
+  .cia-janela {
+    width: calc(100vw - 32px);
+    height: calc(100dvh - 110px);
+    right: -8px;
+    bottom: 86px;
+  }
   .cia-trigger { width: 56px; height: 56px; }
-  .cia-stand   { width: 40px; height: 40px; }
-  .cia-menu    { width: 196px; bottom: 72px; }
+  .cia-trigger .ti { font-size: 22px; }
+  .cia-menu { width: 196px; bottom: 76px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cia-stand, .cia-badge, .cia-dot-online, .cia-bubble--loading span {
+  .cia-trigger,
+  .cia-trigger .ti,
+  .cia-badge,
+  .cia-dot-online,
+  .cia-bubble--loading span {
     animation: none !important;
   }
 }
