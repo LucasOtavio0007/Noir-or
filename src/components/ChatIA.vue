@@ -12,7 +12,23 @@
         aria-haspopup="true"
         aria-label="Abrir menu de assistência"
       >
-        <i class="ti ti-brain" aria-hidden="true"></i>
+        <!-- ícone SVG inline — sem dependência externa -->
+        <svg class="cia-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- cérebro estilizado -->
+          <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <!-- divisão central -->
+          <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="0.9" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+          <!-- sulcos esquerda -->
+          <path d="M11 9C10 9.8 9.5 11 10 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <path d="M10.5 13.5C10 14.2 10 15.2 10.5 16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <!-- sulcos direita -->
+          <path d="M17 9C18 9.8 18.5 11 18 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <path d="M17.5 13.5C18 14.2 18 15.2 17.5 16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+          <!-- brilho topo -->
+          <circle cx="11.5" cy="7.5" r="1" fill="currentColor" opacity="0.3"/>
+          <circle cx="16.5" cy="7.5" r="1" fill="currentColor" opacity="0.3"/>
+        </svg>
+
         <span class="cia-badge" aria-hidden="true">IA</span>
         <span class="cia-dot-online" aria-hidden="true"></span>
       </button>
@@ -29,13 +45,19 @@
 
           <button class="cia-menu-item" role="menuitem" @click="abrirChat">
             <span class="cia-menu-num" aria-hidden="true">一</span>
-            <i class="ti ti-message-circle-2" aria-hidden="true"></i>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
             Assistente IA
           </button>
 
           <button class="cia-menu-item" role="menuitem" @click="irParaSuporte">
             <span class="cia-menu-num" aria-hidden="true">二</span>
-            <i class="ti ti-headset" aria-hidden="true"></i>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
             Central de Suporte
           </button>
 
@@ -64,7 +86,12 @@
           </div>
 
           <div class="cia-header-avatar" aria-hidden="true">
-            <i class="ti ti-brain"></i>
+            <svg width="16" height="16" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+              <path d="M11 9C10 9.8 9.5 11 10 12" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+              <path d="M17 9C18 9.8 18.5 11 18 12" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+            </svg>
           </div>
 
           <div class="cia-header-info">
@@ -77,10 +104,16 @@
 
           <div class="cia-header-acoes">
             <button class="cia-header-btn" @click="confirmarLimpar" title="Limpar conversa" aria-label="Limpar conversa">
-              <i class="ti ti-trash" aria-hidden="true"></i>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              </svg>
             </button>
             <button class="cia-header-btn" @click="chatAberto = false" title="Fechar" aria-label="Fechar chat">
-              <i class="ti ti-x" aria-hidden="true"></i>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                <line x1="5" y1="5" x2="19" y2="19"/>
+                <line x1="19" y1="5" x2="5" y2="19"/>
+              </svg>
             </button>
           </div>
         </header>
@@ -106,7 +139,10 @@
             :class="['cia-msg', msg.role === 'user' ? 'cia-msg--user' : 'cia-msg--ia']"
           >
             <div v-if="msg.role === 'assistant'" class="cia-msg-avatar" aria-hidden="true">
-              <i class="ti ti-brain"></i>
+              <svg width="12" height="12" viewBox="0 0 28 28" fill="none">
+                <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+              </svg>
             </div>
 
             <div
@@ -122,7 +158,10 @@
           <!-- typing indicator -->
           <div v-if="carregando" class="cia-msg cia-msg--ia" aria-label="Assistente digitando">
             <div class="cia-msg-avatar" aria-hidden="true">
-              <i class="ti ti-brain"></i>
+              <svg width="12" height="12" viewBox="0 0 28 28" fill="none">
+                <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+              </svg>
             </div>
             <div class="cia-bubble cia-bubble--ia cia-bubble--loading">
               <span></span><span></span><span></span>
@@ -180,7 +219,9 @@
             :disabled="carregando || !inputMsg.trim()"
             aria-label="Enviar mensagem"
           >
-            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
           </button>
         </div>
 
@@ -199,11 +240,6 @@ import { useSiteStore } from '@/stores/site.js'
 
 /* ── Props ── */
 const props = defineProps({
-  /**
-   * Rota para a Central de Suporte.
-   * Passe a rota correta via prop: <ChatIA rota-suporte="/contato" />
-   * Padrão: '/suporte'
-   */
   rotaSuporte: {
     type: String,
     default: '/suporte'
@@ -406,12 +442,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ══ Tabler Icons — carregado via CDN no index.html ou aqui via @import ══
-   Adicione no seu index.html:
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-   OU descomente a linha abaixo: */
-/* @import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css'); */
-
 .cia {
   position: fixed;
   bottom: 28px;
@@ -422,12 +452,12 @@ onUnmounted(() => {
 
 /* ══ KEYFRAMES ══ */
 @keyframes triggerPulse {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(200,168,75,0.08), inset 0 0 18px rgba(200,168,75,0.04); }
-  50%       { box-shadow: 0 0 0 4px rgba(200,168,75,0.14), 0 0 22px rgba(200,168,75,0.18), inset 0 0 18px rgba(200,168,75,0.06); }
+  0%, 100% { box-shadow: 0 0 0 1px rgba(200,168,75,0.1), inset 0 0 20px rgba(200,168,75,0.05); }
+  50%       { box-shadow: 0 0 0 5px rgba(200,168,75,0.12), 0 0 28px rgba(200,168,75,0.2), inset 0 0 20px rgba(200,168,75,0.08); }
 }
 @keyframes iconFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%       { transform: translateY(-3px) rotate(-5deg); }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
 }
 @keyframes badgeFloat {
   0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -435,7 +465,7 @@ onUnmounted(() => {
 }
 @keyframes dotBlink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.38; }
+  50%       { opacity: 0.35; }
 }
 @keyframes ciaDot {
   0%, 80%, 100% { transform: scale(0.65); opacity: 0.45; }
@@ -461,10 +491,10 @@ onUnmounted(() => {
 /* ══ BOTÃO ══ */
 .cia-trigger {
   width: 64px; height: 64px;
-  background: rgba(200,168,75,0.08);
-  border: 0.5px solid var(--or-gold, #C8A84B);
+  background: rgba(200,168,75,0.07);
+  border: 1px solid rgba(200,168,75,0.5);
   border-radius: 50%;
-  cursor: pointer; position: relative;
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   padding: 0; outline: none;
   animation: triggerPulse 3.5s ease-in-out infinite;
@@ -475,8 +505,7 @@ onUnmounted(() => {
   outline: 1px solid var(--or-gold, #C8A84B);
   outline-offset: 4px;
 }
-.cia-trigger .ti {
-  font-size: 26px;
+.cia-icon {
   color: var(--or-gold, #C8A84B);
   animation: iconFloat 4s ease-in-out infinite;
   transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.3s;
@@ -484,13 +513,13 @@ onUnmounted(() => {
 }
 .cia-trigger:hover {
   animation: none;
-  transform: scale(1.1);
+  transform: scale(1.08);
   border-color: rgba(200,168,75,0.9);
-  box-shadow: 0 0 0 3px rgba(200,168,75,0.2), 0 0 32px rgba(200,168,75,0.3);
+  box-shadow: 0 0 0 4px rgba(200,168,75,0.15), 0 0 32px rgba(200,168,75,0.25);
 }
-.cia-trigger:hover .ti {
+.cia-trigger:hover .cia-icon {
   animation: none;
-  transform: rotate(-12deg) scale(1.15);
+  transform: scale(1.1);
   color: #F5A623;
 }
 
@@ -509,7 +538,7 @@ onUnmounted(() => {
   position: absolute; top: 4px; right: 4px;
   width: 10px; height: 10px;
   background: #2ecc71; border-radius: 50%;
-  border: 2px solid rgba(0,0,0,0.35);
+  border: 2px solid #09090f;
   box-shadow: 0 0 8px rgba(46,204,113,0.9);
   animation: dotBlink 2.2s ease infinite; z-index: 6;
 }
@@ -520,7 +549,7 @@ onUnmounted(() => {
 .cia-menu {
   position: absolute; bottom: 80px; right: 0;
   background: var(--or-deep, #09090f);
-  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
+  border: 0.5px solid rgba(200,168,75,0.15);
   width: 218px;
   box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(200,168,75,0.05);
   overflow: hidden;
@@ -549,7 +578,7 @@ onUnmounted(() => {
   background: none; border: none;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
-  color: var(--or-silk-2, rgba(237,232,224,0.50));
+  color: rgba(237,232,224,0.50);
   cursor: pointer; position: relative;
   transition: color 0.25s, padding-left 0.28s;
   text-align: left;
@@ -565,16 +594,14 @@ onUnmounted(() => {
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); z-index: 0;
 }
-.cia-menu-item:hover::before  { opacity: 0.65; }
-.cia-menu-item:hover::after   { transform: scaleX(1); }
-.cia-menu-item:hover { color: var(--or-silk, #ede8e0); padding-left: 22px; }
-.cia-menu-item .ti  {
-  flex-shrink: 0; font-size: 15px;
-  opacity: 0.55; transition: opacity 0.25s;
-  position: relative; z-index: 1;
-  color: var(--or-gold, #F5A623);
+.cia-menu-item:hover::before { opacity: 0.65; }
+.cia-menu-item:hover::after  { transform: scaleX(1); }
+.cia-menu-item:hover { color: #ede8e0; padding-left: 22px; }
+.cia-menu-item svg  {
+  flex-shrink: 0; opacity: 0.55; transition: opacity 0.25s;
+  position: relative; z-index: 1; color: var(--or-gold, #F5A623);
 }
-.cia-menu-item:hover .ti { opacity: 1; }
+.cia-menu-item:hover svg { opacity: 1; }
 .cia-menu-num {
   font-family: var(--font-jp, 'Noto Serif JP', serif);
   font-size: 11px; color: var(--or-gold, #F5A623);
@@ -595,21 +622,24 @@ onUnmounted(() => {
 .cia-menu-fade-enter-from,
 .cia-menu-fade-leave-to     { opacity: 0; transform: translateY(12px) scale(0.96); }
 
-/* ══ JANELA DO CHAT ══
-   CORREÇÃO: removida a declaração duplicada de position: relative
-   que sobrescrevia o position: absolute e impedia o posicionamento correto ══ */
+/* ══ JANELA DO CHAT
+   CORREÇÃO: position fixed garante que o modal nunca seja cortado
+   por um pai com overflow:hidden ou transform. bottom/right calculados
+   para ficar acima do botão (28px margem + 64px botão + 16px gap = 108px)
+══ */
 .cia-janela {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
+  position: fixed;
+  bottom: 108px;
+  right: 28px;
   width: 368px;
   height: 530px;
   background: var(--or-deep, #09090f);
-  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
+  border: 0.5px solid rgba(200,168,75,0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 24px 64px rgba(0,0,0,0.65), 0 0 28px rgba(200,168,75,0.07);
+  z-index: 8499;
 }
 
 .cia-janela-realm-line {
@@ -623,32 +653,29 @@ onUnmounted(() => {
   display: flex; align-items: center; gap: 10px;
   padding: 13px 16px;
   background: rgba(245,166,35,0.03);
-  border-bottom: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border-bottom: 0.5px solid rgba(237,232,224,0.07);
   flex-shrink: 0; position: relative; overflow: hidden;
 }
 .cia-header-seigaiha { position: absolute; inset: 0; pointer-events: none; opacity: 0.55; }
 
 .cia-header-avatar {
   width: 36px; height: 36px; border-radius: 50%;
-  background: var(--grad-btn, linear-gradient(135deg,#F5A623,#FF7A20));
-  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
+  background: linear-gradient(135deg,#F5A623,#FF7A20);
+  border: 0.5px solid rgba(200,168,75,0.2);
   display: flex; align-items: center; justify-content: center;
   color: #0A0A0A; flex-shrink: 0; position: relative; z-index: 1;
 }
-.cia-header-avatar .ti { font-size: 18px; }
 
 .cia-header-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
 .cia-header-nome {
   font-family: var(--font-serif, 'Playfair Display', serif);
   font-size: 12px; font-weight: 400; font-style: italic;
-  color: var(--or-silk, #ede8e0); letter-spacing: 0.06em;
-  margin: 0;
+  color: #ede8e0; letter-spacing: 0.06em; margin: 0;
 }
 .cia-header-status {
   display: flex; align-items: center; gap: 5px;
-  font-size: 9px; color: var(--or-silk-3, rgba(237,232,224,0.22));
-  margin-top: 2px; letter-spacing: 0.04em;
-  margin-bottom: 0;
+  font-size: 9px; color: rgba(237,232,224,0.22);
+  margin-top: 2px; letter-spacing: 0.04em; margin-bottom: 0;
 }
 .cia-status-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -659,13 +686,11 @@ onUnmounted(() => {
 .cia-header-btn {
   width: 28px; height: 28px;
   background: rgba(245,166,35,0.06);
-  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border: 0.5px solid rgba(237,232,224,0.07);
   display: flex; align-items: center; justify-content: center;
-  color: var(--or-silk-3, rgba(237,232,224,0.22));
-  cursor: pointer;
+  color: rgba(237,232,224,0.22); cursor: pointer;
   transition: border-color 0.25s, color 0.25s, transform 0.35s;
 }
-.cia-header-btn .ti { font-size: 13px; }
 .cia-header-btn:hover { border-color: var(--or-gold, #F5A623); color: var(--or-gold, #F5A623); transform: rotate(15deg); }
 
 /* ── CONFIRMAÇÃO LIMPAR ── */
@@ -687,14 +712,13 @@ onUnmounted(() => {
 }
 .cia-confirm-sim:hover { background: rgba(239,68,68,0.22); }
 .cia-confirm-nao {
-  background: none; border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  background: none; border: 0.5px solid rgba(237,232,224,0.07);
   padding: 4px 12px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--or-silk-3, rgba(237,232,224,0.22));
-  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  color: rgba(237,232,224,0.22); cursor: pointer; transition: border-color 0.2s, color 0.2s;
 }
-.cia-confirm-nao:hover { border-color: var(--or-hair, rgba(245,166,35,0.12)); color: var(--or-silk-2, rgba(237,232,224,0.50)); }
+.cia-confirm-nao:hover { border-color: rgba(200,168,75,0.2); color: rgba(237,232,224,0.50); }
 
 .cia-confirm-enter-active,
 .cia-confirm-leave-active { transition: all 0.2s; }
@@ -707,7 +731,7 @@ onUnmounted(() => {
   padding: 14px;
   display: flex; flex-direction: column; gap: 10px;
   scrollbar-width: thin;
-  scrollbar-color: var(--or-hair, rgba(245,166,35,0.12)) transparent;
+  scrollbar-color: rgba(200,168,75,0.15) transparent;
   position: relative;
 }
 .cia-msgs-kamon {
@@ -725,11 +749,10 @@ onUnmounted(() => {
 .cia-msg-avatar {
   width: 26px; height: 26px; border-radius: 50%;
   background: rgba(245,166,35,0.08);
-  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border: 0.5px solid rgba(237,232,224,0.07);
   display: flex; align-items: center; justify-content: center;
   color: var(--or-gold, #F5A623); flex-shrink: 0;
 }
-.cia-msg-avatar .ti { font-size: 13px; }
 
 .cia-bubble {
   max-width: 82%; padding: 10px 13px;
@@ -737,13 +760,13 @@ onUnmounted(() => {
   font-size: 13px; line-height: 1.65; font-weight: 300;
 }
 .cia-bubble--user {
-  background: var(--grad-btn, linear-gradient(135deg,#F5A623,#FF7A20));
+  background: linear-gradient(135deg,#F5A623,#FF7A20);
   color: #0A0A0A; border-bottom-right-radius: 3px;
 }
 .cia-bubble--ia {
   background: rgba(245,166,35,0.04);
-  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
-  color: var(--or-silk-2, rgba(237,232,224,0.50));
+  border: 0.5px solid rgba(237,232,224,0.07);
+  color: rgba(237,232,224,0.55);
   border-bottom-left-radius: 3px; position: relative;
 }
 .cia-bubble--ia::before {
@@ -777,11 +800,11 @@ onUnmounted(() => {
 .cia-sug {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(245,166,35,0.04);
-  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border: 0.5px solid rgba(237,232,224,0.07);
   padding: 5px 11px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 10px; font-weight: 400; letter-spacing: 0.04em;
-  color: var(--or-silk-2, rgba(237,232,224,0.50));
+  color: rgba(237,232,224,0.50);
   cursor: pointer; position: relative; overflow: hidden;
   transition: border-color 0.25s, color 0.25s;
   animation: sugIn 0.35s ease both;
@@ -795,8 +818,8 @@ onUnmounted(() => {
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); z-index: 0;
 }
-.cia-sug:hover::before  { transform: scaleX(1); }
-.cia-sug:hover { border-color: var(--or-gold, #F5A623); color: var(--or-silk, #ede8e0); }
+.cia-sug:hover::before { transform: scaleX(1); }
+.cia-sug:hover { border-color: var(--or-gold, #F5A623); color: #ede8e0; }
 .cia-sug-gem { font-size: 4.5px; color: var(--or-gold, #F5A623); opacity: 0.28; position: relative; z-index: 1; transition: opacity 0.25s; }
 .cia-sug:hover .cia-sug-gem { opacity: 0.65; }
 
@@ -809,7 +832,7 @@ onUnmounted(() => {
 .cia-input-wrap {
   display: flex; align-items: center; gap: 8px;
   padding: 12px 14px;
-  border-top: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border-top: 0.5px solid rgba(237,232,224,0.07);
   flex-shrink: 0; position: relative;
 }
 .cia-input-wrap::before {
@@ -821,22 +844,22 @@ onUnmounted(() => {
 .cia-input {
   flex: 1;
   background: rgba(245,166,35,0.03);
-  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border: 0.5px solid rgba(237,232,224,0.07);
   padding: 9px 13px;
-  color: var(--or-silk, #ede8e0);
+  color: #ede8e0;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 12px; font-weight: 300; letter-spacing: 0.03em;
   outline: none; transition: border-color 0.28s, box-shadow 0.28s;
-  -webkit-text-fill-color: var(--or-silk, #ede8e0);
+  -webkit-text-fill-color: #ede8e0;
   caret-color: var(--or-gold, #F5A623);
 }
 .cia-input:focus { border-color: rgba(200,168,75,0.35); box-shadow: 0 0 0 2px rgba(200,168,75,0.06); }
-.cia-input::placeholder { color: var(--or-silk-4, rgba(237,232,224,0.10)); font-size: 11px; letter-spacing: 0.07em; }
+.cia-input::placeholder { color: rgba(237,232,224,0.10); font-size: 11px; letter-spacing: 0.07em; }
 .cia-input:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .cia-char-count {
   font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 9px; color: var(--or-silk-3, rgba(237,232,224,0.22));
+  font-size: 9px; color: rgba(237,232,224,0.22);
   flex-shrink: 0; letter-spacing: 0.05em; transition: color 0.2s;
 }
 .cia-char-count--warn { color: rgba(239,68,68,0.72); }
@@ -849,7 +872,6 @@ onUnmounted(() => {
   flex-shrink: 0; position: relative; overflow: hidden;
   transition: color 0.45s; z-index: 0;
 }
-.cia-send .ti { font-size: 16px; position: relative; z-index: 1; }
 .cia-send::before {
   content: ''; position: absolute; inset: 0;
   background: var(--or-gold, #F5A623);
@@ -857,8 +879,9 @@ onUnmounted(() => {
   transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); z-index: -1;
 }
 .cia-send:hover:not(:disabled)::before { transform: scaleX(1); }
-.cia-send:hover:not(:disabled) { color: var(--or-void, #06060d); }
-.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: var(--or-hair-2, rgba(237,232,224,0.07)); }
+.cia-send:hover:not(:disabled) { color: #06060d; }
+.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: rgba(237,232,224,0.07); }
+.cia-send svg { position: relative; z-index: 1; }
 
 .cia-footer-watermark {
   position: absolute; bottom: 58px; right: 10px;
@@ -866,6 +889,7 @@ onUnmounted(() => {
   font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
   color: var(--or-gold, #F5A623); opacity: 0.06;
   pointer-events: none; user-select: none; z-index: 0;
+  margin: 0;
 }
 
 /* ── TRANSIÇÃO JANELA ── */
@@ -876,19 +900,20 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   .cia { bottom: 16px; right: 16px; }
   .cia-janela {
+    position: fixed;
     width: calc(100vw - 32px);
     height: calc(100dvh - 110px);
-    right: -8px;
-    bottom: 86px;
+    right: 16px;
+    bottom: 94px;
   }
   .cia-trigger { width: 56px; height: 56px; }
-  .cia-trigger .ti { font-size: 22px; }
-  .cia-menu { width: 196px; bottom: 76px; }
+  .cia-icon    { width: 24px; height: 24px; }
+  .cia-menu    { width: 196px; bottom: 76px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cia-trigger,
-  .cia-trigger .ti,
+  .cia-icon,
   .cia-badge,
   .cia-dot-online,
   .cia-bubble--loading span {
