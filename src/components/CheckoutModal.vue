@@ -1102,14 +1102,6 @@ watch(metodo, (v) => { try { localStorage.setItem('no_metodo_pag', v) } catch {}
 watch(() => pedidoCriado.value?.status, (status) => { if (status === 'aprovado') clearInterval(pixTimerInt) })
 watch(subtotal, (val) => { if (FRETE_GRATIS_ACIMA_DE > 0 && val >= FRETE_GRATIS_ACIMA_DE) freteValor.value = 0 })
 
-// Observa qrGerado: quando virar true, tenta renderizar o QR no canvas
-watch(qrGerado, async (val) => {
-  if (val && pedidoCriado.value?.pagamento?.metodo === 'pix') {
-    await nextTick()
-    await _renderizarQRCode(pedidoCriado.value)
-  }
-})
-
 const fmt = (v) => (v||0).toLocaleString('pt-BR', { minimumFractionDigits:2 })
 const fmtDateLong = (d) => {
   if (!d) return ''
@@ -1366,9 +1358,10 @@ const finalizarPedido = async () => {
       iniciarTimerPix()
       // Se não há imagem do backend, prepara canvas local
       if (!(data.pedido || data)?.pagamento?.pixQrImage) {
-        qrGerado.value = false
         await nextTick()
-        qrGerado.value = true  // dispara o watch que renderiza o QR após o canvas existir no DOM
+qrGerado.value = true
+await nextTick()
+await _renderizarQRCode(data.pedido || data)
       }
     }
 
@@ -1820,7 +1813,7 @@ onUnmounted(() => {
 .co-step.is-done .co-step__line { background: rgba(200,168,75,0.35); }
 .co-header__right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .co-locale-sel { background: rgba(200,168,75,0.05); border: 0.5px solid var(--hair); color: var(--text2); font-size: 11px; padding: 4px 6px; outline: none; cursor: pointer; }
-.co-close { width: 30px; height: 30px; background: none; border: 0.5px solid rgba(200,168,75,0.2); border-radius: 50%; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .25s; }
+.co-close { width: 30px; height: 30px; flex-shrink: 0; background: none; border: 0.5px solid rgba(200,168,75,0.2); border-radius: 50%; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .25s; }
 .co-close:hover { border-color: var(--red); color: var(--red); transform: rotate(90deg); }
 .co-progress { height: 1.5px; background: rgba(200,168,75,0.06); flex-shrink: 0; position: relative; overflow: hidden; }
 .co-progress__fill { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--or), var(--or2)); transition: width .6s var(--ease); box-shadow: 0 0 8px rgba(200,168,75,.5); }
