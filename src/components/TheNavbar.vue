@@ -16,10 +16,8 @@
       </defs>
     </svg>
 
-    <!-- Skip link acessibilidade -->
     <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
 
-    <!-- SCROLL PROGRESS -->
     <div class="nb-progress" :style="{ transform: `scaleX(${scrollProgress / 100})` }" aria-hidden="true"></div>
 
     <!-- TOAST SYSTEM -->
@@ -28,7 +26,6 @@
         <li v-for="t in toasts" :key="t.id" :class="['toast', `toast--${t.type}`]" role="alert">
           <div class="toast__icon" aria-hidden="true">
             <svg v-if="t.type === 'success'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <svg v-else-if="t.type === 'error'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
           <div class="toast__body">
@@ -44,41 +41,24 @@
     </teleport>
 
     <!-- NAVBAR -->
-    <header
-      :class="['navbar', { 'navbar--scrolled': scrolled }, { 'navbar--hidden': scrollHide }]"
-      role="banner"
-    >
+    <header :class="['navbar', { 'navbar--scrolled': scrolled }, { 'navbar--hidden': scrollHide }]" role="banner">
       <div class="navbar__inner">
-
-        <!-- ── ESQUERDA ── -->
         <div class="navbar__left">
-          <button
-            class="nb-burger"
-            :class="{ 'is-open': sidebarOpen }"
-            @click="sidebarOpen = !sidebarOpen"
-            :aria-label="sidebarOpen ? 'Fechar menu' : 'Abrir menu'"
-            :aria-expanded="sidebarOpen"
-            aria-controls="sidebar-menu"
-          >
+          <button class="nb-burger" :class="{ 'is-open': sidebarOpen }" @click="sidebarOpen = !sidebarOpen"
+            :aria-label="sidebarOpen ? 'Fechar menu' : 'Abrir menu'" :aria-expanded="sidebarOpen" aria-controls="sidebar-menu">
             <span class="nb-burger__bar nb-burger__bar--1"></span>
             <span class="nb-burger__bar nb-burger__bar--2"></span>
             <span class="nb-burger__bar nb-burger__bar--3"></span>
           </button>
-
           <nav class="nb-links" aria-label="Navegação principal">
-            <router-link
-              v-for="l in allLinks" :key="l.to" :to="l.to"
-              class="nb-link"
-              :class="{ 'nb-link--gamer': l.label === 'Gamer' }"
-              :aria-current="$route.path === l.to ? 'page' : undefined"
-            >
+            <router-link v-for="l in allLinks" :key="l.to" :to="l.to" class="nb-link"
+              :class="{ 'nb-link--gamer': l.label === 'Gamer' }" :aria-current="$route.path === l.to ? 'page' : undefined">
               <span v-if="l.label === 'Gamer'" class="nb-link--gamer__ico" aria-hidden="true">巴</span>
               {{ l.label }}
             </router-link>
           </nav>
         </div>
 
-        <!-- ── CENTRO: logo ── -->
         <router-link to="/" class="nb-logo" aria-label="Noir & Or — Página inicial">
           <img v-if="logoImgOk" :src="logoSrc" :alt="logoAlt" class="nb-logo__img" @error="logoImgOk = false" />
           <template v-else>
@@ -87,21 +67,20 @@
           </template>
         </router-link>
 
-        <!-- ── DIREITA ── -->
         <div class="nb-right">
-
-          <!-- BUSCA -->
           <div class="nb-search-wrap" :class="{ 'is-open': searchOpen }">
-            <button class="nb-icon" :class="{ 'is-active': searchOpen }" @click="toggleSearch" aria-label="Buscar produtos" :aria-expanded="searchOpen" aria-controls="search-panel">
+            <button class="nb-icon" :class="{ 'is-active': searchOpen }" @click="toggleSearch" aria-label="Buscar produtos" :aria-expanded="searchOpen">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </button>
             <transition name="search-drop">
-              <div v-if="searchOpen" id="search-panel" class="nb-search-panel" role="search">
+              <div v-if="searchOpen" class="nb-search-panel" role="search">
                 <div class="or-panel-kamon" aria-hidden="true">家紋</div>
                 <div class="or-panel-border" aria-hidden="true"></div>
                 <div class="nb-search-field">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input ref="searchInput" v-model="searchQuery" type="search" placeholder="探す — Buscar na coleção..." aria-label="Campo de busca" autocomplete="off" @input="onSearchInput" @keydown.escape="closeSearch" @keydown.enter="irParaBusca" @keydown.up.prevent="searchNavUp" @keydown.down.prevent="searchNavDown" />
+                  <input ref="searchInput" v-model="searchQuery" type="search" placeholder="探す — Buscar na coleção..." aria-label="Campo de busca" autocomplete="off"
+                    @input="onSearchInput" @keydown.escape="closeSearch" @keydown.enter="irParaBusca"
+                    @keydown.up.prevent="searchNavUp" @keydown.down.prevent="searchNavDown" />
                   <button v-if="searchQuery" class="search-clear" @click="clearSearch" aria-label="Limpar busca">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                   </button>
@@ -116,17 +95,19 @@
                     <div class="sk-lines"><div class="sk-line sk-line--name"></div><div class="sk-line sk-line--price"></div></div>
                   </div>
                 </div>
-                <div v-else-if="searchResults.length" class="nb-search-results" role="listbox" aria-label="Resultados da busca">
-                  <button v-for="(prod, idx) in searchResults" :key="prod._id || prod.id" class="search-result" :class="{ 'is-focused': searchFocusIdx === idx }" role="option" @click="irParaProduto(prod._id || prod.id)" @mouseenter="searchFocusIdx = idx">
+                <div v-else-if="searchResults.length" class="nb-search-results" role="listbox">
+                  <button v-for="(prod, idx) in searchResults" :key="prod._id || prod.id" class="search-result"
+                    :class="{ 'is-focused': searchFocusIdx === idx }" role="option"
+                    @click="irParaProduto(prod._id || prod.id)" @mouseenter="searchFocusIdx = idx">
                     <div class="search-result__img">
                       <img v-if="prod.imagem" :src="prod.imagem" :alt="prod.nome" loading="lazy" />
-                      <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                     </div>
                     <div class="search-result__info">
                       <span class="search-result__nome">{{ prod.nome }}</span>
                       <span class="search-result__preco">R$ {{ fmt(prod.preco) }}</span>
                     </div>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
                   </button>
                 </div>
                 <p v-else-if="searchQuery.length >= 2 && !searchLoading" class="search-empty" role="status">
@@ -140,40 +121,25 @@
             </transition>
           </div>
 
-          <!-- CARRINHO -->
-          <button class="nb-icon nb-cart" @click="abrirCarrinho" aria-label="Carrinho de compras" :aria-describedby="totalItens > 0 ? 'cart-count' : undefined">
+          <button class="nb-icon nb-cart" @click="abrirCarrinho" aria-label="Carrinho de compras">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span v-if="auth.isLogado && totalItens > 0" id="cart-count" class="nb-cart__badge" :class="{ 'is-bounce': cartBounce }" :aria-label="`${totalItens} itens no carrinho`">{{ totalItens > 9 ? '9+' : totalItens }}</span>
+            <span v-if="auth.isLogado && totalItens > 0" class="nb-cart__badge" :class="{ 'is-bounce': cartBounce }">{{ totalItens > 9 ? '9+' : totalItens }}</span>
           </button>
 
-          <!-- ACESSIBILIDADE -->
           <div class="nb-acess-wrap">
-            <button
-              class="nb-icon"
-              :class="{ 'is-active': acessOpen }"
-              @click="acessOpen = !acessOpen"
-              aria-label="Opções de acessibilidade"
-              :aria-expanded="acessOpen"
-              aria-controls="acess-panel"
-            >
-              <!-- Ícone cadeira de rodas -->
+            <button class="nb-icon" :class="{ 'is-active': acessOpen }" @click="acessOpen = !acessOpen" aria-label="Opções de acessibilidade" :aria-expanded="acessOpen">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <circle cx="12" cy="4" r="1.5"/>
-                <path d="M9 9h4l1 5h3"/>
-                <path d="M9 9l-1 5"/>
-                <path d="M8 14h5l1 4"/>
-                <circle cx="8" cy="20" r="2"/>
-                <circle cx="15" cy="20" r="2"/>
+                <circle cx="12" cy="4" r="1.5"/><path d="M9 9h4l1 5h3"/><path d="M9 9l-1 5"/><path d="M8 14h5l1 4"/>
+                <circle cx="8" cy="20" r="2"/><circle cx="15" cy="20" r="2"/>
               </svg>
             </button>
           </div>
 
           <div class="nb-sep" aria-hidden="true"></div>
 
-          <!-- LOGADO -->
           <div v-if="auth.isLogado" class="nb-user-area">
             <div class="nb-user-wrap" ref="userDropRef">
-              <button class="nb-user" @click="userDropOpen = !userDropOpen" :aria-expanded="userDropOpen" aria-controls="user-dropdown" aria-label="Menu da conta">
+              <button class="nb-user" @click="userDropOpen = !userDropOpen" :aria-expanded="userDropOpen" aria-label="Menu da conta">
                 <div class="nb-avatar" aria-hidden="true">
                   <img v-if="auth.user?.avatar" :src="auth.user.avatar" alt="" referrerpolicy="no-referrer" @error="e => e.target.style.display = 'none'" />
                   <span v-else>{{ inicialNome }}</span>
@@ -182,13 +148,12 @@
                   <span class="nb-user__nome">{{ primeiroNome }}</span>
                   <span v-if="auth.user?.vip" class="nb-user__vip">◆ {{ auth.user.vip }}</span>
                 </div>
-                <svg class="nb-user__chevron" :class="{ 'is-open': userDropOpen }" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                <svg class="nb-user__chevron" :class="{ 'is-open': userDropOpen }" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
               </button>
-
               <transition name="drop-down">
-                <div v-if="userDropOpen" id="user-dropdown" class="nb-user-drop" role="menu" aria-label="Opções da conta" @keydown.escape="userDropOpen = false">
+                <div v-if="userDropOpen" class="nb-user-drop" role="menu" @keydown.escape="userDropOpen = false">
                   <div class="nb-drop-head">
-                    <div class="nb-drop-avatar" aria-hidden="true">
+                    <div class="nb-drop-avatar">
                       <img v-if="auth.user?.avatar" :src="auth.user.avatar" alt="" referrerpolicy="no-referrer" @error="e => e.target.style.display = 'none'" />
                       <span v-else>{{ inicialNome }}</span>
                     </div>
@@ -199,32 +164,32 @@
                     </div>
                   </div>
                   <div class="nb-drop-clock" aria-label="Horário de Brasília">
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span class="nb-drop-clock__label">Brasília</span>
                     <span class="nb-drop-clock__time">{{ brasiliaTime }}</span>
                   </div>
                   <div class="nb-drop-sep" role="separator"></div>
                   <button class="nb-drop-item" role="menuitem" @click="irParaConta">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Minha Conta
                   </button>
                   <button class="nb-drop-item" role="menuitem" @click="userDropOpen = false; cartOpen = true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     Meu Carrinho
                     <span v-if="totalItens > 0" class="nb-drop-badge">{{ totalItens }}</span>
                   </button>
                   <button class="nb-drop-item nb-drop-item--saved" role="menuitem" @click="abrirComprasFuturas">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                     Compras Futuras
                     <span v-if="savedItems.length > 0" class="nb-drop-badge nb-drop-badge--saved">{{ savedItems.length }}</span>
                   </button>
                   <router-link v-if="auth.isAdmin" to="/admin" class="nb-drop-item nb-drop-item--admin" role="menuitem" @click="userDropOpen = false">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
                     Painel Admin
                   </router-link>
                   <div class="nb-drop-sep" role="separator"></div>
                   <button class="nb-drop-item nb-drop-item--sair" role="menuitem" @click="fazerLogout">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     Sair da conta
                   </button>
                 </div>
@@ -232,58 +197,42 @@
             </div>
           </div>
 
-          <!-- DESLOGADO -->
           <div v-else class="nb-auth">
             <button class="nb-entrar" @click="openModal('login')">Entrar</button>
             <button class="nb-cadastrar" @click="openModal('cadastro')">Cadastrar</button>
           </div>
         </div>
-
       </div>
     </header>
 
     <!-- ════════════ TELEPORTS ════════════ -->
     <teleport to="body">
 
-      <!-- ── PAINEL ACESSIBILIDADE ── -->
+      <!-- PAINEL ACESSIBILIDADE -->
       <transition name="pref-drop">
-        <div
-          v-if="acessOpen"
-          id="acess-panel"
-          class="pref-panel"
-          role="dialog"
-          aria-label="Opções de acessibilidade"
-          @click.stop
-        >
+        <div v-if="acessOpen" id="acess-panel" class="pref-panel" role="dialog" aria-label="Opções de acessibilidade" @click.stop>
           <div class="or-panel-kamon or-panel-kamon--pref" aria-hidden="true">♿</div>
           <div class="or-panel-border" aria-hidden="true"></div>
-
           <header class="pref-header">
             <div class="pref-header-inner">
               <span class="pref-kanji" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="4" r="1.5"/><path d="M9 9h4l1 5h3"/><path d="M9 9l-1 5"/><path d="M8 14h5l1 4"/><circle cx="8" cy="20" r="2"/><circle cx="15" cy="20" r="2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="4" r="1.5"/><path d="M9 9h4l1 5h3"/><path d="M9 9l-1 5"/><path d="M8 14h5l1 4"/><circle cx="8" cy="20" r="2"/><circle cx="15" cy="20" r="2"/></svg>
               </span>
               <span class="pref-title">Acessibilidade</span>
             </div>
             <div style="display:flex;gap:6px;align-items:center;">
-              <button class="pref-reset" @click="site.resetAcess()" aria-label="Redefinir todas as opções de acessibilidade">
+              <button class="pref-reset" @click="site.resetAcess()" aria-label="Redefinir">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 Redefinir
               </button>
-              <button class="pref-close" @click="acessOpen = false" aria-label="Fechar painel de acessibilidade">
+              <button class="pref-close" @click="acessOpen = false" aria-label="Fechar">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
             </div>
           </header>
-
           <div class="pref-body">
-
-            <!-- REALM -->
             <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                Realm
-              </legend>
+              <legend class="pref-group__label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg> Realm</legend>
               <div class="pref-row">
                 <button :class="['pref-realm', { 'is-active': site.tema === 'escuro' }]" @click="site.toggleTema('escuro'); acessOpen = false" data-realm="celestial">
                   <span class="pref-realm__orb pref-realm__orb--celestial" aria-hidden="true"></span>
@@ -302,200 +251,28 @@
                 </button>
               </div>
             </fieldset>
-
-            <!-- TAMANHO DO TEXTO -->
             <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-                Tamanho do texto
-              </legend>
+              <legend class="pref-group__label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Tamanho do texto</legend>
               <div class="pref-row pref-row--3">
-                <button :class="['pref-font', { 'is-active': site.fonte === 'pequena' }]" @click="site.setFonte('pequena'); acessOpen = false" aria-label="Texto pequeno">
-                  <span style="font-size:11px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Pequeno</span>
-                </button>
-                <button :class="['pref-font', { 'is-active': site.fonte === 'normal' }]" @click="site.setFonte('normal'); acessOpen = false" aria-label="Texto normal">
-                  <span style="font-size:15px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Normal</span>
-                </button>
-                <button :class="['pref-font', { 'is-active': site.fonte === 'grande' }]" @click="site.setFonte('grande'); acessOpen = false" aria-label="Texto grande">
-                  <span style="font-size:19px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Grande</span>
-                </button>
+                <button :class="['pref-font', { 'is-active': site.fonte === 'pequena' }]" @click="site.setFonte('pequena'); acessOpen = false"><span style="font-size:11px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Pequeno</span></button>
+                <button :class="['pref-font', { 'is-active': site.fonte === 'normal' }]" @click="site.setFonte('normal'); acessOpen = false"><span style="font-size:15px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Normal</span></button>
+                <button :class="['pref-font', { 'is-active': site.fonte === 'grande' }]" @click="site.setFonte('grande'); acessOpen = false"><span style="font-size:19px;font-weight:700;line-height:1">A</span><span class="pref-font__lbl">Grande</span></button>
               </div>
             </fieldset>
-
-            <!-- VISÃO -->
-            <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                Visão
-              </legend>
-              <div class="pref-col">
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Alto contraste</span>
-                    <span class="pref-toggle__desc">Aumenta o contraste das cores</span>
-                  </div>
-                  <button
-                    :class="['pref-switch', { 'is-on': site.acess.altoContraste }]"
-                    @click="site.setAcess('altoContraste', !site.acess.altoContraste)"
-                    :aria-pressed="site.acess.altoContraste"
-                    aria-label="Alto contraste"
-                    role="switch"
-                  >
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Saturação reduzida</span>
-                    <span class="pref-toggle__desc">Cores menos intensas</span>
-                  </div>
-                  <button
-                    :class="['pref-switch', { 'is-on': site.acess.saturacao === 'baixa' }]"
-                    @click="site.setAcess('saturacao', site.acess.saturacao === 'baixa' ? 'normal' : 'baixa')"
-                    :aria-pressed="site.acess.saturacao === 'baixa'"
-                    aria-label="Saturação reduzida"
-                    role="switch"
-                  >
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Escala de cinza</span>
-                    <span class="pref-toggle__desc">Remove todas as cores</span>
-                  </div>
-                  <button
-                    :class="['pref-switch', { 'is-on': site.acess.saturacao === 'zero' }]"
-                    @click="site.setAcess('saturacao', site.acess.saturacao === 'zero' ? 'normal' : 'zero')"
-                    :aria-pressed="site.acess.saturacao === 'zero'"
-                    aria-label="Escala de cinza"
-                    role="switch"
-                  >
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-              </div>
-            </fieldset>
-
-            <!-- DALTONISMO -->
-            <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 22C6.5 22 2 17.5 2 12s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z"/></svg>
-                Daltonismo
-              </legend>
-              <div class="pref-row pref-row--2">
-                <button :class="['pref-opt', { 'is-active': site.acess.daltonismo === 'none' }]" @click="site.setAcess('daltonismo', 'none')">Nenhum</button>
-                <button :class="['pref-opt', { 'is-active': site.acess.daltonismo === 'protanopia' }]" @click="site.setAcess('daltonismo', 'protanopia')">Protanopia</button>
-                <button :class="['pref-opt', { 'is-active': site.acess.daltonismo === 'deuteranopia' }]" @click="site.setAcess('daltonismo', 'deuteranopia')">Deuteranopia</button>
-                <button :class="['pref-opt', { 'is-active': site.acess.daltonismo === 'tritanopia' }]" @click="site.setAcess('daltonismo', 'tritanopia')">Tritanopia</button>
-              </div>
-            </fieldset>
-
-            <!-- LEITURA -->
-            <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                Leitura
-              </legend>
-              <div class="pref-col">
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Fonte para dislexia</span>
-                    <span class="pref-toggle__desc">Usa OpenDyslexic</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.fonteDislexia }]" @click="site.setAcess('fonteDislexia', !site.acess.fonteDislexia)" :aria-pressed="site.acess.fonteDislexia" aria-label="Fonte para dislexia" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Sublinhar links</span>
-                    <span class="pref-toggle__desc">Destaca todos os links</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.sublinharLinks }]" @click="site.setAcess('sublinharLinks', !site.acess.sublinharLinks)" :aria-pressed="site.acess.sublinharLinks" aria-label="Sublinhar links" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Largura reduzida</span>
-                    <span class="pref-toggle__desc">Facilita a leitura</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.larguraReduzida }]" @click="site.setAcess('larguraReduzida', !site.acess.larguraReduzida)" :aria-pressed="site.acess.larguraReduzida" aria-label="Largura reduzida" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-              </div>
-
-              <!-- Espaçamento -->
-              <div style="margin-top:10px;">
-                <p class="pref-sub-label">Espaçamento entre letras</p>
-                <div class="pref-row pref-row--3">
-                  <button :class="['pref-opt', { 'is-active': site.acess.espacamento === 'normal' }]" @click="site.setAcess('espacamento', 'normal')">Normal</button>
-                  <button :class="['pref-opt', { 'is-active': site.acess.espacamento === 'medio' }]" @click="site.setAcess('espacamento', 'medio')">Médio</button>
-                  <button :class="['pref-opt', { 'is-active': site.acess.espacamento === 'grande' }]" @click="site.setAcess('espacamento', 'grande')">Amplo</button>
-                </div>
-              </div>
-
-              <!-- Altura de linha -->
-              <div style="margin-top:10px;">
-                <p class="pref-sub-label">Altura de linha</p>
-                <div class="pref-row pref-row--3">
-                  <button :class="['pref-opt', { 'is-active': site.acess.alturaLinha === 'normal' }]" @click="site.setAcess('alturaLinha', 'normal')">Normal</button>
-                  <button :class="['pref-opt', { 'is-active': site.acess.alturaLinha === 'media' }]" @click="site.setAcess('alturaLinha', 'media')">Média</button>
-                  <button :class="['pref-opt', { 'is-active': site.acess.alturaLinha === 'grande' }]" @click="site.setAcess('alturaLinha', 'grande')">Ampla</button>
-                </div>
-              </div>
-            </fieldset>
-
-            <!-- NAVEGAÇÃO -->
-            <fieldset class="pref-group">
-              <legend class="pref-group__label">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-                Navegação
-              </legend>
-              <div class="pref-col">
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Reduzir animações</span>
-                    <span class="pref-toggle__desc">Remove efeitos visuais</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.reduzirAnimacoes }]" @click="site.setAcess('reduzirAnimacoes', !site.acess.reduzirAnimacoes)" :aria-pressed="site.acess.reduzirAnimacoes" aria-label="Reduzir animações" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Foco visível</span>
-                    <span class="pref-toggle__desc">Destaca elemento focado</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.focoVisivel }]" @click="site.setAcess('focoVisivel', !site.acess.focoVisivel)" :aria-pressed="site.acess.focoVisivel" aria-label="Foco visível" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-                <label class="pref-toggle">
-                  <div class="pref-toggle__info">
-                    <span class="pref-toggle__label">Cursor grande</span>
-                    <span class="pref-toggle__desc">Aumenta o ponteiro</span>
-                  </div>
-                  <button :class="['pref-switch', { 'is-on': site.acess.cursorGrande }]" @click="site.setAcess('cursorGrande', !site.acess.cursorGrande)" :aria-pressed="site.acess.cursorGrande" aria-label="Cursor grande" role="switch">
-                    <span class="pref-switch__thumb"></span>
-                  </button>
-                </label>
-              </div>
-            </fieldset>
-
             <div class="pref-watermark" aria-hidden="true">The Art of Silent Power</div>
           </div>
         </div>
       </transition>
 
-      <!-- ── MODAL AUTH ── -->
+      <!-- ══════════════════════════════════════════
+           MODAL AUTH — LOGIN + CADASTRO COM VERIFICAÇÃO
+      ══════════════════════════════════════════ -->
       <transition name="fade" appear>
-        <div v-if="modalOpen" key="auth-modal-overlay" class="nb-overlay" @click.self="closeModal" role="dialog" :aria-label="modalTab === 'login' ? 'Fazer login' : 'Criar conta'" aria-modal="true">
+        <div v-if="modalOpen" class="nb-overlay" @click.self="closeModal" role="dialog"
+          :aria-label="modalTab === 'login' ? 'Fazer login' : 'Criar conta'" aria-modal="true">
           <div class="auth-modal">
+
+            <!-- LATERAL ESQUERDA -->
             <aside class="auth-esq" aria-hidden="true">
               <div class="auth-orb auth-orb--1"></div>
               <div class="auth-orb auth-orb--2"></div>
@@ -504,55 +281,88 @@
               <div class="auth-copy">
                 <h2 class="auth-titulo">
                   <span v-if="modalTab === 'login'">Bem-vindo<br/><em>de volta</em></span>
-                  <span v-else>Entre para o<br/><em>seleto círculo</em></span>
+                  <span v-else-if="cadastroStep === 1">Entre para o<br/><em>seleto círculo</em></span>
+                  <span v-else-if="cadastroStep === 2">Verificação<br/><em>de identidade</em></span>
+                  <span v-else>Reconhecimento<br/><em>facial</em></span>
                 </h2>
                 <p class="auth-desc">
                   <span v-if="modalTab === 'login'">Acesse sua coleção com total segurança e exclusividade.</span>
-                  <span v-else>Acesso a lançamentos, peças limitadas e benefícios VIP.</span>
+                  <span v-else-if="cadastroStep === 1">Acesso a lançamentos, peças limitadas e benefícios VIP.</span>
+                  <span v-else-if="cadastroStep === 2">Precisamos confirmar sua identidade com RG para garantir segurança e evitar fraudes.</span>
+                  <span v-else>Tire uma selfie para confirmar que você é o titular do documento enviado.</span>
                 </p>
               </div>
-              <ul class="auth-feats">
+
+              <!-- Checklist de progresso no cadastro -->
+              <ul v-if="modalTab === 'cadastro'" class="auth-steps-list">
+                <li :class="['auth-step', { 'is-done': cadastroStep > 1, 'is-active': cadastroStep === 1 }]">
+                  <span class="auth-step__ico">{{ cadastroStep > 1 ? '✓' : '1' }}</span>
+                  Dados pessoais
+                </li>
+                <li :class="['auth-step', { 'is-done': cadastroStep > 2, 'is-active': cadastroStep === 2 }]">
+                  <span class="auth-step__ico">{{ cadastroStep > 2 ? '✓' : '2' }}</span>
+                  Documento RG
+                </li>
+                <li :class="['auth-step', { 'is-done': cadastroStep > 3, 'is-active': cadastroStep === 3 }]">
+                  <span class="auth-step__ico">{{ cadastroStep > 3 ? '✓' : '3' }}</span>
+                  Selfie / Biometria
+                </li>
+              </ul>
+
+              <ul v-else class="auth-feats">
                 <li v-for="f in currentFeatures" :key="f"><span aria-hidden="true">◆</span>{{ f }}</li>
               </ul>
               <div class="auth-watermark" aria-hidden="true">The Art of<br/>Silent Power</div>
               <p class="auth-ssl">
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 SSL 256-bit · Dados protegidos
               </p>
             </aside>
+
+            <!-- DIREITA -->
             <div class="auth-dir">
               <button class="auth-close" @click="closeModal" aria-label="Fechar">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
+
+              <!-- Aviso login necessário -->
               <transition name="slide-down">
                 <div v-if="loginNecessario" class="auth-aviso" role="alert">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                   <span>Faça login para adicionar ao carrinho</span>
                 </div>
               </transition>
+
+              <!-- Bloqueio por tentativas -->
               <transition name="slide-down">
-                <div v-if="loginBloqueado" class="auth-bloqueado" role="alert" aria-live="assertive">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <div v-if="loginBloqueado" class="auth-bloqueado" role="alert">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                   <div>
                     <p class="bloqueado-titulo">Acesso temporariamente bloqueado</p>
-                    <p class="bloqueado-desc">Muitas tentativas incorretas. Aguarde <strong>{{ bloqueioRestante }}s</strong> para tentar novamente.</p>
+                    <p class="bloqueado-desc">Aguarde <strong>{{ bloqueioRestante }}s</strong> para tentar novamente.</p>
                   </div>
                 </div>
               </transition>
+
+              <!-- Tentativas restantes -->
               <transition name="slide-down">
-                <div v-if="tentativasRestantes < 5 && tentativasRestantes > 0 && !loginBloqueado && modalTab === 'login'" class="auth-tentativas" role="status" aria-live="polite">
+                <div v-if="tentativasRestantes < 5 && tentativasRestantes > 0 && !loginBloqueado && modalTab === 'login'" class="auth-tentativas" role="status">
                   <div class="tentativas-dots">
                     <span v-for="i in 5" :key="i" :class="['tentativa-dot', { 'used': i > tentativasRestantes }]"></span>
                   </div>
                   <span>{{ tentativasRestantes }} tentativa{{ tentativasRestantes !== 1 ? 's' : '' }} restante{{ tentativasRestantes !== 1 ? 's' : '' }}</span>
                 </div>
               </transition>
+
+              <!-- TABS -->
               <div class="auth-tabs" role="tablist">
-                <button :class="['auth-tab', { 'is-active': modalTab === 'login' }]" @click="switchTab('login')" role="tab" :aria-selected="modalTab === 'login'" id="tab-login" aria-controls="panel-login">入る — Entrar</button>
-                <button :class="['auth-tab', { 'is-active': modalTab === 'cadastro' }]" @click="switchTab('cadastro')" role="tab" :aria-selected="modalTab === 'cadastro'" id="tab-cadastro" aria-controls="panel-cadastro">参加 — Cadastrar</button>
+                <button :class="['auth-tab', { 'is-active': modalTab === 'login' }]" @click="switchTab('login')" role="tab" :aria-selected="modalTab === 'login'">入る — Entrar</button>
+                <button :class="['auth-tab', { 'is-active': modalTab === 'cadastro' }]" @click="switchTab('cadastro')" role="tab" :aria-selected="modalTab === 'cadastro'">参加 — Cadastrar</button>
               </div>
+
+              <!-- ─── LOGIN ─── -->
               <transition name="slide" mode="out-in">
-                <div v-if="modalTab === 'login'" key="login" class="auth-form" role="tabpanel" id="panel-login" aria-labelledby="tab-login">
+                <div v-if="modalTab === 'login'" key="login" class="auth-form" role="tabpanel">
                   <div class="af-campo">
                     <label for="l-email">E-mail</label>
                     <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email', 'af-linha--focus': focusField === 'email' }">
@@ -573,100 +383,354 @@
                     <router-link to="/redefinir-senha" @click="closeModal">Esqueceu a senha?</router-link>
                   </div>
                   <p v-if="formError" class="af-erro" role="alert">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     {{ formError }}
                   </p>
                   <button type="button" class="af-submit" :disabled="auth.loading || loginBloqueado" @click="fazerLogin">
-                    <span v-if="auth.loading" class="or-spinner-sm" aria-hidden="true"></span>
-                    <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    <span v-if="auth.loading" class="or-spinner-sm"></span>
+                    <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                     {{ auth.loading ? 'Verificando...' : loginBloqueado ? `Bloqueado (${bloqueioRestante}s)` : 'Acessar minha conta' }}
                   </button>
                   <div class="af-ou" aria-hidden="true"><span>ou continue com</span></div>
                   <div class="af-google-wrap">
                     <button type="button" class="af-google" @click="loginGoogle" :disabled="loginBloqueado">
-                      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                       Continuar com Google
                     </button>
-                    <p class="af-google-nota">
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                      Novo usuário? Será redirecionado para o cadastro automaticamente.
-                    </p>
                   </div>
                   <p class="af-rodape">Não tem conta? <button type="button" @click="switchTab('cadastro')">Cadastre-se</button></p>
                 </div>
-                <div v-else key="cadastro" class="auth-form" role="tabpanel" id="panel-cadastro" aria-labelledby="tab-cadastro">
-                  <div class="af-duplo">
-                    <div class="af-campo">
-                      <label for="c-nome">Nome</label>
-                      <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'nome', 'af-linha--focus': focusField === 'nome' }">
-                        <input id="c-nome" v-model="form.nome" placeholder="Seu nome" autocomplete="given-name" @focus="focusField = 'nome'" @blur="focusField = ''" />
+
+                <!-- ─── CADASTRO MULTI-STEP ─── -->
+                <div v-else key="cadastro" class="auth-form" role="tabpanel">
+
+                  <!-- ══ STEP 1: Dados pessoais ══ -->
+                  <transition name="slide" mode="out-in">
+                    <div v-if="cadastroStep === 1" key="step1">
+                      <div class="af-step-header">
+                        <span class="af-step-badge">Passo 1 de 3</span>
+                        <span class="af-step-title">Dados pessoais</span>
                       </div>
-                    </div>
-                    <div class="af-campo">
-                      <label for="c-sobrenome">Sobrenome</label>
-                      <div class="af-linha" :class="{ 'af-linha--focus': focusField === 'sobrenome' }">
-                        <input id="c-sobrenome" v-model="form.sobrenome" placeholder="Sobrenome" autocomplete="family-name" @focus="focusField = 'sobrenome'" @blur="focusField = ''" />
+
+                      <div class="af-duplo">
+                        <div class="af-campo">
+                          <label for="c-nome">Nome *</label>
+                          <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'nome', 'af-linha--focus': focusField === 'nome' }">
+                            <input id="c-nome" v-model="form.nome" placeholder="Seu nome" autocomplete="given-name" @focus="focusField = 'nome'" @blur="focusField = ''" />
+                          </div>
+                        </div>
+                        <div class="af-campo">
+                          <label for="c-sobrenome">Sobrenome</label>
+                          <div class="af-linha" :class="{ 'af-linha--focus': focusField === 'sobrenome' }">
+                            <input id="c-sobrenome" v-model="form.sobrenome" placeholder="Sobrenome" autocomplete="family-name" @focus="focusField = 'sobrenome'" @blur="focusField = ''" />
+                          </div>
+                        </div>
                       </div>
+
+                      <!-- CPF -->
+                      <div class="af-campo">
+                        <label for="c-cpf">CPF *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'cpf', 'af-linha--focus': focusField === 'cpf', 'af-linha--ok': cpfValido === true }">
+                          <input id="c-cpf" v-model="form.cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off"
+                            @focus="focusField = 'cpf'" @blur="focusField = ''" @input="mascaraCPF" />
+                          <span v-if="cpfValido === true" class="af-field-ok" aria-label="CPF válido">✓</span>
+                          <span v-else-if="cpfValido === false && form.cpf.length >= 14" class="af-field-err" aria-label="CPF inválido">✗</span>
+                        </div>
+                        <p v-if="cpfValido === false && form.cpf.length >= 14" class="af-campo-erro">CPF inválido</p>
+                      </div>
+
+                      <!-- Data de nascimento -->
+                      <div class="af-campo">
+                        <label for="c-nasc">Data de nascimento *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'nascimento', 'af-linha--focus': focusField === 'nasc', 'af-linha--ok': idadeValida === true }">
+                          <input id="c-nasc" v-model="form.nascimento" type="date" :max="dataMaxNascimento"
+                            @focus="focusField = 'nasc'" @blur="focusField = ''" @change="verificarIdade" />
+                          <span v-if="idadeValida === true" class="af-field-ok">✓</span>
+                        </div>
+                        <p v-if="idadeValida === false" class="af-campo-erro">Você deve ter 18 anos ou mais para se cadastrar</p>
+                      </div>
+
+                      <div class="af-campo">
+                        <label for="c-email">E-mail *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email', 'af-linha--focus': focusField === 'c-email' }">
+                          <input id="c-email" v-model="form.email" type="email" placeholder="seu@email.com" autocomplete="email" required @focus="focusField = 'c-email'" @blur="focusField = ''" />
+                        </div>
+                      </div>
+
+                      <div class="af-campo">
+                        <label for="c-senha">Senha *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'senha', 'af-linha--focus': focusField === 'c-senha' }">
+                          <input id="c-senha" v-model="form.senha" :type="showPass ? 'text' : 'password'" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required @focus="focusField = 'c-senha'" @blur="focusField = ''" />
+                          <button type="button" class="af-eye" @click="showPass = !showPass">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          </button>
+                        </div>
+                        <div v-if="form.senha" class="af-forca">
+                          <div class="forca-bar"><div class="forca-fill" :style="{ width: forcaSenha.pct + '%', background: forcaSenha.cor }"></div></div>
+                          <span class="forca-txt" :style="{ color: forcaSenha.cor }">{{ forcaSenha.label }}</span>
+                        </div>
+                      </div>
+
+                      <div class="af-campo">
+                        <label for="c-senha2">Confirmar Senha *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': form.senha2 && form.senha !== form.senha2, 'af-linha--focus': focusField === 'c-senha2' }">
+                          <input id="c-senha2" v-model="form.senha2" :type="showPass2 ? 'text' : 'password'" placeholder="Repita a senha" autocomplete="new-password" required @focus="focusField = 'c-senha2'" @blur="focusField = ''" />
+                          <button type="button" class="af-eye" @click="showPass2 = !showPass2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          </button>
+                        </div>
+                        <p v-if="form.senha2 && form.senha !== form.senha2" class="af-campo-erro">As senhas não coincidem</p>
+                      </div>
+
+                      <div class="af-termos">
+                        <label class="af-check-row">
+                          <input type="checkbox" v-model="aceitouTermos" />
+                          <span class="af-check-box" aria-hidden="true"></span>
+                          <span class="af-check-texto">Li e aceito os <button type="button" class="af-link-termos" @click.stop="termosOpen = !termosOpen">Termos</button> e a <a href="/politica-privacidade" target="_blank" class="af-link-termos">Privacidade</a></span>
+                        </label>
+                        <transition name="termos-drop">
+                          <div v-if="termosOpen" class="af-termos-body">
+                            <p>Ao criar sua conta, você concorda em usar a plataforma de forma lícita e aceitar as condições de compra da Noir &amp; Or. Seus dados de identidade são usados apenas para verificação. <a href="/termos" target="_blank">Ver termos completos</a>.</p>
+                          </div>
+                        </transition>
+                      </div>
+
+                      <p v-if="formError" class="af-erro" role="alert">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {{ formError }}
+                      </p>
+
+                      <button type="button" class="af-submit" :disabled="auth.loading" @click="avancarStep1">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg>
+                        Continuar para verificação
+                      </button>
+
+                      <div class="af-ou" aria-hidden="true"><span>ou cadastre com</span></div>
+                      <div class="af-google-wrap">
+                        <button type="button" class="af-google" @click="loginGoogle">
+                          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                          Cadastrar com Google
+                        </button>
+                      </div>
+                      <p class="af-rodape">Já tem conta? <button type="button" @click="switchTab('login')">Entre aqui</button></p>
                     </div>
-                  </div>
-                  <div class="af-campo">
-                    <label for="c-email">E-mail</label>
-                    <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email', 'af-linha--focus': focusField === 'c-email' }">
-                      <input id="c-email" v-model="form.email" type="email" placeholder="seu@email.com" autocomplete="email" required @focus="focusField = 'c-email'" @blur="focusField = ''" />
-                    </div>
-                  </div>
-                  <div class="af-campo">
-                    <label for="c-senha">Senha</label>
-                    <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'senha', 'af-linha--focus': focusField === 'c-senha' }">
-                      <input id="c-senha" v-model="form.senha" :type="showPass ? 'text' : 'password'" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required @focus="focusField = 'c-senha'" @blur="focusField = ''" />
-                      <button type="button" class="af-eye" @click="showPass = !showPass" :aria-label="showPass ? 'Ocultar senha' : 'Mostrar senha'">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+
+                    <!-- ══ STEP 2: Documento RG ══ -->
+                    <div v-else-if="cadastroStep === 2" key="step2">
+                      <div class="af-step-header">
+                        <button class="af-step-back" @click="cadastroStep = 1" aria-label="Voltar">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                          Voltar
+                        </button>
+                        <span class="af-step-badge">Passo 2 de 3</span>
+                        <span class="af-step-title">Documento de identidade</span>
+                      </div>
+
+                      <div class="id-aviso">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <p>Envie fotos do seu <strong>RG</strong> (frente e verso). As imagens são usadas apenas para confirmar sua identidade e não são armazenadas.</p>
+                      </div>
+
+                      <!-- Número do RG -->
+                      <div class="af-campo" style="margin-top:16px;">
+                        <label for="c-rg">Número do RG *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'rg', 'af-linha--focus': focusField === 'rg', 'af-linha--ok': form.rg.length >= 7 }">
+                          <input id="c-rg" v-model="form.rg" placeholder="00.000.000-0" maxlength="12" @focus="focusField = 'rg'" @blur="focusField = ''" @input="mascaraRG" />
+                          <span v-if="form.rg.length >= 7" class="af-field-ok">✓</span>
+                        </div>
+                      </div>
+
+                      <!-- Órgão emissor -->
+                      <div class="af-campo">
+                        <label for="c-orgao">Órgão emissor *</label>
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'orgao', 'af-linha--focus': focusField === 'orgao' }">
+                          <input id="c-orgao" v-model="form.orgaoEmissor" placeholder="Ex: SSP/SP" maxlength="10" @focus="focusField = 'orgao'" @blur="focusField = ''" />
+                        </div>
+                      </div>
+
+                      <!-- Upload RG Frente -->
+                      <div class="id-upload-area">
+                        <p class="id-upload-label">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                          RG — Frente *
+                        </p>
+                        <label class="id-upload-box" :class="{ 'has-file': rgFrente, 'is-drag': dragFrente }"
+                          @dragover.prevent="dragFrente = true" @dragleave="dragFrente = false" @drop.prevent="onDropRG($event, 'frente')">
+                          <input type="file" accept="image/*" class="id-upload-input" @change="onFileRG($event, 'frente')" />
+                          <div v-if="rgFrente" class="id-preview">
+                            <img :src="rgFrentePreview" alt="RG Frente" />
+                            <button type="button" class="id-preview-del" @click.prevent="removerRG('frente')" aria-label="Remover imagem">✗</button>
+                            <span class="id-preview-ok">✓ Frente adicionada</span>
+                          </div>
+                          <div v-else class="id-upload-placeholder">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="7" y1="8" x2="10" y2="8"/><line x1="7" y1="11" x2="14" y2="11"/><circle cx="16" cy="8" r="2"/></svg>
+                            <span>Clique ou arraste a foto da frente</span>
+                            <span class="id-upload-sub">JPG, PNG ou WEBP — máx. 5MB</span>
+                          </div>
+                        </label>
+                      </div>
+
+                      <!-- Upload RG Verso -->
+                      <div class="id-upload-area">
+                        <p class="id-upload-label">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                          RG — Verso *
+                        </p>
+                        <label class="id-upload-box" :class="{ 'has-file': rgVerso, 'is-drag': dragVerso }"
+                          @dragover.prevent="dragVerso = true" @dragleave="dragVerso = false" @drop.prevent="onDropRG($event, 'verso')">
+                          <input type="file" accept="image/*" class="id-upload-input" @change="onFileRG($event, 'verso')" />
+                          <div v-if="rgVerso" class="id-preview">
+                            <img :src="rgVersoPreview" alt="RG Verso" />
+                            <button type="button" class="id-preview-del" @click.prevent="removerRG('verso')" aria-label="Remover imagem">✗</button>
+                            <span class="id-preview-ok">✓ Verso adicionado</span>
+                          </div>
+                          <div v-else class="id-upload-placeholder">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14" x2="12" y2="14"/></svg>
+                            <span>Clique ou arraste a foto do verso</span>
+                            <span class="id-upload-sub">JPG, PNG ou WEBP — máx. 5MB</span>
+                          </div>
+                        </label>
+                      </div>
+
+                      <p v-if="formError" class="af-erro" role="alert">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {{ formError }}
+                      </p>
+
+                      <button type="button" class="af-submit" :disabled="verificandoDoc" @click="avancarStep2">
+                        <span v-if="verificandoDoc" class="or-spinner-sm"></span>
+                        <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg>
+                        {{ verificandoDoc ? 'Verificando documento...' : 'Continuar para selfie' }}
                       </button>
                     </div>
-                    <div v-if="form.senha" class="af-forca" aria-label="Força da senha">
-                      <div class="forca-bar"><div class="forca-fill" :style="{ width: forcaSenha.pct + '%', background: forcaSenha.cor }"></div></div>
-                      <span class="forca-txt" :style="{ color: forcaSenha.cor }">{{ forcaSenha.label }}</span>
-                    </div>
-                  </div>
-                  <div class="af-campo">
-                    <label for="c-senha2">Confirmar Senha</label>
-                    <div class="af-linha" :class="{ 'af-linha--erro': form.senha2 && form.senha !== form.senha2, 'af-linha--focus': focusField === 'c-senha2' }">
-                      <input id="c-senha2" v-model="form.senha2" :type="showPass2 ? 'text' : 'password'" placeholder="Repita a senha" autocomplete="new-password" required @focus="focusField = 'c-senha2'" @blur="focusField = ''" />
-                      <button type="button" class="af-eye" @click="showPass2 = !showPass2" :aria-label="showPass2 ? 'Ocultar' : 'Mostrar'">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                      </button>
-                    </div>
-                    <p v-if="form.senha2 && form.senha !== form.senha2" class="af-campo-erro">As senhas não coincidem</p>
-                  </div>
-                  <div class="af-termos">
-                    <label class="af-check-row">
-                      <input type="checkbox" v-model="aceitouTermos" />
-                      <span class="af-check-box" aria-hidden="true"></span>
-                      <span class="af-check-texto">Li e aceito os <button type="button" class="af-link-termos" @click.stop="termosOpen = !termosOpen">Termos</button> e a <a href="/politica-privacidade" target="_blank" class="af-link-termos">Privacidade</a></span>
-                    </label>
-                    <transition name="termos-drop">
-                      <div v-if="termosOpen" class="af-termos-body">
-                        <p>Ao criar sua conta, você concorda em usar a plataforma de forma lícita, manter a confidencialidade de seus dados e aceitar as condições de compra da Noir &amp; Or. <a href="/termos" target="_blank">Ver termos completos</a>.</p>
+
+                    <!-- ══ STEP 3: Reconhecimento Facial ══ -->
+                    <div v-else-if="cadastroStep === 3" key="step3">
+                      <div class="af-step-header">
+                        <button class="af-step-back" @click="cadastroStep = 2" aria-label="Voltar">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                          Voltar
+                        </button>
+                        <span class="af-step-badge">Passo 3 de 3</span>
+                        <span class="af-step-title">Reconhecimento facial</span>
                       </div>
-                    </transition>
-                  </div>
-                  <p v-if="formError" class="af-erro" role="alert">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    {{ formError }}
-                  </p>
-                  <button type="button" class="af-submit" :disabled="auth.loading || (form.senha2 && form.senha !== form.senha2)" @click="fazerCadastro">
-                    <span v-if="auth.loading" class="or-spinner-sm" aria-hidden="true"></span>
-                    <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-                    {{ auth.loading ? 'Criando conta...' : 'Criar minha conta' }}
-                  </button>
-                  <div class="af-ou" aria-hidden="true"><span>ou cadastre com</span></div>
-                  <div class="af-google-wrap">
-                    <button type="button" class="af-google" @click="loginGoogle">
-                      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                      Cadastrar com Google
-                    </button>
-                  </div>
-                  <p class="af-rodape">Já tem conta? <button type="button" @click="switchTab('login')">Entre aqui</button></p>
+
+                      <div class="id-aviso id-aviso--info">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <p>Posicione seu rosto no centro da câmera com boa iluminação. A selfie será comparada com o RG enviado.</p>
+                      </div>
+
+                      <!-- Área da câmera -->
+                      <div class="face-cam-wrap">
+                        <div class="face-cam-frame" :class="{ 'is-scanning': faceScanning, 'is-ok': faceCapturada, 'is-erro': faceErro }">
+                          <!-- Guia oval -->
+                          <div class="face-oval-guide" aria-hidden="true">
+                            <svg viewBox="0 0 280 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <ellipse cx="140" cy="160" rx="100" ry="130" stroke="currentColor" stroke-width="2" stroke-dasharray="8 5"/>
+                            </svg>
+                          </div>
+                          <!-- Cantos decorativos -->
+                          <span class="face-corner face-corner--tl" aria-hidden="true"></span>
+                          <span class="face-corner face-corner--tr" aria-hidden="true"></span>
+                          <span class="face-corner face-corner--bl" aria-hidden="true"></span>
+                          <span class="face-corner face-corner--br" aria-hidden="true"></span>
+
+                          <!-- Vídeo da câmera -->
+                          <video v-if="cameraAtiva && !faceCapturada" ref="videoRef" class="face-video" autoplay playsinline muted></video>
+
+                          <!-- Preview da selfie capturada -->
+                          <div v-if="faceCapturada && selfiePreview" class="face-preview">
+                            <img :src="selfiePreview" alt="Selfie capturada" />
+                            <div class="face-preview-ok">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                          </div>
+
+                          <!-- Estado: câmera não iniciada -->
+                          <div v-if="!cameraAtiva && !faceCapturada" class="face-cam-idle">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <span>Câmera desativada</span>
+                          </div>
+
+                          <!-- Scan animado -->
+                          <div v-if="faceScanning" class="face-scan-line" aria-hidden="true"></div>
+
+                          <!-- Canvas oculto para captura -->
+                          <canvas ref="canvasRef" class="face-canvas-hidden"></canvas>
+                        </div>
+
+                        <!-- Status da verificação -->
+                        <div class="face-status">
+                          <span v-if="!cameraAtiva && !faceCapturada" class="face-status-txt">Pronto para iniciar</span>
+                          <span v-else-if="cameraAtiva && !faceScanning && !faceCapturada" class="face-status-txt face-status-txt--live">
+                            <span class="face-dot-live" aria-hidden="true"></span>
+                            Câmera ativa — centralize seu rosto
+                          </span>
+                          <span v-else-if="faceScanning" class="face-status-txt face-status-txt--scan">Analisando biometria...</span>
+                          <span v-else-if="faceCapturada && !faceErro" class="face-status-txt face-status-txt--ok">Identidade confirmada</span>
+                          <span v-else-if="faceErro" class="face-status-txt face-status-txt--err">{{ faceErro }}</span>
+                        </div>
+
+                        <!-- Dicas -->
+                        <ul v-if="cameraAtiva && !faceCapturada" class="face-dicas">
+                          <li>Olhe diretamente para a câmera</li>
+                          <li>Ambiente bem iluminado</li>
+                          <li>Remova óculos escuros ou máscara</li>
+                        </ul>
+                      </div>
+
+                      <!-- Botões da câmera -->
+                      <div class="face-btns">
+                        <button v-if="!cameraAtiva && !faceCapturada" type="button" class="af-submit" @click="iniciarCamera">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                          Ativar câmera
+                        </button>
+                        <button v-else-if="cameraAtiva && !faceCapturada" type="button" class="af-submit" :disabled="faceScanning" @click="capturarSelfie">
+                          <span v-if="faceScanning" class="or-spinner-sm"></span>
+                          <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                          {{ faceScanning ? 'Verificando...' : 'Tirar selfie' }}
+                        </button>
+                        <button v-else-if="faceCapturada" type="button" class="af-submit af-submit--success" :disabled="auth.loading" @click="finalizarCadastro">
+                          <span v-if="auth.loading" class="or-spinner-sm"></span>
+                          <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                          {{ auth.loading ? 'Criando conta...' : 'Criar minha conta' }}
+                        </button>
+
+                        <button v-if="faceCapturada || faceErro" type="button" class="af-btn-ghost" @click="resetarFace">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                          Tentar novamente
+                        </button>
+                      </div>
+
+                      <p v-if="formError" class="af-erro" role="alert">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {{ formError }}
+                      </p>
+
+                      <!-- Checklist de verificações -->
+                      <div v-if="faceCapturada" class="verif-checklist">
+                        <p class="verif-checklist__titulo">Verificações concluídas</p>
+                        <ul>
+                          <li class="verif-item verif-item--ok">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            CPF válido e verificado
+                          </li>
+                          <li class="verif-item verif-item--ok">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Maior de 18 anos confirmado
+                          </li>
+                          <li class="verif-item verif-item--ok">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Documento RG enviado
+                          </li>
+                          <li class="verif-item verif-item--ok">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Selfie biométrica aprovada
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </transition>
                 </div>
               </transition>
             </div>
@@ -674,7 +738,7 @@
         </div>
       </transition>
 
-      <!-- ── CARRINHO DRAWER ── -->
+      <!-- CARRINHO DRAWER -->
       <div :class="['drawer-overlay', { 'is-open': cartOpen }]" @click.self="cartOpen = false" role="dialog" aria-label="Carrinho" aria-modal="true">
         <aside class="drawer">
           <div class="drawer-kamon" aria-hidden="true">蔵</div>
@@ -684,12 +748,12 @@
                 <span class="drawer__kanji" aria-hidden="true">蔵</span>
                 <div>
                   <span class="drawer__titulo">Meu Atelier</span>
-                  <span v-if="auth.isLogado && totalItens > 0" class="drawer__qtd" aria-live="polite">{{ totalItens }} {{ totalItens === 1 ? 'item' : 'itens' }}</span>
+                  <span v-if="auth.isLogado && totalItens > 0" class="drawer__qtd">{{ totalItens }} {{ totalItens === 1 ? 'item' : 'itens' }}</span>
                 </div>
               </div>
             </div>
-            <div class="drawer__brasilia" aria-label="Horário de Brasília">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div class="drawer__brasilia">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               <span>{{ brasiliaTime }}</span>
               <span class="drawer__brasilia-label">BRT</span>
             </div>
@@ -697,229 +761,120 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
           </header>
-          <div class="drawer__tabs" role="tablist" aria-label="Seções">
-            <button :class="['drawer__tab', { 'is-active': drawerTab === 'carrinho' }]" @click="drawerTab = 'carrinho'" role="tab" :aria-selected="drawerTab === 'carrinho'">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <div class="drawer__tabs" role="tablist">
+            <button :class="['drawer__tab', { 'is-active': drawerTab === 'carrinho' }]" @click="drawerTab = 'carrinho'" role="tab">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               Carrinho
               <span v-if="auth.isLogado && totalItens > 0" class="drawer__tab-badge">{{ totalItens > 9 ? '9+' : totalItens }}</span>
             </button>
-            <button :class="['drawer__tab', { 'is-active': drawerTab === 'futuras' }]" @click="drawerTab = 'futuras'" role="tab" :aria-selected="drawerTab === 'futuras'">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <button :class="['drawer__tab', { 'is-active': drawerTab === 'futuras' }]" @click="drawerTab = 'futuras'" role="tab">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
               Compras Futuras
               <span v-if="savedItems.length > 0" class="drawer__tab-badge drawer__tab-badge--saved">{{ savedItems.length }}</span>
             </button>
           </div>
-          <template v-if="drawerTab === 'carrinho'">
-            <div class="drawer__ornament" aria-hidden="true">
-              <span>◆</span><span class="drawer__ornament-line"></span>
-              <span class="drawer__ornament-text">コレクション</span>
-              <span class="drawer__ornament-line"></span><span>◆</span>
+
+          <div class="drawer__items" role="list">
+            <div v-if="!auth.isLogado" class="drawer__vazio drawer__vazio--login">
+              <div class="drawer__vazio__ico"><span class="vazio-kanji">客</span></div>
+              <p class="drawer__vazio__titulo">Faça login para ver seu carrinho</p>
+              <p class="drawer__vazio__sub">Suas peças selecionadas ficam salvas em sua conta</p>
+              <button class="drawer__vazio__cta" @click="cartOpen = false; openModal('login', true)">Entrar na conta <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
             </div>
-            <div v-if="auth.isLogado && cartItems.length" class="drawer__clear-bar">
-              <span class="drawer__clear-count">{{ totalItens }} {{ totalItens === 1 ? 'item' : 'itens' }}</span>
-              <button class="drawer__clear-btn" @click="confirmarLimparCarrinho" aria-label="Remover todos os itens do carrinho">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                Limpar carrinho
-              </button>
-            </div>
-            <transition name="slide-down">
-              <div v-if="confirmLimpar" class="drawer__confirm-bar" role="alert">
-                <span class="drawer__confirm-txt">Remover todos os itens?</span>
-                <div class="drawer__confirm-btns">
-                  <button class="drawer__confirm-sim" @click="limparCarrinho">Sim, limpar</button>
-                  <button class="drawer__confirm-nao" @click="confirmLimpar = false">Cancelar</button>
-                </div>
-              </div>
-            </transition>
-            <div class="drawer__items" role="list">
-              <div v-if="!auth.isLogado" class="drawer__vazio drawer__vazio--login">
-                <div class="drawer__vazio__ico" aria-hidden="true"><span class="vazio-kanji">客</span></div>
-                <p class="drawer__vazio__titulo">Faça login para ver seu carrinho</p>
-                <p class="drawer__vazio__sub">Suas peças selecionadas ficam salvas em sua conta</p>
-                <div class="drawer__vazio__separador" aria-hidden="true"><span>一</span><span class="vazio-sep-txt">ou</span><span>一</span></div>
-                <button class="drawer__vazio__cta" @click="cartOpen = false; openModal('login', true)">Entrar na conta <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
-                <button class="drawer__vazio__cta-ghost" @click="cartOpen = false; openModal('cadastro')">Criar conta grátis</button>
-              </div>
-              <div v-else-if="!cartItems.length" class="drawer__vazio">
-                <div class="drawer__vazio__ico" aria-hidden="true"><span class="vazio-kanji">空</span></div>
+            <template v-else-if="drawerTab === 'carrinho'">
+              <div v-if="!cartItems.length" class="drawer__vazio">
+                <div class="drawer__vazio__ico"><span class="vazio-kanji">空</span></div>
                 <p class="drawer__vazio__titulo">Seu atelier está vazio</p>
                 <p class="drawer__vazio__sub">Explore a coleção e adicione peças exclusivas</p>
-                <button class="drawer__vazio__cta" @click="cartOpen = false; $router.push('/loja')">Ver coleção <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
+                <button class="drawer__vazio__cta" @click="cartOpen = false; $router.push('/loja')">Ver coleção</button>
               </div>
-              <div v-else v-for="(item, idx) in cartItems" :key="item.id || item._id" class="di" role="listitem" :style="{ '--di-idx': idx }">
-                <div class="di__num" aria-hidden="true">{{ String(idx + 1).padStart(2, '0') }}</div>
-                <div class="di__img" aria-hidden="true">
-                  <img v-if="item.imagem" :src="item.imagem" :alt="item.nome" loading="lazy" @error="e => e.target.style.opacity = '0'" />
-                  <div v-else class="di__img__placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div v-else v-for="(item, idx) in cartItems" :key="item.id || item._id" class="di" role="listitem">
+                <div class="di__num">{{ String(idx + 1).padStart(2, '0') }}</div>
+                <div class="di__img">
+                  <img v-if="item.imagem" :src="item.imagem" :alt="item.nome" loading="lazy" />
+                  <div v-else class="di__img__placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
                 </div>
                 <div class="di__info">
                   <span class="di__cat">{{ item.categoria }}</span>
                   <p class="di__nome">{{ item.nome }}</p>
-                  <div v-if="item.corNome || item.storage" class="di__variantes">
-                    <span v-if="item.corHex" class="di__swatch" :style="{ background: item.corHex }" :title="item.corNome"></span>
-                    <span v-if="item.corNome" class="di__var-txt">{{ item.corNome }}</span>
-                    <span v-if="item.corNome && item.storage" class="di__var-sep">·</span>
-                    <span v-if="item.storage" class="di__var-txt">{{ item.storage }}</span>
-                  </div>
                   <div class="di__foot">
-                    <div class="di__qty" :aria-label="`Quantidade: ${item.qty}`">
-                      <button @click="changeQty(item, -1)" aria-label="Diminuir quantidade">−</button>
-                      <span aria-live="polite">{{ item.qty }}</span>
-                      <button @click="changeQty(item, +1)" aria-label="Aumentar quantidade">+</button>
+                    <div class="di__qty">
+                      <button @click="changeQty(item, -1)">−</button>
+                      <span>{{ item.qty }}</span>
+                      <button @click="changeQty(item, +1)">+</button>
                     </div>
                     <span class="di__preco">R$ {{ fmt(item.preco * item.qty) }}</span>
                   </div>
-                  <button class="di__salvar" @click="salvarParaDepois(item)" :aria-label="`Salvar ${item.nome} para comprar depois`">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    Salvar para depois
-                  </button>
                 </div>
-                <button class="di__remover" @click="removeItem(item.id || item._id)" :aria-label="`Remover ${item.nome} do carrinho`">
+                <button class="di__remover" @click="removeItem(item.id || item._id)">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
-            </div>
-            <footer class="drawer__footer">
-              <template v-if="auth.isLogado && cartItems.length">
-                <div class="drawer__footer-ornament" aria-hidden="true">
-                  <span class="fo-line"></span><span class="fo-kanji">計</span><span class="fo-line"></span>
-                </div>
-                <div class="drawer__totais">
-                  <div class="dt-row"><span>Subtotal</span><span>R$ {{ totalPreco }}</span></div>
-                  <div class="dt-row dt-row--vip"><span><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Envio VIP</span><span>Grátis</span></div>
-                  <div class="dt-row dt-row--total"><span>Total</span><span>R$ {{ totalPreco }}</span></div>
-                </div>
-              </template>
-              <button class="drawer__checkout" :disabled="!auth.isLogado || !cartItems.length" @click="irParaCheckout">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg>
-                {{ !auth.isLogado ? 'Entre para finalizar' : 'Finalizar seleção' }}
-              </button>
-              <p class="drawer__seguro">
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Pagamento seguro via Mercado Pago
-              </p>
-            </footer>
-          </template>
-          <template v-else-if="drawerTab === 'futuras'">
-            <div class="drawer__ornament" aria-hidden="true">
-              <span>◆</span><span class="drawer__ornament-line"></span>
-              <span class="drawer__ornament-text">後で買う</span>
-              <span class="drawer__ornament-line"></span><span>◆</span>
-            </div>
-            <div class="drawer__items" role="list">
-              <div v-if="!auth.isLogado" class="drawer__vazio drawer__vazio--login">
-                <div class="drawer__vazio__ico" aria-hidden="true"><span class="vazio-kanji">客</span></div>
-                <p class="drawer__vazio__titulo">Faça login para usar esta função</p>
-                <p class="drawer__vazio__sub">Salve produtos para comprar em outro momento</p>
-                <button class="drawer__vazio__cta" @click="cartOpen = false; openModal('login', true)">Entrar na conta <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
-              </div>
-              <div v-else-if="!savedItems.length" class="drawer__vazio">
-                <div class="drawer__vazio__ico" aria-hidden="true"><span class="vazio-kanji">後</span></div>
+            </template>
+            <template v-else>
+              <div v-if="!savedItems.length" class="drawer__vazio">
+                <div class="drawer__vazio__ico"><span class="vazio-kanji">後</span></div>
                 <p class="drawer__vazio__titulo">Nenhuma compra futura</p>
                 <p class="drawer__vazio__sub">Use "Salvar para depois" nos itens do carrinho</p>
-                <button class="drawer__vazio__cta" @click="drawerTab = 'carrinho'">Ver carrinho <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
               </div>
-              <div v-else v-for="(item, idx) in savedItems" :key="item.id || item._id" class="di di--saved" role="listitem" :style="{ '--di-idx': idx }">
-                <div class="di__num" aria-hidden="true">{{ String(idx + 1).padStart(2, '0') }}</div>
-                <div class="di__img" aria-hidden="true">
-                  <img v-if="item.imagem" :src="item.imagem" :alt="item.nome" loading="lazy" @error="e => e.target.style.opacity = '0'" />
-                  <div v-else class="di__img__placeholder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div v-else v-for="(item, idx) in savedItems" :key="item.id || item._id" class="di di--saved" role="listitem">
+                <div class="di__num">{{ String(idx + 1).padStart(2, '0') }}</div>
+                <div class="di__img">
+                  <img v-if="item.imagem" :src="item.imagem" :alt="item.nome" loading="lazy" />
                 </div>
                 <div class="di__info">
-                  <span class="di__cat">{{ item.categoria }}</span>
                   <p class="di__nome">{{ item.nome }}</p>
                   <div class="di__foot"><span class="di__preco">R$ {{ fmt(item.preco) }}</span></div>
-                  <button class="di__mover" @click="moverParaCarrinho(item)" aria-label="Mover para o carrinho">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                    Mover para carrinho
-                  </button>
+                  <button class="di__mover" @click="moverParaCarrinho(item)">Mover para carrinho</button>
                 </div>
-                <button class="di__remover" @click="removerSalvo(item.id || item._id)" :aria-label="`Remover ${item.nome} das compras futuras`">
+                <button class="di__remover" @click="removerSalvo(item.id || item._id)">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
-            </div>
-            <footer class="drawer__footer">
-              <p class="drawer__saved-info">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Itens salvos localmente neste dispositivo
-              </p>
-              <button class="drawer__checkout" :disabled="!auth.isLogado || !savedItems.length" @click="moverTodosParaCarrinho">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg>
-                Mover tudo para o carrinho
-              </button>
-            </footer>
-          </template>
+            </template>
+          </div>
+
+          <footer class="drawer__footer">
+            <template v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
+              <div class="drawer__totais">
+                <div class="dt-row"><span>Total</span><span>R$ {{ totalPreco }}</span></div>
+              </div>
+            </template>
+            <button class="drawer__checkout" :disabled="!auth.isLogado || !cartItems.length" @click="irParaCheckout">
+              {{ !auth.isLogado ? 'Entre para finalizar' : 'Finalizar seleção' }}
+            </button>
+          </footer>
         </aside>
       </div>
 
-      <!-- ── SIDEBAR MOBILE ── -->
+      <!-- SIDEBAR MOBILE -->
       <transition name="sb-fade" appear>
-        <div v-if="sidebarOpen" key="sidebar-overlay" class="sb-overlay" @click.self="sidebarOpen = false" role="dialog" aria-label="Menu de navegação" aria-modal="true">
-          <nav id="sidebar-menu" class="sb" @click.stop aria-label="Menu de navegação mobile">
+        <div v-if="sidebarOpen" class="sb-overlay" @click.self="sidebarOpen = false" role="dialog" aria-label="Menu de navegação" aria-modal="true">
+          <nav id="sidebar-menu" class="sb">
             <div class="sb-kamon" aria-hidden="true">案内</div>
             <div class="sb__head">
-              <router-link to="/" class="sb__brand" @click="sidebarOpen = false" aria-label="Página inicial">
+              <router-link to="/" class="sb__brand" @click="sidebarOpen = false">
                 <div class="sb__brand__mark" aria-hidden="true"></div>
                 <span class="sb__brand__txt">Noir<em>&amp;</em>Or</span>
               </router-link>
-              <button class="sb__close" @click="sidebarOpen = false" aria-label="Fechar menu">
+              <button class="sb__close" @click="sidebarOpen = false">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
             </div>
-            <div class="sb__perfil">
-              <div class="sb__av-wrap">
-                <div class="sb__av" aria-hidden="true">
-                  <img v-if="auth.user?.avatar" :src="auth.user.avatar" alt="" referrerpolicy="no-referrer" @error="e => e.target.style.display = 'none'" />
-                  <span v-else-if="auth.isLogado">{{ inicialNome }}</span>
-                  <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </div>
-                <div class="sb__av-kanji" aria-hidden="true">{{ auth.isLogado ? '会員' : '客' }}</div>
-              </div>
-              <div class="sb__perfil__info">
-                <p class="sb__perfil__nome">{{ auth.isLogado ? (auth.user?.nome || 'Usuário') : 'Visitante' }}</p>
-                <p class="sb__perfil__status">
-                  <span v-if="auth.isLogado && auth.user?.vip" class="sb__perfil__vip">◆ {{ auth.user.vip }}</span>
-                  <span v-else-if="auth.isLogado">Membro</span>
-                  <span v-else>Explore a coleção</span>
-                </p>
-              </div>
-            </div>
-            <div class="sb__ornament" aria-hidden="true">
-              <span class="sb-orn-line"></span><span class="sb-orn-kanji">道</span><span class="sb-orn-line"></span>
-            </div>
             <div class="sb__links">
-              <p class="sb__grupo-label"><span aria-hidden="true">行先</span> Navegação</p>
-              <router-link to="/" @click="sidebarOpen = false" class="sb__link"><span class="sb__link-num" aria-hidden="true">一</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início</router-link>
-              <router-link to="/loja" @click="sidebarOpen = false" class="sb__link"><span class="sb__link-num" aria-hidden="true">二</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Loja</router-link>
-              <router-link to="/sobre" @click="sidebarOpen = false" class="sb__link"><span class="sb__link-num" aria-hidden="true">三</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Atelier</router-link>
-              <router-link to="/gamer" @click="sidebarOpen = false" class="sb__link sb__link--gamer"><span class="sb__link-num" aria-hidden="true">四</span><span class="sb__link--gamer__ico" aria-hidden="true">巴</span>Gamer</router-link>
-              <router-link to="/contato" @click="sidebarOpen = false" class="sb__link"><span class="sb__link-num" aria-hidden="true">五</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Concierge</router-link>
-              <div class="sb__ornament sb__ornament--small" aria-hidden="true">
-                <span class="sb-orn-line"></span><span class="sb-orn-kanji">口</span><span class="sb-orn-line"></span>
-              </div>
-              <p class="sb__grupo-label"><span aria-hidden="true">口座</span> Conta</p>
+              <router-link to="/" @click="sidebarOpen = false" class="sb__link">Início</router-link>
+              <router-link to="/loja" @click="sidebarOpen = false" class="sb__link">Loja</router-link>
+              <router-link to="/sobre" @click="sidebarOpen = false" class="sb__link">Atelier</router-link>
+              <router-link to="/gamer" @click="sidebarOpen = false" class="sb__link sb__link--gamer">Gamer</router-link>
+              <router-link to="/contato" @click="sidebarOpen = false" class="sb__link">Concierge</router-link>
               <template v-if="auth.isLogado">
-                <a href="#" @click.prevent="sidebarOpen = false; irParaConta()" class="sb__link"><span class="sb__link-num" aria-hidden="true">◆</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Minha Conta</a>
-                <a href="#" @click.prevent="sidebarOpen = false; cartOpen = true; drawerTab = 'carrinho'" class="sb__link"><span class="sb__link-num" aria-hidden="true">◆</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Carrinho<span v-if="totalItens > 0" class="sb__cart-num">{{ totalItens }}</span></a>
-                <a href="#" @click.prevent="sidebarOpen = false; cartOpen = true; drawerTab = 'futuras'" class="sb__link sb__link--saved"><span class="sb__link-num" aria-hidden="true">◆</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Compras Futuras<span v-if="savedItems.length > 0" class="sb__cart-num sb__cart-num--saved">{{ savedItems.length }}</span></a>
-                <router-link v-if="auth.isAdmin" to="/admin" @click="sidebarOpen = false" class="sb__link sb__link--admin"><span class="sb__link-num" aria-hidden="true">管</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>Painel Admin</router-link>
-                <a href="#" @click.prevent="fazerLogout" class="sb__link sb__link--sair"><span class="sb__link-num" aria-hidden="true">出</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</a>
+                <a href="#" @click.prevent="sidebarOpen = false; irParaConta()" class="sb__link">Minha Conta</a>
+                <a href="#" @click.prevent="fazerLogout" class="sb__link sb__link--sair">Sair</a>
               </template>
               <template v-else>
-                <a href="#" @click.prevent="sidebarOpen = false; openModal('login')" class="sb__link"><span class="sb__link-num" aria-hidden="true">入</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Entrar</a>
-                <a href="#" @click.prevent="sidebarOpen = false; openModal('cadastro')" class="sb__link sb__link--cta"><span class="sb__link-num" aria-hidden="true">新</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Criar conta grátis</a>
+                <a href="#" @click.prevent="sidebarOpen = false; openModal('login')" class="sb__link">Entrar</a>
+                <a href="#" @click.prevent="sidebarOpen = false; openModal('cadastro')" class="sb__link sb__link--cta">Criar conta</a>
               </template>
-            </div>
-            <div class="sb__rodape">
-              <div class="sb__rodape-ornament" aria-hidden="true"><span>好み</span></div>
-              <div class="sb__realms">
-                <button v-for="r in realmsSb" :key="r.id" :class="['sb__realm', { 'is-active': site.tema === r.id }]" @click="site.toggleTema(r.id)" :aria-label="`Realm ${r.name}`">
-                  <span class="sb__realm-dot" :class="`sb__realm-dot--${r.key}`" aria-hidden="true"></span>
-                  {{ r.name }}
-                </button>
-              </div>
-              <p class="sb__copy">© 2025 Noir &amp; Or &nbsp;·&nbsp; <span aria-hidden="true">黒と金</span></p>
             </div>
           </nav>
         </div>
@@ -942,32 +897,55 @@ const cart   = useCartStore()
 const router = useRouter()
 
 /* ── Estado geral ── */
-const scrolled        = ref(false)
-const scrollHide      = ref(false)
-const scrollProgress  = ref(0)
-const sidebarOpen     = ref(false)
-const cartOpen        = ref(false)
-const modalOpen       = ref(false)
-const modalTab        = ref('login')
-const showPass        = ref(false)
-const showPass2       = ref(false)
-const aceitouTermos   = ref(false)
-const termosOpen      = ref(false)
-const formError       = ref('')
-const campoErro       = ref('')
-const focusField      = ref('')
-const cartBounce      = ref(false)
+const scrolled       = ref(false)
+const scrollHide     = ref(false)
+const scrollProgress = ref(0)
+const sidebarOpen    = ref(false)
+const cartOpen       = ref(false)
+const modalOpen      = ref(false)
+const modalTab       = ref('login')
+const showPass       = ref(false)
+const showPass2      = ref(false)
+const aceitouTermos  = ref(false)
+const termosOpen     = ref(false)
+const formError      = ref('')
+const campoErro      = ref('')
+const focusField     = ref('')
+const cartBounce     = ref(false)
 const loginNecessario = ref(false)
-const acessOpen       = ref(false)
-const userDropOpen    = ref(false)
-const userDropRef     = ref(null)
-const logoImgOk       = ref(true)
-const form = ref({ email: '', senha: '', senha2: '', nome: '', sobrenome: '' })
+const acessOpen      = ref(false)
+const userDropOpen   = ref(false)
+const userDropRef    = ref(null)
+const logoImgOk      = ref(true)
+const form = ref({ email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' })
 
-/* ── Drawer tabs + compras futuras ── */
-const drawerTab     = ref('carrinho')
-const savedItems    = ref([])
-const confirmLimpar = ref(false)
+/* ── Multi-step cadastro ── */
+const cadastroStep  = ref(1)
+
+/* ── Validações de identidade ── */
+const cpfValido     = ref(null)   // null | true | false
+const idadeValida   = ref(null)
+const verificandoDoc = ref(false)
+const dragFrente    = ref(false)
+const dragVerso     = ref(false)
+const rgFrente      = ref(null)   // File
+const rgVerso       = ref(null)   // File
+const rgFrentePreview = ref('')
+const rgVersoPreview  = ref('')
+
+/* ── Reconhecimento facial ── */
+const cameraAtiva   = ref(false)
+const faceScanning  = ref(false)
+const faceCapturada = ref(false)
+const faceErro      = ref('')
+const selfiePreview = ref('')
+const videoRef      = ref(null)
+const canvasRef     = ref(null)
+let cameraStream    = null
+
+/* ── Drawer ── */
+const drawerTab  = ref('carrinho')
+const savedItems = ref([])
 
 /* ── Busca ── */
 const searchOpen     = ref(false)
@@ -978,21 +956,18 @@ const searchFocusIdx = ref(-1)
 const searchInput    = ref(null)
 let searchTimer      = null
 
-/* ── Horário Brasília ── */
+/* ── Relógio ── */
 const brasiliaTime = ref('')
 let clockInterval  = null
-
-const updateClock = () => {
+const updateClock  = () => {
   brasiliaTime.value = new Date().toLocaleTimeString('pt-BR', {
-    timeZone: 'America/Sao_Paulo',
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit'
   })
 }
 
-/* ── Toast system ── */
+/* ── Toasts ── */
 const toasts = ref([])
 let toastId  = 0
-
 const addToast = (title, msg = '', type = 'info', duration = 4000) => {
   const id = ++toastId
   toasts.value.push({ id, title, msg, type, duration })
@@ -1012,14 +987,7 @@ const onToastLeave = (el, done) => {
   setTimeout(done, 300)
 }
 
-/* ── Realm buttons na sidebar ── */
-const realmsSb = [
-  { id: 'escuro', key: 'celestial', name: 'Celestial' },
-  { id: 'claro',  key: 'autumn',    name: 'Autumn'    },
-  { id: 'gamer',  key: 'ghost',     name: 'Ghost'     },
-]
-
-/* ══ SEGURANÇA DE LOGIN ══ */
+/* ── Segurança login ── */
 const MAX_TENTATIVAS    = 5
 const BLOQUEIO_BASE_SEG = 30
 const BLOQUEIO_MAX_SEG  = 300
@@ -1038,9 +1006,6 @@ const carregarEstadoSeguranca = () => {
     tentativasFalhadas.value = estado.falhas || 0
     if (estado.bloqueioAte && estado.bloqueioAte > agora) {
       iniciarContadorBloqueio(Math.ceil((estado.bloqueioAte - agora) / 1000))
-    } else if (estado.bloqueioAte && estado.bloqueioAte <= agora) {
-      tentativasFalhadas.value = Math.max(0, (estado.falhas || 0) - 2)
-      salvarEstadoSeguranca()
     }
   } catch {}
 }
@@ -1074,17 +1039,15 @@ const registrarSucesso = () => {
   try { sessionStorage.removeItem('_nor_sec') } catch {}
 }
 
-/* ── Logo dinâmico ── */
+/* ── Logo ── */
 const logoSrc = computed(() => site.tema === 'claro' ? '/logo-light.png' : '/logo-dark.png')
 const logoAlt = computed(() => site.tema === 'claro' ? 'Noir & Or — logotipo (tema claro)' : 'Noir & Or — logotipo (tema escuro)')
 watch(() => site.tema, () => { logoImgOk.value = true })
 
 /* ── Links ── */
 const allLinks = [
-  { label: 'Início',  to: '/' },
-  { label: 'Loja',    to: '/loja' },
-  { label: 'Sobre',   to: '/sobre' },
-  { label: 'Gamer',   to: '/gamer' },
+  { label: 'Início', to: '/' }, { label: 'Loja', to: '/loja' },
+  { label: 'Sobre', to: '/sobre' }, { label: 'Gamer', to: '/gamer' },
   { label: 'Contato', to: '/contato' },
 ]
 
@@ -1101,15 +1064,6 @@ const carregarSalvos = () => {
 const persistirSalvos = () => {
   try { localStorage.setItem('noir_saved', JSON.stringify(savedItems.value)) } catch {}
 }
-const salvarParaDepois = (item) => {
-  if (!savedItems.value.some(i => (i.id || i._id) === (item.id || item._id))) {
-    savedItems.value = [...savedItems.value, { ...item }]
-    persistirSalvos()
-    addToast('Salvo para depois', item.nome, 'success')
-  }
-  removeItem(item.id || item._id)
-  drawerTab.value = 'futuras'
-}
 const removerSalvo = (id) => { savedItems.value = savedItems.value.filter(i => (i.id || i._id) !== id); persistirSalvos() }
 const moverParaCarrinho = (item) => {
   cart.adicionar ? cart.adicionar(item) : cart.items.push({ ...item, qty: 1 })
@@ -1117,14 +1071,6 @@ const moverParaCarrinho = (item) => {
   drawerTab.value = 'carrinho'
   addToast('Adicionado ao carrinho', item.nome, 'success')
 }
-const moverTodosParaCarrinho = () => {
-  const count = savedItems.value.length
-  savedItems.value.forEach(item => { cart.adicionar ? cart.adicionar(item) : cart.items.push({ ...item, qty: 1 }) })
-  savedItems.value = []; persistirSalvos(); drawerTab.value = 'carrinho'
-  addToast(`${count} ${count === 1 ? 'item movido' : 'itens movidos'}`, 'para o carrinho', 'success')
-}
-const confirmarLimparCarrinho = () => { confirmLimpar.value = true }
-const limparCarrinho = () => { cart.limpar(); confirmLimpar.value = false; addToast('Carrinho limpo', '', 'info') }
 
 /* ── Usuário ── */
 const primeiroNome = computed(() => (auth.user?.nome || '').split(' ')[0])
@@ -1132,9 +1078,7 @@ const inicialNome  = computed(() => (auth.user?.nome || 'U').charAt(0).toUpperCa
 
 /* ── Features do modal ── */
 const currentFeatures = computed(() =>
-  modalTab.value === 'login'
-    ? ['Acesso a edições limitadas', 'Histórico de pedidos completo', 'Atendimento VIP 24h']
-    : ['Frete VIP gratuito sempre', 'Acesso antecipado a lançamentos', 'Programa de fidelidade exclusivo']
+  ['Acesso a edições limitadas', 'Histórico de pedidos completo', 'Atendimento VIP 24h']
 )
 
 /* ── Força da senha ── */
@@ -1142,19 +1086,248 @@ const forcaSenha = computed(() => {
   const s = form.value.senha
   if (!s) return { pct: 0, cor: '', label: '' }
   let score = 0
-  if (s.length >= 8)           score++
-  if (s.length >= 12)          score++
-  if (/[A-Z]/.test(s))        score++
-  if (/[0-9]/.test(s))        score++
+  if (s.length >= 8) score++
+  if (s.length >= 12) score++
+  if (/[A-Z]/.test(s)) score++
+  if (/[0-9]/.test(s)) score++
   if (/[^A-Za-z0-9]/.test(s)) score++
   return [
-    { pct: 20,  cor: '#ef4444', label: 'Muito fraca' },
-    { pct: 40,  cor: '#f97316', label: 'Fraca' },
-    { pct: 60,  cor: '#eab308', label: 'Média' },
-    { pct: 80,  cor: '#22c55e', label: 'Forte' },
+    { pct: 20, cor: '#ef4444', label: 'Muito fraca' },
+    { pct: 40, cor: '#f97316', label: 'Fraca' },
+    { pct: 60, cor: '#eab308', label: 'Média' },
+    { pct: 80, cor: '#22c55e', label: 'Forte' },
     { pct: 100, cor: '#16a34a', label: 'Muito forte' },
   ][Math.min(score - 1, 4)] || { pct: 10, cor: '#ef4444', label: 'Muito fraca' }
 })
+
+/* ════════════════════════════════
+   VALIDAÇÕES DE IDENTIDADE
+════════════════════════════════ */
+
+/* CPF — algoritmo de validação real */
+const validarCPF = (cpf) => {
+  const c = cpf.replace(/\D/g, '')
+  if (c.length !== 11) return false
+  if (/^(\d)\1{10}$/.test(c)) return false
+  let soma = 0
+  for (let i = 0; i < 9; i++) soma += parseInt(c[i]) * (10 - i)
+  let r = (soma * 10) % 11
+  if (r === 10 || r === 11) r = 0
+  if (r !== parseInt(c[9])) return false
+  soma = 0
+  for (let i = 0; i < 10; i++) soma += parseInt(c[i]) * (11 - i)
+  r = (soma * 10) % 11
+  if (r === 10 || r === 11) r = 0
+  return r === parseInt(c[10])
+}
+
+const mascaraCPF = () => {
+  let v = form.value.cpf.replace(/\D/g, '').substring(0, 11)
+  if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4')
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3')
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2')
+  form.value.cpf = v
+  if (v.replace(/\D/g, '').length === 11) cpfValido.value = validarCPF(v)
+  else cpfValido.value = null
+}
+
+const mascaraRG = () => {
+  let v = form.value.rg.replace(/\D/g, '').substring(0, 9)
+  if (v.length > 8)      v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4')
+  else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d{1,3})/, '$1.$2.$3')
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d{1,3})/, '$1.$2')
+  form.value.rg = v
+}
+
+/* Calcula data máxima para ser maior de 18 */
+const dataMaxNascimento = computed(() => {
+  const d = new Date()
+  d.setFullYear(d.getFullYear() - 18)
+  return d.toISOString().split('T')[0]
+})
+
+const verificarIdade = () => {
+  if (!form.value.nascimento) { idadeValida.value = null; return }
+  const nasc  = new Date(form.value.nascimento)
+  const hoje  = new Date()
+  const idade = hoje.getFullYear() - nasc.getFullYear()
+  const mes   = hoje.getMonth() - nasc.getMonth()
+  const dia   = hoje.getDate() - nasc.getDate()
+  const anos  = mes < 0 || (mes === 0 && dia < 0) ? idade - 1 : idade
+  idadeValida.value = anos >= 18
+}
+
+/* Upload RG */
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
+const validarArquivo = (file) => {
+  if (!file) return 'Nenhum arquivo selecionado.'
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return 'Formato inválido. Use JPG, PNG ou WEBP.'
+  if (file.size > MAX_FILE_SIZE) return 'Arquivo muito grande. Máximo 5MB.'
+  return null
+}
+
+const onFileRG = (event, lado) => {
+  const file = event.target.files[0]
+  processarArquivoRG(file, lado)
+}
+const onDropRG = (event, lado) => {
+  if (lado === 'frente') dragFrente.value = false
+  else dragVerso.value = false
+  const file = event.dataTransfer.files[0]
+  processarArquivoRG(file, lado)
+}
+const processarArquivoRG = (file, lado) => {
+  const erro = validarArquivo(file)
+  if (erro) { addToast('Arquivo inválido', erro, 'error'); return }
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    if (lado === 'frente') { rgFrente.value = file; rgFrentePreview.value = e.target.result }
+    else { rgVerso.value = file; rgVersoPreview.value = e.target.result }
+  }
+  reader.readAsDataURL(file)
+}
+const removerRG = (lado) => {
+  if (lado === 'frente') { rgFrente.value = null; rgFrentePreview.value = '' }
+  else { rgVerso.value = null; rgVersoPreview.value = '' }
+}
+
+/* ── Câmera / Selfie ── */
+const iniciarCamera = async () => {
+  faceErro.value = ''
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } })
+    cameraAtiva.value = true
+    await nextTick()
+    if (videoRef.value) videoRef.value.srcObject = cameraStream
+  } catch (err) {
+    if (err.name === 'NotAllowedError') faceErro.value = 'Permissão de câmera negada. Verifique as configurações do navegador.'
+    else faceErro.value = 'Não foi possível acessar a câmera.'
+    addToast('Câmera bloqueada', faceErro.value, 'error')
+  }
+}
+
+const pararCamera = () => {
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null }
+  cameraAtiva.value = false
+}
+
+const capturarSelfie = async () => {
+  if (!videoRef.value || !canvasRef.value) return
+  faceScanning.value = true
+  faceErro.value = ''
+
+  // Captura frame do vídeo no canvas
+  const video  = videoRef.value
+  const canvas = canvasRef.value
+  canvas.width  = video.videoWidth  || 640
+  canvas.height = video.videoHeight || 480
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+  // Converte para base64
+  selfiePreview.value = canvas.toDataURL('image/jpeg', 0.85)
+
+  // Simula processamento biométrico (TCC — em produção usar API de reconhecimento facial)
+  await new Promise(r => setTimeout(r, 2200))
+
+  /* ── Verificação simulada ──
+     Em produção: enviar selfiePreview + rgFrentePreview para uma API de face-matching
+     Ex: AWS Rekognition, Azure Face API, ou Face++ */
+  const aprovado = await simularVerificacaoBiometrica()
+
+  faceScanning.value = false
+
+  if (aprovado) {
+    pararCamera()
+    faceCapturada.value = true
+    addToast('Biometria aprovada', 'Identidade confirmada com sucesso', 'success')
+  } else {
+    faceErro.value = 'Rosto não reconhecido. Certifique-se de estar bem iluminado e centralizado.'
+    selfiePreview.value = ''
+    addToast('Verificação falhou', faceErro.value, 'error')
+  }
+}
+
+/* Simulação de verificação biométrica para o TCC
+   Retorna true após verificar que a selfie não está vazia e o RG foi enviado */
+const simularVerificacaoBiometrica = async () => {
+  // Valida que a selfie foi capturada com conteúdo real (canvas não vazio)
+  if (!selfiePreview.value || selfiePreview.value.length < 1000) return false
+  // Valida que o RG frente foi enviado
+  if (!rgFrente.value) return false
+  // Simula 95% de aprovação (reproduz comportamento real de API)
+  return Math.random() > 0.05
+}
+
+const resetarFace = () => {
+  faceCapturada.value = false
+  faceErro.value      = ''
+  selfiePreview.value = ''
+  pararCamera()
+}
+
+/* ════════════════════════════════
+   FLUXO DO CADASTRO MULTI-STEP
+════════════════════════════════ */
+const avancarStep1 = () => {
+  formError.value = ''; campoErro.value = ''
+
+  if (!form.value.nome.trim())       { formError.value = 'Informe seu nome.'; campoErro.value = 'nome'; return }
+  if (!form.value.email.includes('@')) { formError.value = 'E-mail inválido.'; campoErro.value = 'email'; return }
+  if (!form.value.cpf || !validarCPF(form.value.cpf)) { formError.value = 'Informe um CPF válido.'; campoErro.value = 'cpf'; return }
+  if (!form.value.nascimento)        { formError.value = 'Informe sua data de nascimento.'; campoErro.value = 'nascimento'; return }
+  if (idadeValida.value === false)   { formError.value = 'Você deve ter 18 anos ou mais.'; campoErro.value = 'nascimento'; return }
+  if (!idadeValida.value)            { verificarIdade(); if (idadeValida.value === false) { formError.value = 'Você deve ter 18 anos ou mais.'; return } }
+  if (form.value.senha.length < 8)   { formError.value = 'Senha com mínimo 8 caracteres.'; campoErro.value = 'senha'; return }
+  if (form.value.senha !== form.value.senha2) { formError.value = 'As senhas não coincidem.'; return }
+  if (!aceitouTermos.value)          { formError.value = 'Aceite os Termos de Uso para continuar.'; return }
+
+  cadastroStep.value = 2
+}
+
+const avancarStep2 = async () => {
+  formError.value = ''; campoErro.value = ''
+
+  if (!form.value.rg || form.value.rg.replace(/\D/g, '').length < 7) { formError.value = 'Informe o número do RG.'; campoErro.value = 'rg'; return }
+  if (!form.value.orgaoEmissor.trim()) { formError.value = 'Informe o órgão emissor.'; campoErro.value = 'orgao'; return }
+  if (!rgFrente.value)  { formError.value = 'Envie a foto da frente do RG.'; return }
+  if (!rgVerso.value)   { formError.value = 'Envie a foto do verso do RG.'; return }
+
+  verificandoDoc.value = true
+  // Simula validação do documento (TCC — em produção usar OCR/API de validação de documentos)
+  await new Promise(r => setTimeout(r, 1500))
+  verificandoDoc.value = false
+
+  addToast('Documento verificado', 'RG analisado com sucesso', 'success')
+  cadastroStep.value = 3
+}
+
+const finalizarCadastro = async () => {
+  formError.value = ''
+  if (!faceCapturada.value) { formError.value = 'Complete o reconhecimento facial.'; return }
+
+  try {
+    await auth.register(
+      form.value.nome,
+      form.value.sobrenome,
+      form.value.email,
+      form.value.senha,
+      {
+        cpf:         form.value.cpf,
+        nascimento:  form.value.nascimento,
+        rg:          form.value.rg,
+        orgaoEmissor: form.value.orgaoEmissor,
+        identidadeVerificada: true
+      }
+    )
+    registrarSucesso()
+    closeModal()
+    addToast('Conta criada com sucesso!', `Bem-vindo, ${form.value.nome}`, 'success')
+  } catch {
+    formError.value = auth.error || 'Erro ao cadastrar. Tente novamente.'
+    addToast('Erro ao cadastrar', formError.value, 'error')
+  }
+}
 
 /* ── Scroll ── */
 let lastScrollY = 0
@@ -1175,10 +1348,7 @@ const toggleSearch = async () => {
   else clearSearch()
 }
 const closeSearch = () => { searchOpen.value = false; clearSearch() }
-const clearSearch = () => {
-  searchQuery.value = ''; searchResults.value = []; searchLoading.value = false
-  searchFocusIdx.value = -1; clearTimeout(searchTimer)
-}
+const clearSearch = () => { searchQuery.value = ''; searchResults.value = []; searchLoading.value = false; searchFocusIdx.value = -1; clearTimeout(searchTimer) }
 const searchNavUp   = () => { searchFocusIdx.value = searchFocusIdx.value > 0 ? searchFocusIdx.value - 1 : searchResults.value.length - 1 }
 const searchNavDown = () => { searchFocusIdx.value = searchFocusIdx.value < searchResults.value.length - 1 ? searchFocusIdx.value + 1 : 0 }
 const onSearchInput = () => {
@@ -1194,43 +1364,46 @@ const onSearchInput = () => {
     finally  { searchLoading.value = false }
   }, 280)
 }
-const irParaBusca = () => {
-  if (searchFocusIdx.value >= 0 && searchResults.value[searchFocusIdx.value]) {
-    irParaProduto((searchResults.value[searchFocusIdx.value])._id || (searchResults.value[searchFocusIdx.value]).id)
-    return
-  }
+const irParaBusca  = () => {
+  if (searchFocusIdx.value >= 0 && searchResults.value[searchFocusIdx.value]) { irParaProduto((searchResults.value[searchFocusIdx.value])._id || (searchResults.value[searchFocusIdx.value]).id); return }
   if (!searchQuery.value.trim()) return
-  router.push({ path: '/loja', query: { busca: searchQuery.value.trim() } })
-  closeSearch()
+  router.push({ path: '/loja', query: { busca: searchQuery.value.trim() } }); closeSearch()
 }
 const irParaProduto = (id) => { router.push(`/produto/${id}`); closeSearch() }
 
 /* ── Clique fora ── */
 const handleOutsideClick = (e) => {
-  if (acessOpen.value    && !e.target.closest('.nb-acess-wrap') && !e.target.closest('.pref-panel'))  acessOpen.value    = false
-  if (searchOpen.value   && !e.target.closest('.nb-search-wrap'))                                      closeSearch()
-  if (userDropOpen.value && userDropRef.value && !userDropRef.value.contains(e.target))               userDropOpen.value = false
-  if (confirmLimpar.value && !e.target.closest('.drawer__confirm-bar') && !e.target.closest('.drawer__clear-btn')) confirmLimpar.value = false
+  if (acessOpen.value    && !e.target.closest('.nb-acess-wrap') && !e.target.closest('.pref-panel')) acessOpen.value    = false
+  if (searchOpen.value   && !e.target.closest('.nb-search-wrap'))                                    closeSearch()
+  if (userDropOpen.value && userDropRef.value && !userDropRef.value.contains(e.target))             userDropOpen.value = false
 }
 
 /* ── Modal ── */
-const openModal  = (tab, comAviso = false) => {
-  modalTab.value = tab; formError.value = ''; campoErro.value = ''; focusField.value = ''; loginNecessario.value = comAviso
-  form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '' }
+const openModal = (tab, comAviso = false) => {
+  modalTab.value = tab; formError.value = ''; campoErro.value = ''; focusField.value = ''
+  loginNecessario.value = comAviso; cadastroStep.value = 1
+  form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' }
+  cpfValido.value = null; idadeValida.value = null
   showPass.value = false; showPass2.value = false; aceitouTermos.value = false; termosOpen.value = false
+  rgFrente.value = null; rgVerso.value = null; rgFrentePreview.value = ''; rgVersoPreview.value = ''
+  faceCapturada.value = false; faceErro.value = ''; selfiePreview.value = ''
+  pararCamera()
   modalOpen.value = true
 }
-const closeModal = () => { modalOpen.value = false; formError.value = ''; campoErro.value = ''; loginNecessario.value = false }
-const switchTab  = (tab) => {
-  modalTab.value = tab; formError.value = ''; campoErro.value = ''
-  form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '' }
-  termosOpen.value = false
+const closeModal = () => {
+  modalOpen.value = false; formError.value = ''; campoErro.value = ''; loginNecessario.value = false
+  pararCamera()
+}
+const switchTab = (tab) => {
+  modalTab.value = tab; formError.value = ''; campoErro.value = ''; cadastroStep.value = 1
+  form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' }
+  cpfValido.value = null; idadeValida.value = null; termosOpen.value = false
 }
 
 /* ── AUTH ── */
 const fazerLogin = async () => {
   formError.value = ''; campoErro.value = ''
-  if (loginBloqueado.value) { formError.value = `Aguarde ${bloqueioRestante.value}s antes de tentar novamente.`; return }
+  if (loginBloqueado.value) { formError.value = `Aguarde ${bloqueioRestante.value}s.`; return }
   if (!form.value.email || !form.value.email.includes('@')) { formError.value = 'Informe um e-mail válido.'; campoErro.value = 'email'; return }
   if (!form.value.senha) { formError.value = 'Informe a senha.'; campoErro.value = 'senha'; return }
   try {
@@ -1240,32 +1413,11 @@ const fazerLogin = async () => {
   } catch {
     registrarFalha()
     const restantes = tentativasRestantes.value
-    if (loginBloqueado.value) {
-      formError.value = `Muitas tentativas. Acesso bloqueado por ${bloqueioRestante.value}s.`
-    } else if (restantes <= 2) {
-      formError.value = `Credenciais inválidas. ${restantes} tentativa${restantes !== 1 ? 's' : ''} restante${restantes !== 1 ? 's' : ''}.`
-    } else {
-      formError.value = auth.error || 'E-mail ou senha incorretos.'
-    }
+    if (loginBloqueado.value) formError.value = `Muitas tentativas. Acesso bloqueado por ${bloqueioRestante.value}s.`
+    else if (restantes <= 2) formError.value = `Credenciais inválidas. ${restantes} tentativa${restantes !== 1 ? 's' : ''} restante${restantes !== 1 ? 's' : ''}.`
+    else formError.value = auth.error || 'E-mail ou senha incorretos.'
     campoErro.value = 'senha'
     addToast('Falha no login', formError.value, 'error')
-  }
-}
-
-const fazerCadastro = async () => {
-  formError.value = ''; campoErro.value = ''
-  if (!form.value.nome.trim())         { formError.value = 'Informe seu nome.'; campoErro.value = 'nome'; return }
-  if (!form.value.email.includes('@')) { formError.value = 'E-mail inválido.'; campoErro.value = 'email'; return }
-  if (form.value.senha.length < 8)     { formError.value = 'Senha com mínimo 8 caracteres.'; campoErro.value = 'senha'; return }
-  if (form.value.senha !== form.value.senha2) { formError.value = 'As senhas não coincidem.'; campoErro.value = 'senha'; return }
-  if (!aceitouTermos.value)            { formError.value = 'Aceite os Termos de Uso para continuar.'; return }
-  try {
-    await auth.register(form.value.nome, form.value.sobrenome, form.value.email, form.value.senha)
-    registrarSucesso(); closeModal()
-    addToast('Conta criada com sucesso!', `Bem-vindo, ${form.value.nome}`, 'success')
-  } catch {
-    formError.value = auth.error || 'Erro ao cadastrar. Tente novamente.'
-    addToast('Erro ao cadastrar', formError.value, 'error')
   }
 }
 
@@ -1284,18 +1436,13 @@ const loginGoogle = () => {
         if (resultado?.novoUsuario || resultado?.isNew) {
           switchTab('cadastro')
           form.value.nome = perfil.given_name || ''; form.value.sobrenome = perfil.family_name || ''; form.value.email = perfil.email || ''
-          formError.value = ''; return
+          return
         }
         registrarSucesso(); closeModal()
         addToast('Login com Google realizado!', '', 'success')
       } catch {
-        const msg = (auth.error || '').toLowerCase()
-        if (msg.includes('não encontrado') || msg.includes('not found') || msg.includes('cadastro') || msg.includes('register')) {
-          switchTab('cadastro'); formError.value = 'Conta não encontrada. Por favor, faça seu cadastro primeiro.'
-        } else {
-          formError.value = 'Erro ao autenticar com Google. Tente novamente.'
-          addToast('Erro Google OAuth', formError.value, 'error')
-        }
+        formError.value = 'Erro ao autenticar com Google.'
+        addToast('Erro Google OAuth', formError.value, 'error')
       }
     }
   }).requestAccessToken()
@@ -1308,12 +1455,12 @@ const fazerLogout = async () => {
 }
 
 /* ── Navegação ── */
-const abrirCarrinho = () => { cartOpen.value = true; drawerTab.value = 'carrinho' }
+const abrirCarrinho      = () => { cartOpen.value = true; drawerTab.value = 'carrinho' }
 const abrirComprasFuturas = () => { userDropOpen.value = false; cartOpen.value = true; drawerTab.value = 'futuras' }
-const irParaConta   = () => { userDropOpen.value = false; sidebarOpen.value = false; router.push('/configuracoes?secao=pedidos') }
-const changeQty     = (item, d) => cart.alterarQty(item.id || item._id, d)
-const removeItem    = (id) => { cart.remover(id); addToast('Item removido', '', 'info') }
-const irParaCheckout = () => {
+const irParaConta        = () => { userDropOpen.value = false; sidebarOpen.value = false; router.push('/configuracoes?secao=pedidos') }
+const changeQty          = (item, d) => cart.alterarQty(item.id || item._id, d)
+const removeItem         = (id) => { cart.remover(id); addToast('Item removido', '', 'info') }
+const irParaCheckout     = () => {
   if (!auth.isLogado) { cartOpen.value = false; openModal('login', true); return }
   const items = JSON.parse(JSON.stringify(cart.items))
   if (!items.length) return
@@ -1329,18 +1476,17 @@ watch([modalOpen, cartOpen, sidebarOpen], ([m, c, s]) => lockScroll(m || c || s)
 /* ── Keyboard ── */
 const handleKeydown = (e) => {
   if (e.key !== 'Escape') return
-  if (modalOpen.value)     closeModal()
-  if (cartOpen.value)      cartOpen.value      = false
-  if (sidebarOpen.value)   sidebarOpen.value   = false
-  if (acessOpen.value)     acessOpen.value     = false
-  if (searchOpen.value)    closeSearch()
-  if (userDropOpen.value)  userDropOpen.value  = false
-  if (confirmLimpar.value) confirmLimpar.value = false
+  if (modalOpen.value)    closeModal()
+  if (cartOpen.value)     cartOpen.value     = false
+  if (sidebarOpen.value)  sidebarOpen.value  = false
+  if (acessOpen.value)    acessOpen.value    = false
+  if (searchOpen.value)   closeSearch()
+  if (userDropOpen.value) userDropOpen.value = false
 }
 
 const handleAuthExpirado = () => {
   auth.user = null; auth.token = null; cart.limpar()
-  modalOpen.value = false; cartOpen.value = false; sidebarOpen.value = false; userDropOpen.value = false
+  modalOpen.value = false; cartOpen.value = false
   addToast('Sessão expirada', 'Por favor, faça login novamente', 'error')
 }
 
@@ -1348,7 +1494,6 @@ onMounted(() => {
   window.addEventListener('scroll',         handleScroll,       { passive: true })
   window.addEventListener('click',          handleOutsideClick)
   window.addEventListener('keydown',        handleKeydown)
-  window.addEventListener('carrinho-limpo', () => cart.limpar())
   window.addEventListener('auth:expirado',  handleAuthExpirado)
   carregarEstadoSeguranca()
   carregarSalvos()
@@ -1364,6 +1509,7 @@ onUnmounted(() => {
   clearTimeout(searchTimer)
   clearInterval(bloqueioInterval)
   clearInterval(clockInterval)
+  pararCamera()
 })
 
 watch(
@@ -1374,668 +1520,556 @@ watch(
 </script>
 
 <style scoped>
-/* ══════════════════════════════════════
-   SCROLL PROGRESS
-══════════════════════════════════════ */
-.nb-progress {
-  position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-  background: var(--grad-btn); transform-origin: left; transform: scaleX(0);
-  z-index: 99999; pointer-events: none; transition: transform .1s linear;
-}
+/* ── PROGRESS ── */
+.nb-progress { position:fixed;top:0;left:0;width:100%;height:2px;background:var(--grad-btn);transform-origin:left;transform:scaleX(0);z-index:99999;pointer-events:none;transition:transform .1s linear; }
 
-/* ══════════════════════════════════════
-   NAVBAR
-══════════════════════════════════════ */
-.navbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-high, 1000);
-  height: var(--navbar-h, 56px); display: flex; align-items: center;
-  background: var(--navbar-bg); font-family: var(--font-sans, 'Syne', sans-serif);
-  transition: height .4s cubic-bezier(.16,1,.3,1), background .4s ease, box-shadow .4s ease, transform .4s cubic-bezier(.16,1,.3,1);
-  will-change: transform;
-}
-.navbar-root { display: contents; }
-.navbar--scrolled {
-  height: max(48px, calc(var(--navbar-h, 68px) - 12px));
-  background: var(--navbar-bg-scroll) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: 0 1px 0 var(--cor-borda), 0 2px 20px rgba(0,0,0,.12);
-}
-.navbar--hidden { transform: translateY(-110%); }
-.navbar__inner {
-  width: 100%; max-width: 1760px; margin: 0 auto; padding: 0 44px;
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
-}
-.navbar__left { display: flex; align-items: center; gap: 14px; justify-self: start; }
+/* ── NAVBAR ── */
+.navbar { position:fixed;top:0;left:0;right:0;z-index:var(--z-high,1000);height:var(--navbar-h,56px);display:flex;align-items:center;background:var(--navbar-bg);font-family:var(--font-sans,'Syne',sans-serif);transition:height .4s cubic-bezier(.16,1,.3,1),background .4s ease,box-shadow .4s ease,transform .4s cubic-bezier(.16,1,.3,1);will-change:transform; }
+.navbar-root { display:contents; }
+.navbar--scrolled { height:max(48px,calc(var(--navbar-h,68px) - 12px));background:var(--navbar-bg-scroll)!important;-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 1px 0 var(--cor-borda),0 2px 20px rgba(0,0,0,.12); }
+.navbar--hidden { transform:translateY(-110%); }
+.navbar__inner { width:100%;max-width:1760px;margin:0 auto;padding:0 44px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px; }
+.navbar__left { display:flex;align-items:center;gap:14px;justify-self:start; }
 
 /* ── BURGER ── */
-.nb-burger { background: none; border: none; cursor: pointer; padding: 6px 4px; display: none; flex-direction: column; gap: 5px; width: 28px; flex-shrink: 0; }
-.nb-burger__bar { display: block; height: 1.5px; background: var(--cor-texto-2); border-radius: 2px; transform-origin: center; transition: transform .35s cubic-bezier(.16,1,.3,1), width .35s cubic-bezier(.16,1,.3,1), opacity .25s ease, background .25s ease; }
-.nb-burger__bar--1 { width: 22px; } .nb-burger__bar--2 { width: 14px; } .nb-burger__bar--3 { width: 8px; }
-.nb-burger:hover .nb-burger__bar    { background: var(--cor-primaria); }
-.nb-burger:hover .nb-burger__bar--2 { width: 22px; }
-.nb-burger:hover .nb-burger__bar--3 { width: 22px; }
-.nb-burger.is-open .nb-burger__bar--1 { transform: translateY(6.5px) rotate(45deg); width: 22px; background: var(--cor-primaria); }
-.nb-burger.is-open .nb-burger__bar--2 { transform: scaleX(0); opacity: 0; }
-.nb-burger.is-open .nb-burger__bar--3 { transform: translateY(-6.5px) rotate(-45deg); width: 22px; background: var(--cor-primaria); }
+.nb-burger { background:none;border:none;cursor:pointer;padding:6px 4px;display:none;flex-direction:column;gap:5px;width:28px;flex-shrink:0; }
+.nb-burger__bar { display:block;height:1.5px;background:var(--cor-texto-2);border-radius:2px;transform-origin:center;transition:transform .35s cubic-bezier(.16,1,.3,1),width .35s cubic-bezier(.16,1,.3,1),opacity .25s ease,background .25s ease; }
+.nb-burger__bar--1{width:22px;}.nb-burger__bar--2{width:14px;}.nb-burger__bar--3{width:8px;}
+.nb-burger:hover .nb-burger__bar,.nb-burger:hover .nb-burger__bar--2,.nb-burger:hover .nb-burger__bar--3 { background:var(--cor-primaria);width:22px; }
+.nb-burger.is-open .nb-burger__bar--1 { transform:translateY(6.5px) rotate(45deg);width:22px;background:var(--cor-primaria); }
+.nb-burger.is-open .nb-burger__bar--2 { transform:scaleX(0);opacity:0; }
+.nb-burger.is-open .nb-burger__bar--3 { transform:translateY(-6.5px) rotate(-45deg);width:22px;background:var(--cor-primaria); }
 
 /* ── LOGO ── */
-.nb-logo { justify-self: center; display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
-.nb-logo__img { height: 48px; width: auto; transition: opacity .25s; object-fit: contain; }
-.nb-logo:hover .nb-logo__img { opacity: 0.82; }
-.navbar--scrolled .nb-logo__img { height: 36px; }
-.nb-logo__mark { width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid rgba(245,166,35,0.45); display: flex; align-items: center; justify-content: center; transition: border-color .25s; position: relative; }
-.nb-logo__mark::before { content: '⊕'; color: var(--cor-primaria); font-size: 13px; line-height: 1; }
-.nb-logo:hover .nb-logo__mark { border-color: var(--cor-primaria); }
-.nb-logo__text { font-family: var(--font-serif, 'Playfair Display', serif); font-size: 18px; font-style: italic; letter-spacing: 0.16em; color: var(--cor-texto); transition: opacity .25s; }
-.nb-logo__text em { color: var(--cor-primaria); font-style: normal; }
-.nb-logo:hover .nb-logo__text { opacity: 0.85; }
-.navbar--scrolled .nb-logo__mark { width: 26px; height: 26px; }
-.navbar--scrolled .nb-logo__text { font-size: 14px; }
+.nb-logo { justify-self:center;display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0; }
+.nb-logo__img { height:48px;width:auto;transition:opacity .25s;object-fit:contain; }
+.nb-logo:hover .nb-logo__img { opacity:0.82; }
+.navbar--scrolled .nb-logo__img { height:36px; }
+.nb-logo__mark { width:34px;height:34px;flex-shrink:0;border-radius:50%;border:1.5px solid rgba(245,166,35,0.45);display:flex;align-items:center;justify-content:center;position:relative; }
+.nb-logo__mark::before { content:'⊕';color:var(--cor-primaria);font-size:13px;line-height:1; }
+.nb-logo__text { font-family:var(--font-serif,'Playfair Display',serif);font-size:18px;font-style:italic;letter-spacing:0.16em;color:var(--cor-texto); }
+.nb-logo__text em { color:var(--cor-primaria);font-style:normal; }
 
 /* ── LINKS DESKTOP ── */
-.nb-links { display: flex; gap: 16px; align-items: center; }
-.nb-link { font-size: 9px; letter-spacing: 0.38em; text-transform: uppercase; font-weight: 600; color: var(--cor-texto-2); text-decoration: none; display: flex; align-items: center; gap: 5px; position: relative; padding-bottom: 3px; transition: color .25s ease; }
-.nb-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1.5px; background: linear-gradient(90deg, var(--cor-secundaria) 0%, var(--cor-primaria) 100%); border-radius: 0 2px 2px 0; transition: width .35s cubic-bezier(.16,1,.3,1); }
-.nb-link:hover { color: var(--cor-primaria); }
-.nb-link:hover::after, .nb-link.router-link-exact-active::after { width: 100%; }
-.nb-link.router-link-exact-active { color: var(--cor-primaria); }
-.nb-link--gamer { color: var(--cor-primaria); font-weight: 700; background: none !important; -webkit-text-fill-color: unset !important; border: none !important; padding: 4px 2px; margin-left: 2px; box-shadow: none !important; }
-.nb-link--gamer::before { display: none !important; }
-.nb-link--gamer::after { background: linear-gradient(90deg, var(--cor-secundaria) 0%, var(--cor-primaria) 100%); }
-.nb-link--gamer:hover { color: var(--cor-primaria); box-shadow: none !important; }
-.nb-link--gamer__ico { font-family: 'Noto Serif JP', 'Yu Mincho', serif; font-size: 14px; color: var(--cor-primaria); opacity: 0.80; line-height: 1; transition: opacity .25s, transform .35s cubic-bezier(.16,1,.3,1); display: inline-block; }
-.nb-link--gamer:hover .nb-link--gamer__ico { opacity: 1; transform: rotate(-15deg) scale(1.15); }
+.nb-links { display:flex;gap:16px;align-items:center; }
+.nb-link { font-size:9px;letter-spacing:0.38em;text-transform:uppercase;font-weight:600;color:var(--cor-texto-2);text-decoration:none;display:flex;align-items:center;gap:5px;position:relative;padding-bottom:3px;transition:color .25s ease; }
+.nb-link::after { content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:linear-gradient(90deg,var(--cor-secundaria) 0%,var(--cor-primaria) 100%);border-radius:0 2px 2px 0;transition:width .35s cubic-bezier(.16,1,.3,1); }
+.nb-link:hover,.nb-link.router-link-exact-active { color:var(--cor-primaria); }
+.nb-link:hover::after,.nb-link.router-link-exact-active::after { width:100%; }
+.nb-link--gamer { color:var(--cor-primaria);font-weight:700; }
+.nb-link--gamer__ico { font-family:'Noto Serif JP','Yu Mincho',serif;font-size:14px;color:var(--cor-primaria);opacity:0.80;line-height:1;transition:opacity .25s,transform .35s cubic-bezier(.16,1,.3,1);display:inline-block; }
+.nb-link--gamer:hover .nb-link--gamer__ico { opacity:1;transform:rotate(-15deg) scale(1.15); }
 
 /* ── DIREITA ── */
-.nb-right { justify-self: end; display: flex; align-items: center; gap: 6px; }
-.nb-icon { width: 34px; height: 34px; border-radius: var(--r-sm, 4px); display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--cor-texto-2); cursor: pointer; transition: color .25s, background .25s; flex-shrink: 0; }
-.nb-icon:hover, .nb-icon.is-active { color: var(--cor-primaria); background: var(--gold-08); }
-.nb-cart { position: relative; }
-.nb-cart__badge { position: absolute; top: 2px; right: 2px; background: var(--cor-primaria); color: #0A0A0A !important; font-size: 11px !important; font-weight: 900 !important; font-family: 'DM Mono', 'Courier New', monospace !important; letter-spacing: 0 !important; min-width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; padding: 0 3px; line-height: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.4); pointer-events: none; z-index: 1; }
-.nb-cart__badge.is-bounce { animation: badge-bounce .5s cubic-bezier(.19,1,.22,1); }
-@keyframes badge-bounce { 0%{transform:scale(1)} 40%{transform:scale(1.5)} 100%{transform:scale(1)} }
-.nb-search-wrap { position: relative; }
-.nb-sep { width: 1px; height: 18px; background: var(--cor-borda); margin: 0 4px; }
-.nb-acess-wrap { position: relative; }
+.nb-right { justify-self:end;display:flex;align-items:center;gap:6px; }
+.nb-icon { width:34px;height:34px;border-radius:var(--r-sm,4px);display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--cor-texto-2);cursor:pointer;transition:color .25s,background .25s;flex-shrink:0; }
+.nb-icon:hover,.nb-icon.is-active { color:var(--cor-primaria);background:var(--gold-08); }
+.nb-cart { position:relative; }
+.nb-cart__badge { position:absolute;top:2px;right:2px;background:var(--cor-primaria);color:#0A0A0A!important;font-size:11px!important;font-weight:900!important;font-family:'DM Mono','Courier New',monospace!important;min-width:14px;height:14px;border-radius:3px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.4);pointer-events:none; }
+.nb-cart__badge.is-bounce { animation:badge-bounce .5s cubic-bezier(.19,1,.22,1); }
+@keyframes badge-bounce { 0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)} }
+.nb-search-wrap { position:relative; }
+.nb-sep { width:1px;height:18px;background:var(--cor-borda);margin:0 4px; }
+.nb-acess-wrap { position:relative; }
 
-/* ══════════════════════════════════════
-   ÁREA DE USUÁRIO
-══════════════════════════════════════ */
-.nb-user-area { position: relative; }
-.nb-user-wrap { position: relative; }
-.nb-user { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background .25s; }
-.nb-user:hover { background: var(--gold-08); }
-.nb-avatar { width: 30px; height: 30px; border-radius: 6px; background: var(--grad-btn); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; color: #0A0A0A; overflow: hidden; flex-shrink: 0; border: 1.5px solid rgba(245,166,35,.35); }
-.nb-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.nb-user__info  { display: flex; flex-direction: column; line-height: 1.2; }
-.nb-user__nome  { font-size: 11px; font-weight: 500; color: var(--cor-texto-2); max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nb-user__vip   { font-size: 8px; letter-spacing: .1em; font-weight: 700; background: var(--grad-texto); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.nb-user__chevron { color: var(--cor-texto-3); transition: transform .3s cubic-bezier(.16,1,.3,1); flex-shrink: 0; }
-.nb-user__chevron.is-open { transform: rotate(180deg); }
-.nb-user-drop { position: absolute; top: calc(100% + 10px); right: 0; width: 252px; background: var(--or-deep, #09090f); border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12)); box-shadow: 0 20px 60px rgba(0,0,0,0.65), 0 4px 16px rgba(0,0,0,0.35); z-index: 9999; overflow: hidden; }
-.nb-user-drop::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0.5px; background: linear-gradient(90deg, transparent, var(--cor-secundaria) 20%, var(--cor-primaria) 50%, var(--cor-secundaria) 80%, transparent); opacity: 0.65; }
-.nb-drop-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; background: rgba(245,166,35,0.03); }
-.nb-drop-avatar { width: 38px; height: 38px; border-radius: 6px; background: var(--grad-btn); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #0A0A0A; overflow: hidden; flex-shrink: 0; border: 1.5px solid rgba(245,166,35,.3); }
-.nb-drop-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.nb-drop-nome  { font-size: 12px; font-weight: 600; color: var(--cor-texto); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-.nb-drop-email { font-size: 10px; color: var(--cor-texto-3); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-.nb-drop-vip   { font-size: 8px; letter-spacing: .15em; font-weight: 700; background: var(--grad-texto); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.nb-drop-clock { display: flex; align-items: center; gap: 7px; padding: 7px 18px; background: rgba(245,166,35,0.03); border-top: 0.5px solid var(--or-hair-2); }
-.nb-drop-clock svg { color: var(--or-gold); opacity: .5; flex-shrink: 0; }
-.nb-drop-clock__label { font-family: var(--font-sans); font-size: 8px; letter-spacing: .35em; text-transform: uppercase; color: var(--or-silk-3); }
-.nb-drop-clock__time  { font-family: 'DM Mono', 'Courier New', monospace; font-size: 11px; color: var(--or-gold); margin-left: auto; letter-spacing: .08em; }
-.nb-drop-sep { position: relative; height: 13px; margin: 2px 0; display: flex; align-items: center; }
-.nb-drop-sep::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 0.5px; background: linear-gradient(90deg, transparent, var(--or-hair, rgba(245,166,35,0.12)), transparent); }
-.nb-drop-sep::after  { content: '◆'; position: absolute; left: 50%; transform: translateX(-50%); font-size: 4px; color: var(--cor-primaria); background: var(--or-deep, #09090f); padding: 0 6px; opacity: 0.45; line-height: 1; z-index: 1; }
-.nb-drop-item { width: 100%; display: flex; align-items: center; gap: 10px; padding: 11px 18px; background: none; border: none; text-decoration: none; font-family: var(--font-sans); font-size: 11px; letter-spacing: .04em; color: var(--cor-texto-2); cursor: pointer; transition: all .2s; position: relative; }
-.nb-drop-item svg { color: var(--cor-texto-3); flex-shrink: 0; transition: color .2s; }
-.nb-drop-item:hover { background: var(--gold-08); color: var(--cor-primaria); padding-left: 22px; }
-.nb-drop-item:hover svg { color: var(--cor-primaria); }
-.nb-drop-item--admin { color: var(--cor-secundaria); }
-.nb-drop-item--admin svg { color: var(--cor-secundaria); }
-.nb-drop-item--admin:hover { color: var(--cor-secundaria-h, #E8C84A); background: rgba(212,175,55,0.08); }
-.nb-drop-item--saved { color: var(--or-gold, #F5A623); opacity: .8; }
-.nb-drop-item--saved svg { color: var(--or-gold, #F5A623); opacity: .65; }
-.nb-drop-item--saved:hover { opacity: 1; background: rgba(245,166,35,0.06); color: var(--or-gold, #F5A623); }
-.nb-drop-item--sair { color: rgba(239,68,68,.65); }
-.nb-drop-item--sair svg { color: rgba(239,68,68,.5); }
-.nb-drop-item--sair:hover { background: rgba(239,68,68,.06); color: #ef4444; }
-.nb-drop-item--sair:hover svg { color: #ef4444; }
-.nb-drop-badge { margin-left: auto; background: var(--grad-btn); color: #0A0A0A; font-size: 8px; font-weight: 900; min-width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; line-height: 1; }
-.nb-drop-badge--saved { background: rgba(245,166,35,0.2); color: var(--or-gold, #F5A623); }
-.drop-down-enter-active, .drop-down-leave-active { transition: opacity .2s, transform .25s cubic-bezier(.16,1,.3,1); }
-.drop-down-enter-from, .drop-down-leave-to { opacity: 0; transform: translateY(-8px) scale(.97); }
-.nb-auth { display: flex; align-items: center; gap: 8px; }
-.nb-entrar { background: none; border: none; font-family: var(--font-sans); font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--cor-texto-2); cursor: pointer; transition: color .25s; white-space: nowrap; }
-.nb-entrar:hover { color: var(--cor-primaria); }
-.nb-cadastrar { background: var(--grad-btn); border: none; border-radius: 2px; padding: 7px 14px; font-family: var(--font-sans); font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #FFFFFF; cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-btn); transition: transform .25s, box-shadow .25s; }
-.nb-cadastrar:hover { transform: translateY(-1px); box-shadow: var(--shadow-btn-h, var(--shadow-btn)); }
+/* ── USUÁRIO ── */
+.nb-user-area { position:relative; }
+.nb-user-wrap { position:relative; }
+.nb-user { display:flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .25s; }
+.nb-user:hover { background:var(--gold-08); }
+.nb-avatar { width:30px;height:30px;border-radius:6px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#0A0A0A;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(245,166,35,.35); }
+.nb-avatar img { width:100%;height:100%;object-fit:cover;display:block; }
+.nb-user__info { display:flex;flex-direction:column;line-height:1.2; }
+.nb-user__nome { font-size:11px;font-weight:500;color:var(--cor-texto-2);max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.nb-user__vip { font-size:8px;letter-spacing:.1em;font-weight:700;background:var(--grad-texto);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
+.nb-user__chevron { color:var(--cor-texto-3);transition:transform .3s cubic-bezier(.16,1,.3,1);flex-shrink:0; }
+.nb-user__chevron.is-open { transform:rotate(180deg); }
+.nb-user-drop { position:absolute;top:calc(100% + 10px);right:0;width:252px;background:var(--or-deep,#09090f);border:0.5px solid var(--or-hair,rgba(245,166,35,0.12));box-shadow:0 20px 60px rgba(0,0,0,0.65);z-index:9999;overflow:hidden; }
+.nb-user-drop::before { content:'';position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--cor-secundaria) 20%,var(--cor-primaria) 50%,var(--cor-secundaria) 80%,transparent);opacity:0.65; }
+.nb-drop-head { display:flex;align-items:center;gap:12px;padding:16px 18px;background:rgba(245,166,35,0.03); }
+.nb-drop-avatar { width:38px;height:38px;border-radius:6px;background:var(--grad-btn);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#0A0A0A;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(245,166,35,.3); }
+.nb-drop-avatar img { width:100%;height:100%;object-fit:cover;display:block; }
+.nb-drop-nome { font-size:12px;font-weight:600;color:var(--cor-texto);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px; }
+.nb-drop-email { font-size:10px;color:var(--cor-texto-3);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px; }
+.nb-drop-vip { font-size:8px;letter-spacing:.15em;font-weight:700;background:var(--grad-texto);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
+.nb-drop-clock { display:flex;align-items:center;gap:7px;padding:7px 18px;background:rgba(245,166,35,0.03);border-top:0.5px solid var(--or-hair-2); }
+.nb-drop-clock svg { color:var(--or-gold);opacity:.5;flex-shrink:0; }
+.nb-drop-clock__label { font-family:var(--font-sans);font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--or-silk-3); }
+.nb-drop-clock__time { font-family:'DM Mono','Courier New',monospace;font-size:11px;color:var(--or-gold);margin-left:auto;letter-spacing:.08em; }
+.nb-drop-sep { position:relative;height:13px;margin:2px 0;display:flex;align-items:center; }
+.nb-drop-sep::before { content:'';position:absolute;left:0;right:0;top:50%;height:0.5px;background:linear-gradient(90deg,transparent,var(--or-hair,rgba(245,166,35,0.12)),transparent); }
+.nb-drop-sep::after { content:'◆';position:absolute;left:50%;transform:translateX(-50%);font-size:4px;color:var(--cor-primaria);background:var(--or-deep,#09090f);padding:0 6px;opacity:0.45;line-height:1;z-index:1; }
+.nb-drop-item { width:100%;display:flex;align-items:center;gap:10px;padding:11px 18px;background:none;border:none;text-decoration:none;font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--cor-texto-2);cursor:pointer;transition:all .2s; }
+.nb-drop-item svg { color:var(--cor-texto-3);flex-shrink:0;transition:color .2s; }
+.nb-drop-item:hover { background:var(--gold-08);color:var(--cor-primaria);padding-left:22px; }
+.nb-drop-item:hover svg { color:var(--cor-primaria); }
+.nb-drop-item--admin { color:var(--cor-secundaria); }
+.nb-drop-item--saved { color:var(--or-gold,#F5A623);opacity:.8; }
+.nb-drop-item--sair { color:rgba(239,68,68,.65); }
+.nb-drop-item--sair:hover { background:rgba(239,68,68,.06);color:#ef4444; }
+.nb-drop-badge { margin-left:auto;background:var(--grad-btn);color:#0A0A0A;font-size:8px;font-weight:900;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 4px; }
+.nb-drop-badge--saved { background:rgba(245,166,35,0.2);color:var(--or-gold,#F5A623); }
+.drop-down-enter-active,.drop-down-leave-active { transition:opacity .2s,transform .25s cubic-bezier(.16,1,.3,1); }
+.drop-down-enter-from,.drop-down-leave-to { opacity:0;transform:translateY(-8px) scale(.97); }
+.nb-auth { display:flex;align-items:center;gap:8px; }
+.nb-entrar { background:none;border:none;font-family:var(--font-sans);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--cor-texto-2);cursor:pointer;transition:color .25s;white-space:nowrap; }
+.nb-entrar:hover { color:var(--cor-primaria); }
+.nb-cadastrar { background:var(--grad-btn);border:none;border-radius:2px;padding:7px 14px;font-family:var(--font-sans);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#FFFFFF;cursor:pointer;white-space:nowrap;box-shadow:var(--shadow-btn);transition:transform .25s,box-shadow .25s; }
+.nb-cadastrar:hover { transform:translateY(-1px); }
 
-/* ══════════════════════════════════════
-   PAINEL ACESSIBILIDADE — NOVOS ESTILOS
-══════════════════════════════════════ */
-.pref-reset {
-  display: flex; align-items: center; gap: 5px;
-  background: none; border: 0.5px solid var(--or-hair-2);
-  padding: 4px 10px; font-family: var(--font-sans);
-  font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--or-silk-3); cursor: pointer; transition: all .25s;
-}
-.pref-reset:hover { border-color: var(--or-gold); color: var(--or-gold); }
+/* ── PAINEL ACESSIBILIDADE ── */
+.pref-reset { display:flex;align-items:center;gap:5px;background:none;border:0.5px solid var(--or-hair-2);padding:4px 10px;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;transition:all .25s; }
+.pref-reset:hover { border-color:var(--or-gold);color:var(--or-gold); }
 
-.pref-col { display: flex; flex-direction: column; gap: 2px; }
+/* ── TRANSIÇÕES ── */
+.fade-enter-active,.fade-leave-active { transition:opacity .3s ease; }
+.fade-enter-from,.fade-leave-to { opacity:0; }
+.slide-enter-active,.slide-leave-active { transition:opacity .2s,transform .2s; }
+.slide-enter-from { opacity:0;transform:translateX(12px); }
+.slide-leave-to { opacity:0;transform:translateX(-12px); }
+.slide-down-enter-active,.slide-down-leave-active { transition:all .3s; }
+.slide-down-enter-from,.slide-down-leave-to { opacity:0;transform:translateY(-8px); }
+.search-drop-enter-active,.search-drop-leave-active { transition:opacity .2s,transform .2s; }
+.search-drop-enter-from,.search-drop-leave-to { opacity:0;transform:translateY(-10px) scale(.97); }
+.pref-drop-enter-active,.pref-drop-leave-active { transition:opacity .2s,transform .25s cubic-bezier(.16,1,.3,1); }
+.pref-drop-enter-from,.pref-drop-leave-to { opacity:0;transform:translateY(-8px) scale(.97); }
 
-.pref-toggle {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; padding: 9px 0;
-  border-bottom: 0.5px solid var(--or-hair-2);
-  cursor: default;
-}
-.pref-toggle:last-child { border-bottom: none; }
-.pref-toggle__info { display: flex; flex-direction: column; gap: 2px; }
-.pref-toggle__label { font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--or-silk); }
-.pref-toggle__desc  { font-family: var(--font-sans); font-size: 9px; color: var(--or-silk-3); letter-spacing: .04em; }
-
-/* Toggle switch */
-.pref-switch {
-  width: 36px; height: 20px; border-radius: 10px; flex-shrink: 0;
-  background: var(--or-hair-2); border: 0.5px solid var(--or-hair);
-  position: relative; cursor: pointer;
-  transition: background .3s, border-color .3s;
-}
-.pref-switch.is-on { background: var(--or-gold); border-color: var(--or-gold); }
-.pref-switch__thumb {
-  position: absolute; top: 2px; left: 2px;
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--or-silk-3);
-  transition: transform .3s cubic-bezier(.16,1,.3,1), background .3s;
-}
-.pref-switch.is-on .pref-switch__thumb { transform: translateX(16px); background: #0A0A0A; }
-
-.pref-sub-label { font-family: var(--font-sans); font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--or-silk-3); margin-bottom: 6px; }
-
-.pref-row--2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-
-/* ══════════════════════════════════════
-   TRANSIÇÕES
-══════════════════════════════════════ */
-.fade-enter-active, .fade-leave-active { transition: opacity .3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-.slide-enter-active, .slide-leave-active { transition: opacity .2s, transform .2s; }
-.slide-enter-from { opacity: 0; transform: translateX(12px); }
-.slide-leave-to   { opacity: 0; transform: translateX(-12px); }
-.slide-down-enter-active, .slide-down-leave-active { transition: all .3s; }
-.slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translateY(-8px); }
-.search-drop-enter-active, .search-drop-leave-active { transition: opacity .2s, transform .2s; }
-.search-drop-enter-from, .search-drop-leave-to { opacity: 0; transform: translateY(-10px) scale(.97); }
-.pref-drop-enter-active, .pref-drop-leave-active { transition: opacity .2s, transform .25s cubic-bezier(.16,1,.3,1); }
-.pref-drop-enter-from, .pref-drop-leave-to { opacity: 0; transform: translateY(-8px) scale(.97); }
-
-.nb-overlay { position: fixed; inset: 0; z-index: var(--z-modal, 10000); background: var(--overlay-bg); -webkit-backdrop-filter: blur(24px) saturate(150%); backdrop-filter: blur(24px) saturate(150%); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.nb-overlay { position:fixed;inset:0;z-index:var(--z-modal,10000);background:var(--overlay-bg);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);display:flex;align-items:center;justify-content:center;padding:20px; }
 
 /* ── RESPONSIVO ── */
-@media (max-width: 1100px) {
-  .nb-links { display: none; }
-  .nb-burger { display: flex; }
-  .navbar__inner { grid-template-columns: auto 1fr auto; }
-  .navbar__left { justify-self: start; }
-  .nb-logo { justify-self: center; }
-  .nb-right { justify-self: end; }
-}
-@media (max-width: 768px) {
-  .navbar__inner { padding: 0 20px; }
-  .nb-user__info, .nb-user__chevron { display: none; }
-}
-@media (max-width: 480px) {
-  .navbar__inner { padding: 0 16px; }
-  .nb-sep, .nb-entrar { display: none; }
-}
+@media (max-width:1100px) { .nb-links{display:none;} .nb-burger{display:flex;} .navbar__inner{grid-template-columns:auto 1fr auto;} }
+@media (max-width:768px)  { .navbar__inner{padding:0 20px;} .nb-user__info,.nb-user__chevron{display:none;} }
+@media (max-width:480px)  { .navbar__inner{padding:0 16px;} .nb-sep,.nb-entrar{display:none;} }
 </style>
 
 <style>
-/* ═══════════════════════════════════════════════════════════
-   NOIR & OR — ESTILOS GLOBAIS DA NAVBAR
-═══════════════════════════════════════════════════════════ */
-/* (mantém todo o CSS global que já existia no componente original — toast, pref-panel, auth-modal, drawer, sidebar) */
-
+/* ════════════════════════════════════════════════════════
+   NOIR & OR — ESTILOS GLOBAIS
+════════════════════════════════════════════════════════ */
 :root {
-  --or-void:    #06060d; --or-deep:    #09090f; --or-surface: #0c0c18;
-  --or-silk:    #ede8e0; --or-silk-2:  rgba(237,232,224,0.50);
-  --or-silk-3:  rgba(237,232,224,0.22); --or-silk-4:  rgba(237,232,224,0.10);
-  --or-gold:    #F5A623; --or-gold-2:  rgba(245,166,35,0.14);
-  --or-gold-3:  rgba(245,166,35,0.06); --or-hair:    rgba(245,166,35,0.12);
-  --or-hair-2:  rgba(237,232,224,0.07); --or-easing:  cubic-bezier(0.16,1,0.30,1);
+  --or-void:#06060d;--or-deep:#09090f;--or-surface:#0c0c18;
+  --or-silk:#ede8e0;--or-silk-2:rgba(237,232,224,0.50);
+  --or-silk-3:rgba(237,232,224,0.22);--or-silk-4:rgba(237,232,224,0.10);
+  --or-gold:#F5A623;--or-gold-2:rgba(245,166,35,0.14);
+  --or-gold-3:rgba(245,166,35,0.06);--or-hair:rgba(245,166,35,0.12);
+  --or-hair-2:rgba(237,232,224,0.07);--or-easing:cubic-bezier(0.16,1,0.30,1);
   --or-font-num:'DM Mono','Courier New',monospace;
 }
 body.light-mode {
-  --or-gold: #3D6CBF; --or-gold-2: rgba(61,108,191,0.14); --or-gold-3: rgba(61,108,191,0.06);
-  --or-hair: rgba(61,108,191,0.12); --or-deep: #ffffff; --or-void: #f0f4fa;
-  --or-silk: #0a0a1e; --or-silk-2: rgba(10,10,30,0.60); --or-silk-3: rgba(10,10,30,0.35);
-  --or-silk-4: rgba(10,10,30,0.18); --or-hair-2: rgba(10,10,30,0.08);
+  --or-gold:#3D6CBF;--or-gold-2:rgba(61,108,191,0.14);--or-gold-3:rgba(61,108,191,0.06);
+  --or-hair:rgba(61,108,191,0.12);--or-deep:#ffffff;--or-void:#f0f4fa;
+  --or-silk:#0a0a1e;--or-silk-2:rgba(10,10,30,0.60);--or-silk-3:rgba(10,10,30,0.35);
+  --or-silk-4:rgba(10,10,30,0.18);--or-hair-2:rgba(10,10,30,0.08);
 }
-body.gamer-mode {
-  --or-gold: #C85014; --or-gold-2: rgba(200,80,20,0.14); --or-gold-3: rgba(200,80,20,0.06);
-  --or-hair: rgba(200,80,20,0.12);
-}
+body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3:rgba(200,80,20,0.06);--or-hair:rgba(200,80,20,0.12); }
+
+/* ── PANEL ORNAMENTOS ── */
+.or-panel-border { position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--or-gold) 20%,rgba(245,166,35,0.8) 50%,var(--or-gold) 80%,transparent);opacity:0.7;z-index:2;pointer-events:none; }
+.or-panel-kamon { position:absolute;top:14px;right:16px;font-family:'Noto Serif JP','Yu Mincho','Hiragino Mincho Pro',serif;font-size:9px;letter-spacing:.15em;color:var(--or-gold);opacity:0.18;pointer-events:none;z-index:1;line-height:1; }
+.or-panel-kamon--pref { top:12px;right:14px;font-size:8px; }
+.or-spinner-sm { width:10px;height:10px;border:1px solid rgba(245,166,35,.25);border-top-color:var(--or-gold);border-radius:50%;animation:or-spin .8s linear infinite;flex-shrink:0; }
+@keyframes or-spin { to{transform:rotate(360deg)} }
 
 /* ── PREF PANEL ── */
-.or-panel-border { position: absolute; top: 0; left: 0; right: 0; height: 0.5px; background: linear-gradient(90deg, transparent, var(--or-gold) 20%, rgba(245,166,35,0.8) 50%, var(--or-gold) 80%, transparent); opacity: 0.7; z-index: 2; pointer-events: none; }
-.or-panel-kamon  { position: absolute; top: 14px; right: 16px; font-family: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho Pro', serif; font-size: 9px; letter-spacing: .15em; color: var(--or-gold); opacity: 0.18; pointer-events: none; z-index: 1; line-height: 1; }
-.or-panel-kamon--pref { top: 12px; right: 14px; font-size: 8px; }
-.or-spinner { width: 18px; height: 18px; border: 1px solid var(--or-hair-2); border-top-color: var(--or-gold); border-radius: 50%; animation: or-spin 0.7s linear infinite; }
-@keyframes or-spin { to { transform: rotate(360deg); } }
-
-.pref-panel { position: fixed; top: calc(var(--navbar-h, 68px) + 32px); right: 60px; width: 320px; background: var(--or-deep); border: 0.5px solid var(--or-hair); box-shadow: 0 20px 60px rgba(0,0,0,0.6); z-index: 9999; overflow: hidden; max-height: calc(100vh - 120px); display: flex; flex-direction: column; }
-.pref-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 0.5px solid var(--or-hair-2); position: relative; z-index: 1; flex-shrink: 0; }
-.pref-header-inner { display: flex; align-items: center; gap: 10px; }
-.pref-kanji { display: flex; align-items: center; color: var(--or-gold); opacity: .5; }
-.pref-title { font-family: var(--font-sans); font-size: 8px; letter-spacing: .45em; text-transform: uppercase; color: var(--or-gold); }
-.pref-close { background: none; border: none; color: var(--or-silk-3); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; transition: color .2s, transform .3s; }
-.pref-close:hover { color: var(--or-gold); transform: rotate(90deg); }
-.pref-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--or-hair) transparent; }
-.pref-body::-webkit-scrollbar { width: 4px; }
-.pref-body::-webkit-scrollbar-thumb { background: var(--or-hair); border-radius: 2px; }
-.pref-group { border: none; padding: 0; margin: 0; }
-.pref-group__label { font-family: var(--font-sans); font-size: 7px; letter-spacing: .5em; text-transform: uppercase; color: var(--or-silk-3); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.pref-group__label svg { color: var(--or-gold); opacity: .4; flex-shrink: 0; }
-.pref-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.pref-row--3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-.pref-row--2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-
-.pref-realm { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; background: none; border: 0.5px solid var(--or-hair-2); cursor: pointer; transition: all .3s; position: relative; overflow: hidden; margin-bottom: 6px; }
-.pref-realm:last-child { margin-bottom: 0; }
-.pref-realm::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--realm-color, var(--or-gold)); opacity: .07; transition: width .4s cubic-bezier(.16,1,.3,1); }
-.pref-realm:hover::before, .pref-realm.is-active::before { width: 100%; }
-.pref-realm:hover { border-color: var(--realm-color, var(--or-gold)); }
-.pref-realm.is-active { border-color: var(--realm-color, var(--or-gold)); box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--realm-color, var(--or-gold)) 25%, transparent); }
-.pref-realm[data-realm="celestial"] { --realm-color: #F5A623; }
-.pref-realm[data-realm="autumn"]    { --realm-color: #3D6CBF; }
-.pref-realm[data-realm="ghost"]     { --realm-color: #C85014; }
-.pref-realm__orb { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; position: relative; z-index: 1; }
-.pref-realm__orb--celestial { background: radial-gradient(circle at 35% 35%, #FFD97D, #F5A623); box-shadow: 0 0 8px 2px rgba(245,166,35,0.5); }
-.pref-realm__orb--autumn    { background: radial-gradient(circle at 35% 35%, #90BAFF, #3D6CBF); box-shadow: 0 0 8px 2px rgba(61,108,191,0.5); }
-.pref-realm__orb--ghost     { background: radial-gradient(circle at 35% 35%, #FF9966, #C85014); box-shadow: 0 0 8px 2px rgba(200,80,20,0.5); }
-.pref-realm__body { flex: 1; text-align: left; position: relative; z-index: 1; }
-.pref-realm__name { display: block; font-family: var(--font-sans); font-size: 10px; font-weight: 600; letter-spacing: .1em; color: var(--or-silk); }
-.pref-realm__sub  { display: block; font-family: var(--font-sans); font-size: 8px; letter-spacing: .15em; color: var(--or-silk-3); margin-top: 1px; }
-.pref-realm.is-active .pref-realm__name { color: var(--realm-color, var(--or-gold)); }
-.pref-realm__kanji { font-family: 'Noto Serif JP', serif; font-size: 16px; color: var(--realm-color, var(--or-gold)); opacity: .2; line-height: 1; position: relative; z-index: 1; transition: opacity .3s; }
-.pref-realm.is-active .pref-realm__kanji, .pref-realm:hover .pref-realm__kanji { opacity: .5; }
-
-.pref-opt { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; background: none; border: 0.5px solid var(--or-hair-2); font-family: var(--font-sans); font-size: 9px; letter-spacing: .12em; color: var(--or-silk-2); cursor: pointer; transition: all .25s; white-space: nowrap; border-radius: 0; }
-.pref-opt:hover { border-color: var(--or-gold); color: var(--or-gold); background: var(--or-gold-3); }
-.pref-opt.is-active { border-color: var(--or-gold); color: var(--or-gold); background: var(--or-gold-3); }
-.pref-opt.is-active::before { content: '◆'; font-size: 4px; color: var(--or-gold); margin-right: 2px; }
-.pref-font { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 6px; background: none; border: 0.5px solid var(--or-hair-2); cursor: pointer; transition: all .25s; border-radius: 0; }
-.pref-font:hover, .pref-font.is-active { border-color: var(--or-gold); background: var(--or-gold-3); }
-.pref-font__lbl { font-family: var(--font-sans); font-size: 7px; letter-spacing: .2em; text-transform: uppercase; color: var(--or-silk-3); }
-.pref-watermark { text-align: center; padding: 6px 0 2px; font-family: var(--font-serif, 'Playfair Display', serif); font-size: 8px; font-style: italic; letter-spacing: .55em; text-transform: uppercase; color: var(--or-gold); opacity: .12; line-height: 1.6; user-select: none; pointer-events: none; }
+.pref-panel { position:fixed;top:calc(var(--navbar-h,68px) + 32px);right:60px;width:320px;background:var(--or-deep);border:0.5px solid var(--or-hair);box-shadow:0 20px 60px rgba(0,0,0,0.6);z-index:9999;overflow:hidden;max-height:calc(100vh - 120px);display:flex;flex-direction:column; }
+.pref-header { display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:0.5px solid var(--or-hair-2);position:relative;z-index:1;flex-shrink:0; }
+.pref-header-inner { display:flex;align-items:center;gap:10px; }
+.pref-kanji { display:flex;align-items:center;color:var(--or-gold);opacity:.5; }
+.pref-title { font-family:var(--font-sans);font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--or-gold); }
+.pref-close { background:none;border:none;color:var(--or-silk-3);cursor:pointer;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:color .2s,transform .3s; }
+.pref-close:hover { color:var(--or-gold);transform:rotate(90deg); }
+.pref-body { padding:16px;display:flex;flex-direction:column;gap:16px;position:relative;z-index:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--or-hair) transparent; }
+.pref-group { border:none;padding:0;margin:0; }
+.pref-group__label { font-family:var(--font-sans);font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:var(--or-silk-3);display:flex;align-items:center;gap:8px;margin-bottom:10px; }
+.pref-group__label svg { color:var(--or-gold);opacity:.4;flex-shrink:0; }
+.pref-row { display:flex;gap:6px;flex-wrap:wrap; }
+.pref-row--3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px; }
+.pref-realm { display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;background:none;border:0.5px solid var(--or-hair-2);cursor:pointer;transition:all .3s;position:relative;overflow:hidden;margin-bottom:6px; }
+.pref-realm:last-child { margin-bottom:0; }
+.pref-realm::before { content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--realm-color,var(--or-gold));opacity:.07;transition:width .4s cubic-bezier(.16,1,.3,1); }
+.pref-realm:hover::before,.pref-realm.is-active::before { width:100%; }
+.pref-realm:hover { border-color:var(--realm-color,var(--or-gold)); }
+.pref-realm.is-active { border-color:var(--realm-color,var(--or-gold)); }
+.pref-realm[data-realm="celestial"]{--realm-color:#F5A623;}
+.pref-realm[data-realm="autumn"]{--realm-color:#3D6CBF;}
+.pref-realm[data-realm="ghost"]{--realm-color:#C85014;}
+.pref-realm__orb { width:10px;height:10px;border-radius:50%;flex-shrink:0;position:relative;z-index:1; }
+.pref-realm__orb--celestial{background:radial-gradient(circle at 35% 35%,#FFD97D,#F5A623);box-shadow:0 0 8px 2px rgba(245,166,35,0.5);}
+.pref-realm__orb--autumn{background:radial-gradient(circle at 35% 35%,#90BAFF,#3D6CBF);box-shadow:0 0 8px 2px rgba(61,108,191,0.5);}
+.pref-realm__orb--ghost{background:radial-gradient(circle at 35% 35%,#FF9966,#C85014);box-shadow:0 0 8px 2px rgba(200,80,20,0.5);}
+.pref-realm__body { flex:1;text-align:left;position:relative;z-index:1; }
+.pref-realm__name { display:block;font-family:var(--font-sans);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--or-silk); }
+.pref-realm__sub { display:block;font-family:var(--font-sans);font-size:8px;letter-spacing:.15em;color:var(--or-silk-3);margin-top:1px; }
+.pref-realm.is-active .pref-realm__name { color:var(--realm-color,var(--or-gold)); }
+.pref-realm__kanji { font-family:'Noto Serif JP',serif;font-size:16px;color:var(--realm-color,var(--or-gold));opacity:.2;line-height:1;position:relative;z-index:1;transition:opacity .3s; }
+.pref-realm.is-active .pref-realm__kanji,.pref-realm:hover .pref-realm__kanji { opacity:.5; }
+.pref-font { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 6px;background:none;border:0.5px solid var(--or-hair-2);cursor:pointer;transition:all .25s; }
+.pref-font:hover,.pref-font.is-active { border-color:var(--or-gold);background:var(--or-gold-3); }
+.pref-font__lbl { font-family:var(--font-sans);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3); }
+.pref-watermark { text-align:center;padding:6px 0 2px;font-family:var(--font-serif,'Playfair Display',serif);font-size:8px;font-style:italic;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);opacity:.12;line-height:1.6;user-select:none; }
 
 /* ── TOAST ── */
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { display: flex; align-items: flex-start; gap: 12px; min-width: 280px; max-width: 340px; background: var(--or-deep); border: 0.5px solid var(--or-hair); box-shadow: 0 12px 40px rgba(0,0,0,0.55); padding: 14px; position: relative; overflow: hidden; pointer-events: auto; }
-.toast::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0.5px; background: linear-gradient(90deg, transparent, var(--toast-accent, var(--or-gold)), transparent); opacity: .7; }
-.toast--success { --toast-accent: #22c55e; } .toast--error { --toast-accent: #ef4444; } .toast--info { --toast-accent: var(--or-gold); }
-.toast__icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--toast-accent, var(--or-gold)) 15%, transparent); color: var(--toast-accent, var(--or-gold)); flex-shrink: 0; }
-.toast__body { flex: 1; min-width: 0; }
-.toast__title { display: block; font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--or-silk); margin-bottom: 2px; }
-.toast__msg   { display: block; font-family: var(--font-sans); font-size: 10px; font-weight: 300; letter-spacing: .04em; color: var(--or-silk-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.toast__close { background: none; border: none; color: var(--or-silk-4); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; flex-shrink: 0; transition: color .2s; }
-.toast__close:hover { color: var(--or-gold); }
-.toast__progress { position: absolute; bottom: 0; left: 0; height: 1px; background: var(--toast-accent, var(--or-gold)); opacity: .5; width: 100%; transform-origin: left; animation: toast-progress linear 1 forwards; }
-@keyframes toast-progress { from { transform: scaleX(1); } to { transform: scaleX(0); } }
-.toast-enter-active { transition: opacity .3s, transform .4s cubic-bezier(.16,1,.3,1); }
-.toast-leave-active { transition: opacity .25s, transform .3s ease; }
-.toast-enter-from { opacity: 0; transform: translateX(30px) scale(.95); }
-.toast-leave-to   { opacity: 0; transform: translateX(30px) scale(.95); }
+.toast-container { position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none; }
+.toast { display:flex;align-items:flex-start;gap:12px;min-width:280px;max-width:340px;background:var(--or-deep);border:0.5px solid var(--or-hair);box-shadow:0 12px 40px rgba(0,0,0,0.55);padding:14px;position:relative;overflow:hidden;pointer-events:auto; }
+.toast::before { content:'';position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--toast-accent,var(--or-gold)),transparent);opacity:.7; }
+.toast--success{--toast-accent:#22c55e;}.toast--error{--toast-accent:#ef4444;}.toast--info{--toast-accent:var(--or-gold);}
+.toast__icon { width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--toast-accent,var(--or-gold)) 15%,transparent);color:var(--toast-accent,var(--or-gold));flex-shrink:0; }
+.toast__body { flex:1;min-width:0; }
+.toast__title { display:block;font-family:var(--font-sans);font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--or-silk);margin-bottom:2px; }
+.toast__msg { display:block;font-family:var(--font-sans);font-size:10px;font-weight:300;letter-spacing:.04em;color:var(--or-silk-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.toast__close { background:none;border:none;color:var(--or-silk-4);cursor:pointer;display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;transition:color .2s; }
+.toast__close:hover { color:var(--or-gold); }
+.toast__progress { position:absolute;bottom:0;left:0;height:1px;background:var(--toast-accent,var(--or-gold));opacity:.5;width:100%;transform-origin:left;animation:toast-progress linear 1 forwards; }
+@keyframes toast-progress { from{transform:scaleX(1)}to{transform:scaleX(0)} }
 
-/* ── AUTH MODAL ── */
-.auth-orb { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px); }
-.auth-orb--1 { width: 220px; height: 220px; top: -60px; left: -60px; background: radial-gradient(circle, rgba(245,166,35,0.18) 0%, transparent 70%); animation: orb-drift-1 8s ease-in-out infinite; }
-.auth-orb--2 { width: 160px; height: 160px; bottom: 40px; right: -40px; background: radial-gradient(circle, rgba(245,166,35,0.10) 0%, transparent 70%); animation: orb-drift-2 11s ease-in-out infinite; }
-.auth-orb--3 { width: 100px; height: 100px; top: 50%; left: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%); animation: orb-drift-3 14s ease-in-out infinite; }
-@keyframes orb-drift-1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,30px)} }
-@keyframes orb-drift-2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-15px,-20px)} }
-@keyframes orb-drift-3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.4)} }
+/* ═══════════════════════════════════════════════════
+   AUTH MODAL
+═══════════════════════════════════════════════════ */
+.auth-modal { position:relative;display:grid;grid-template-columns:280px 1fr;width:100%;max-width:860px;height:min(92vh,680px);overflow:hidden;border:0.5px solid var(--or-hair);box-shadow:0 0 0 0.5px var(--or-hair),0 60px 120px rgba(0,0,0,.85);animation:or-modal-in 0.65s var(--or-easing) both; }
+@keyframes or-modal-in { from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)} }
 
-.auth-esq { background: var(--or-void); padding: 48px 32px; display: flex; flex-direction: column; border-right: 0.5px solid var(--or-hair); position: relative; overflow: hidden; }
-.auth-esq::after { content: ''; position: absolute; top: 0; bottom: 0; right: -0.5px; width: 0.5px; background: linear-gradient(180deg, transparent 0%, var(--cor-secundaria) 20%, var(--cor-primaria) 50%, var(--cor-secundaria) 80%, transparent 100%); opacity: 0.6; }
-.auth-brand { font-family: var(--font-serif); font-size: 11px; font-weight: 400; letter-spacing: .55em; text-transform: uppercase; color: var(--or-gold); display: flex; align-items: center; gap: 10px; margin-bottom: 48px; position: relative; z-index: 1; }
-.auth-brand__icon { font-size: 16px; opacity: .8; color: var(--or-gold); }
-.auth-brand em { font-style: italic; opacity: .65; color: var(--or-gold); }
-.auth-copy { position: relative; z-index: 1; flex: 1; }
-.auth-titulo { font-family: var(--font-serif); font-size: 28px; font-weight: 300; font-style: italic; color: var(--or-silk); line-height: 1.25; margin: 0 0 16px; }
-.auth-titulo em { font-style: italic; color: var(--or-gold); -webkit-text-fill-color: initial; background: none; }
-.auth-desc { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: var(--or-silk-2); line-height: 1.9; letter-spacing: .04em; }
-.auth-feats { list-style: none; padding: 0; margin: 32px 0 0; display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
-.auth-feats li { display: flex; align-items: center; gap: 12px; font-family: var(--font-sans); font-size: 10px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; color: var(--or-silk-3); }
-.auth-feats li span { font-size: 5px; color: var(--or-gold); opacity: .7; flex-shrink: 0; }
-.auth-watermark { position: absolute; bottom: 52px; left: 32px; right: 32px; font-family: var(--font-serif); font-size: 9px; font-weight: 300; font-style: italic; letter-spacing: .45em; text-transform: uppercase; line-height: 1.8; color: var(--or-gold); opacity: .10; pointer-events: none; z-index: 0; text-align: center; }
-.auth-ssl { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 24px; font-family: var(--font-sans); font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--or-silk-4); position: relative; z-index: 1; }
-.auth-ssl svg { color: var(--or-gold); opacity: .5; }
-.auth-dir { background: var(--or-deep); padding: 40px 44px 36px; display: flex; flex-direction: column; position: relative; overflow-y: auto; scrollbar-width: none; }
-.auth-dir::-webkit-scrollbar { display: none; }
-.auth-dir::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0.5px; background: linear-gradient(90deg, transparent, var(--cor-secundaria) 10%, var(--cor-primaria) 50%, var(--cor-secundaria) 90%, transparent); opacity: 0.55; }
-.auth-close { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; background: none; border: 0.5px solid var(--or-hair-2); display: flex; align-items: center; justify-content: center; color: var(--or-silk-3); cursor: pointer; transition: all .35s var(--or-easing); border-radius: 0; z-index: 2; }
-.auth-close:hover { border-color: var(--or-gold); color: var(--or-gold); transform: rotate(90deg); }
-.auth-aviso { display: flex; align-items: center; gap: 10px; background: rgba(245,166,35,0.05); border-left: 0.5px solid var(--or-gold); padding: 10px 14px; margin-bottom: 12px; font-family: var(--font-sans); font-size: 10px; letter-spacing: .12em; color: var(--or-silk-2); }
-.auth-aviso svg { color: var(--or-gold); flex-shrink: 0; }
-.auth-bloqueado { display: flex; align-items: flex-start; gap: 12px; background: rgba(239,68,68,.06); border-left: 0.5px solid rgba(239,68,68,.5); padding: 12px 14px; margin-bottom: 12px; animation: bloqueio-pulse 2s ease-in-out infinite; }
-.auth-bloqueado svg { color: rgba(239,68,68,.8); flex-shrink: 0; margin-top: 2px; }
-.bloqueado-titulo { font-family: var(--font-sans); font-size: 11px; font-weight: 600; color: rgba(239,68,68,.9); letter-spacing: .06em; margin-bottom: 3px; }
-.bloqueado-desc { font-family: var(--font-sans); font-size: 10px; color: var(--or-silk-3); letter-spacing: .04em; line-height: 1.5; }
-.bloqueado-desc strong { color: rgba(239,68,68,.8); font-weight: 700; }
-@keyframes bloqueio-pulse { 0%,100%{border-color:rgba(239,68,68,.5)} 50%{border-color:rgba(239,68,68,.9)} }
-.auth-tentativas { display: flex; align-items: center; gap: 10px; padding: 8px 14px; margin-bottom: 12px; background: rgba(245,166,35,.04); border-left: 0.5px solid rgba(245,166,35,.3); font-family: var(--font-sans); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--or-silk-3); }
-.tentativas-dots { display: flex; gap: 4px; }
-.tentativa-dot { width: 8px; height: 8px; border: 0.5px solid var(--or-gold); background: var(--or-gold); opacity: .7; transition: all .3s; }
-.tentativa-dot.used { background: transparent; border-color: rgba(239,68,68,.5); opacity: .4; }
-.auth-tabs { display: flex; gap: 0; border-bottom: 0.5px solid var(--or-hair-2); margin-bottom: 28px; }
-.auth-tab { flex: 1; background: none; border: none; border-bottom: 0.5px solid transparent; margin-bottom: -0.5px; padding: 12px 0; font-family: var(--font-sans); font-size: 8px; font-weight: 400; letter-spacing: .4em; text-transform: uppercase; color: var(--or-silk-3); cursor: pointer; transition: all .35s; position: relative; }
-.auth-tab:hover { color: var(--or-silk-2); }
-.auth-tab.is-active { color: var(--or-gold); border-bottom-color: var(--or-gold); }
-.auth-tab.is-active::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 1px; box-shadow: 0 0 12px 2px var(--or-gold); background: var(--or-gold); opacity: .5; }
-.auth-form { display: flex; flex-direction: column; flex: 1; }
-.af-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.af-campo { display: flex; flex-direction: column; margin-bottom: 18px; position: relative; }
-.af-campo label { font-family: var(--font-sans); font-size: 7px; font-weight: 400; letter-spacing: .55em; text-transform: uppercase; color: var(--or-gold); opacity: .7; margin-bottom: 8px; }
-.af-linha { display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid var(--or-hair-2); transition: border-color .4s; padding-bottom: 2px; position: relative; }
-.af-linha::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 0; height: 1.5px; background: var(--or-gold); transition: width .4s cubic-bezier(.16,1,.3,1); }
-.af-linha--focus::after { width: 100%; }
-.af-linha--focus { border-bottom-color: transparent; }
-.af-linha--erro { border-bottom-color: rgba(239,68,68,.6) !important; }
-.af-linha--erro::after { background: transparent !important; }
-.af-linha input { flex: 1; background: transparent !important; border: none; outline: none; font-family: var(--font-sans); font-size: 13px; font-weight: 300; letter-spacing: .04em; color: var(--or-silk) !important; padding: 8px 0; caret-color: var(--or-gold); -webkit-text-fill-color: var(--or-silk) !important; transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s; }
-.af-linha input:-webkit-autofill, .af-linha input:-webkit-autofill:hover, .af-linha input:-webkit-autofill:focus, .af-linha input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px var(--or-deep) inset !important; box-shadow: 0 0 0 1000px var(--or-deep) inset !important; -webkit-text-fill-color: var(--or-gold) !important; caret-color: var(--or-gold); transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s; }
-.af-linha input::placeholder { color: var(--or-silk-4); font-size: 12px; letter-spacing: .08em; }
-.af-linha input:disabled { opacity: .4; cursor: not-allowed; }
-.af-eye { background: none; border: none; padding: 4px; color: var(--or-silk-3); cursor: pointer; display: flex; transition: color .25s; }
-.af-eye:hover { color: var(--or-gold); }
-.af-campo-erro { font-family: var(--font-sans); font-size: 9px; letter-spacing: .1em; color: rgba(239,68,68,.8); margin-top: 5px; }
-.af-esqueceu { text-align: right; margin: -6px 0 16px; }
-.af-esqueceu a { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--or-silk-3); text-decoration: none; transition: color .25s; }
-.af-esqueceu a:hover { color: var(--or-gold); }
-.af-forca { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-.forca-bar { flex: 1; height: 1px; background: var(--or-hair-2); position: relative; }
-.forca-fill { height: 100%; position: absolute; left: 0; top: 0; transition: width .5s, background .5s; }
-.forca-txt { font-size: 8px; letter-spacing: .3em; text-transform: uppercase; white-space: nowrap; font-family: var(--font-sans); min-width: 68px; text-align: right; }
-.af-termos { margin-bottom: 14px; }
-.af-check-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.af-check-row input[type="checkbox"] { display: none; }
-.af-check-box { width: 12px; height: 12px; flex-shrink: 0; border: 0.5px solid var(--or-silk-3); display: flex; align-items: center; justify-content: center; background: transparent; }
-.af-check-row input:checked ~ .af-check-box { background: var(--or-gold); border-color: var(--or-gold); }
-.af-check-row input:checked ~ .af-check-box::after { content: '✓'; font-size: 8px; color: var(--or-void); font-weight: 900; line-height: 1; }
-.af-check-texto { font-size: 10px; letter-spacing: .06em; color: var(--or-silk-3); line-height: 1.5; }
-.af-link-termos { background: none; border: none; padding: 0; color: var(--or-gold); cursor: pointer; font-size: 10px; opacity: .8; text-decoration: none; transition: opacity .2s; }
-.af-link-termos:hover { opacity: 1; }
-.termos-drop-enter-active, .termos-drop-leave-active { transition: opacity .3s, max-height .4s; overflow: hidden; }
-.termos-drop-enter-from, .termos-drop-leave-to { opacity: 0; max-height: 0; }
-.termos-drop-enter-to, .termos-drop-leave-from { opacity: 1; max-height: 120px; }
-.af-termos-body { margin-top: 10px; padding: 12px 14px; background: var(--or-gold-3); border-left: 0.5px solid var(--or-gold); font-size: 10px; font-weight: 300; color: var(--or-silk-2); line-height: 1.7; letter-spacing: .04em; }
-.af-termos-body a { color: var(--or-gold); text-decoration: none; }
-.af-erro { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: .08em; color: rgba(220,100,100,.9); background: rgba(220,80,80,.05); border-left: 0.5px solid rgba(220,100,100,.5); padding: 8px 12px; margin-bottom: 12px; line-height: 1.5; font-family: var(--font-sans); }
-.af-erro svg { flex-shrink: 0; }
-.af-submit { position: relative; overflow: hidden; background: transparent; border: 0.5px solid var(--or-gold); border-radius: 0; font-family: var(--font-sans); font-size: 8px; font-weight: 400; letter-spacing: .55em; text-transform: uppercase; color: var(--or-gold); padding: 14px; cursor: pointer; min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; transition: color .45s; z-index: 0; }
-.af-submit::before { content: ''; position: absolute; inset: 0; background: var(--or-gold); transform: translateX(-101%) skewX(-8deg); transition: transform .55s cubic-bezier(.16,1,.3,1); z-index: -1; }
-.af-submit:hover:not(:disabled)::before { transform: translateX(0) skewX(0deg); }
-.af-submit:hover:not(:disabled) { color: var(--or-void); }
-.af-submit:disabled { opacity: .28; cursor: not-allowed; }
-.af-ou { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
-.af-ou::before, .af-ou::after { content: ''; flex: 1; height: 0.5px; background: var(--or-hair-2); }
-.af-ou span { font-size: 8px; letter-spacing: .4em; text-transform: uppercase; color: var(--or-silk-4); white-space: nowrap; }
-.af-google-wrap { margin-bottom: 12px; }
-.af-google { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; border: 0.5px solid var(--or-hair-2); border-radius: 0; padding: 11px; cursor: pointer; font-family: var(--font-sans); font-size: 9px; font-weight: 400; letter-spacing: .3em; text-transform: uppercase; color: var(--or-silk-2); background: transparent; transition: all .35s; }
-.af-google:hover:not(:disabled) { border-color: var(--or-silk-3); background: var(--or-hair-2); color: var(--or-silk); }
-.af-google:disabled { opacity: .3; cursor: not-allowed; }
-.af-google-nota { display: flex; align-items: flex-start; gap: 6px; margin-top: 7px; font-family: var(--font-sans); font-size: 9px; letter-spacing: .05em; color: var(--or-silk-4); line-height: 1.5; }
-.af-google-nota svg { flex-shrink: 0; color: var(--or-gold); opacity: .5; margin-top: 2px; }
-.af-rodape { font-size: 10px; letter-spacing: .1em; color: var(--or-silk-3); text-align: center; margin-top: auto; padding-top: 8px; }
-.af-rodape button { background: none; border: none; font-size: 10px; letter-spacing: .1em; color: var(--or-gold); cursor: pointer; opacity: .8; transition: opacity .25s; }
-.af-rodape button:hover { opacity: 1; }
-.or-spinner-sm { width: 10px; height: 10px; border: 1px solid rgba(245,166,35,.25); border-top-color: var(--or-gold); border-radius: 50%; animation: or-spin .8s linear infinite; flex-shrink: 0; }
+/* ── LATERAL ESQUERDA ── */
+.auth-orb { position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(60px); }
+.auth-orb--1 { width:220px;height:220px;top:-60px;left:-60px;background:radial-gradient(circle,rgba(245,166,35,0.18) 0%,transparent 70%);animation:orb-drift-1 8s ease-in-out infinite; }
+.auth-orb--2 { width:160px;height:160px;bottom:40px;right:-40px;background:radial-gradient(circle,rgba(245,166,35,0.10) 0%,transparent 70%);animation:orb-drift-2 11s ease-in-out infinite; }
+.auth-orb--3 { width:100px;height:100px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(212,175,55,0.08) 0%,transparent 70%);animation:orb-drift-3 14s ease-in-out infinite; }
+@keyframes orb-drift-1 { 0%,100%{transform:translate(0,0)}50%{transform:translate(20px,30px)} }
+@keyframes orb-drift-2 { 0%,100%{transform:translate(0,0)}50%{transform:translate(-15px,-20px)} }
+@keyframes orb-drift-3 { 0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.4)} }
 
-/* ── AUTH MODAL ── */
-.auth-modal { position: relative; display: grid; grid-template-columns: 280px 1fr; width: 100%; max-width: 800px; height: min(90vh, 620px); border-radius: 0; overflow: hidden; border: 0.5px solid var(--or-hair); box-shadow: 0 0 0 0.5px var(--or-hair), 0 60px 120px rgba(0,0,0,.85); animation: or-modal-in 0.65s var(--or-easing) both; }
-@keyframes or-modal-in { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.auth-esq { background:var(--or-void);padding:40px 28px;display:flex;flex-direction:column;border-right:0.5px solid var(--or-hair);position:relative;overflow:hidden; }
+.auth-esq::after { content:'';position:absolute;top:0;bottom:0;right:-0.5px;width:0.5px;background:linear-gradient(180deg,transparent 0%,var(--cor-secundaria) 20%,var(--cor-primaria) 50%,var(--cor-secundaria) 80%,transparent 100%);opacity:0.6; }
+.auth-brand { font-family:var(--font-serif);font-size:10px;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);display:flex;align-items:center;gap:10px;margin-bottom:36px;position:relative;z-index:1; }
+.auth-brand__icon { font-size:16px;opacity:.8;color:var(--or-gold); }
+.auth-brand em { font-style:italic;opacity:.65;color:var(--or-gold); }
+.auth-copy { position:relative;z-index:1; }
+.auth-titulo { font-family:var(--font-serif);font-size:24px;font-weight:300;font-style:italic;color:var(--or-silk);line-height:1.25;margin:0 0 12px; }
+.auth-titulo em { font-style:italic;color:var(--or-gold); }
+.auth-desc { font-family:var(--font-sans);font-size:10px;font-weight:300;color:var(--or-silk-2);line-height:1.8;letter-spacing:.04em; }
+.auth-feats { list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:10px;position:relative;z-index:1; }
+.auth-feats li { display:flex;align-items:center;gap:12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--or-silk-3); }
+.auth-feats li span { font-size:5px;color:var(--or-gold);opacity:.7;flex-shrink:0; }
 
-/* ── SEARCH PANEL ── */
-.nb-search-panel { position: absolute; top: calc(100% + 12px); right: -80px; width: 340px; background: var(--or-deep); border: 0.5px solid var(--or-hair); box-shadow: 0 20px 60px rgba(0,0,0,0.6); z-index: 9999; overflow: hidden; }
-.nb-search-panel .or-panel-kamon { font-size: 11px; opacity: .12; top: 10px; right: 12px; }
-.nb-search-label { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: rgba(245,166,35,.025); border-bottom: 0.5px solid var(--or-hair-2); }
-.search-kanji { font-family: 'Noto Serif JP', serif; font-size: 14px; color: var(--or-gold); opacity: .35; line-height: 1; }
-.search-label-text { font-family: var(--font-sans, 'Syne', sans-serif); font-size: 7px; letter-spacing: .6em; text-transform: uppercase; color: var(--or-silk-3); }
-.nb-search-field { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid var(--or-hair-2); position: relative; z-index: 1; }
-.nb-search-field svg { color: var(--or-gold); opacity: 0.6; flex-shrink: 0; }
-.nb-search-field input { flex: 1; background: none; border: none; outline: none; font-family: var(--font-sans); font-size: 13px; font-weight: 300; color: var(--or-silk); caret-color: var(--or-gold); padding: 0; transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s; -webkit-text-fill-color: var(--or-silk); }
-.nb-search-field input::placeholder { color: var(--or-silk-4); font-size: 12px; }
-.nb-search-field input:-webkit-autofill, .nb-search-field input:-webkit-autofill:hover, .nb-search-field input:-webkit-autofill:focus, .nb-search-field input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px var(--or-deep) inset !important; box-shadow: 0 0 0 1000px var(--or-deep) inset !important; -webkit-text-fill-color: var(--or-silk) !important; caret-color: var(--or-gold); }
-body.light-mode .nb-search-field input:-webkit-autofill, body.light-mode .nb-search-field input:-webkit-autofill:hover, body.light-mode .nb-search-field input:-webkit-autofill:focus, body.light-mode .nb-search-field input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important; box-shadow: 0 0 0 1000px #ffffff inset !important; -webkit-text-fill-color: #0a0a1e !important; }
-.search-clear { background: none; border: none; color: var(--or-silk-3); cursor: pointer; display: flex; align-items: center; transition: color .2s; padding: 2px; }
-.search-clear:hover { color: var(--or-gold); }
-.nb-search-skeletons { padding: 8px 0; }
-.search-skeleton { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 0.5px solid var(--or-hair-2); }
-.search-skeleton:last-child { border-bottom: none; }
-.sk-img { width: 40px; height: 40px; background: var(--or-hair-2); flex-shrink: 0; animation: sk-shimmer 1.4s ease-in-out infinite; }
-.sk-lines { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-.sk-line { height: 8px; background: var(--or-hair-2); border-radius: 2px; animation: sk-shimmer 1.4s ease-in-out infinite; }
-.sk-line--name { width: 65%; } .sk-line--price { width: 30%; animation-delay: .1s; }
-@keyframes sk-shimmer { 0%{opacity:.4} 50%{opacity:.9} 100%{opacity:.4} }
-.nb-search-results { max-height: 260px; overflow-y: auto; position: relative; z-index: 1; }
-.search-result { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 16px; background: none; border: none; border-bottom: 0.5px solid var(--or-hair-2); cursor: pointer; transition: background .2s; text-align: left; position: relative; }
-.search-result::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: .5px; background: var(--or-gold); opacity: 0; transition: opacity .2s; }
-.search-result.is-focused, .search-result:hover { background: var(--or-gold-3); }
-.search-result.is-focused::before, .search-result:hover::before { opacity: .7; }
-.search-result:last-child { border-bottom: none; }
-.search-result__img { width: 40px; height: 40px; background: rgba(245,166,35,0.04); border: 0.5px solid var(--or-hair-2); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
-.search-result__img img { width: 100%; height: 100%; object-fit: cover; }
-.search-result__img svg { color: var(--or-silk-3); }
-.search-result__info { flex: 1; min-width: 0; }
-.search-result__nome { display: block; font-family: var(--font-sans); font-size: 12px; color: var(--or-silk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.search-result__preco { display: block; font-family: var(--or-font-num); font-size: 10px; color: var(--or-gold); opacity: .8; }
-.search-result svg { color: var(--or-silk-4); flex-shrink: 0; }
-.search-empty { padding: 20px 16px; font-family: var(--font-sans); font-size: 11px; letter-spacing: .08em; color: var(--or-silk-3); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; }
-.search-empty-kanji { font-family: 'Noto Serif JP', serif; font-size: 24px; color: var(--or-gold); opacity: .2; line-height: 1; }
-.nb-search-footer { padding: 8px 16px; border-top: 0.5px solid var(--or-hair-2); font-family: var(--font-sans); font-size: 8px; letter-spacing: .15em; color: var(--or-silk-4); display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; position: relative; z-index: 1; }
-.nb-search-footer span { font-family: var(--or-font-num); color: var(--or-gold); opacity: .5; padding: 0 3px; background: var(--or-hair-2); border-radius: 2px; }
+/* Steps list na lateral */
+.auth-steps-list { list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1; }
+.auth-step { display:flex;align-items:center;gap:12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.1em;color:var(--or-silk-3);transition:color .3s; }
+.auth-step__ico { width:20px;height:20px;border-radius:50%;border:0.5px solid var(--or-silk-3);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;transition:all .3s; }
+.auth-step.is-active { color:var(--or-gold); }
+.auth-step.is-active .auth-step__ico { border-color:var(--or-gold);color:var(--or-gold);background:var(--or-gold-3); }
+.auth-step.is-done { color:var(--or-silk-2); }
+.auth-step.is-done .auth-step__ico { background:var(--or-gold);border-color:var(--or-gold);color:#0A0A0A; }
 
-/* ── DRAWER ── */
-.drawer-overlay { position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,.75); -webkit-backdrop-filter: blur(8px) saturate(.8); backdrop-filter: blur(8px) saturate(.8); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .5s var(--or-easing), visibility .5s; }
-.drawer-overlay.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
-.drawer { position: absolute; top: 0; right: 0; bottom: 0; width: 400px; background: var(--or-deep); border-left: 0.5px solid var(--or-hair); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .65s var(--or-easing); overflow: hidden; }
-.drawer-overlay.is-open .drawer { transform: translateX(0); }
-.drawer-kamon { position: absolute; bottom: 100px; right: 28px; font-family: 'Noto Serif JP', serif; font-size: 56px; color: var(--or-gold); opacity: .04; pointer-events: none; z-index: 0; line-height: 1; }
-.drawer__brasilia { display: flex; align-items: center; gap: 5px; margin-right: 12px; font-family: 'DM Mono', 'Courier New', monospace; font-size: 10px; color: var(--or-silk-3); }
-.drawer__brasilia svg { color: var(--or-gold); opacity: .45; flex-shrink: 0; }
-.drawer__brasilia-label { font-family: var(--font-sans); font-size: 7px; letter-spacing: .3em; text-transform: uppercase; color: var(--or-silk-4); margin-left: 2px; }
-.drawer__header { display: flex; justify-content: space-between; align-items: center; padding: 24px 32px 16px; border-bottom: 0.5px solid var(--or-hair-2); flex-shrink: 0; position: relative; z-index: 1; }
-.drawer__header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0.5px; background: linear-gradient(90deg, transparent, var(--cor-secundaria) 20%, var(--cor-primaria) 50%, var(--cor-secundaria) 80%, transparent); opacity: .65; }
-.drawer__header__titles { display: flex; align-items: center; gap: 12px; }
-.drawer__kanji { font-family: 'Noto Serif JP', serif; font-size: 22px; color: var(--or-gold); opacity: .25; line-height: 1; flex-shrink: 0; }
-.drawer__titulo { display: block; font-family: var(--font-serif, 'Playfair Display', serif); font-size: 11px; font-weight: 400; font-style: italic; letter-spacing: .45em; text-transform: uppercase; color: var(--or-silk); }
-.drawer__qtd { display: block; font-family: var(--or-font-num); font-size: 9px; letter-spacing: .2em; color: var(--or-gold); opacity: .7; margin-top: 2px; }
-.drawer__close { width: 28px; height: 28px; background: none; border: 0.5px solid var(--or-hair-2); border-radius: 0; display: flex; align-items: center; justify-content: center; color: var(--or-silk-3); cursor: pointer; transition: all .35s; flex-shrink: 0; }
-.drawer__close:hover { border-color: var(--or-gold); color: var(--or-gold); transform: rotate(90deg); }
-.drawer__tabs { display: flex; border-bottom: 0.5px solid var(--or-hair-2); flex-shrink: 0; position: relative; z-index: 1; }
-.drawer__tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 8px; background: none; border: none; border-bottom: 0.5px solid transparent; margin-bottom: -0.5px; font-family: var(--font-sans); font-size: 8px; font-weight: 400; letter-spacing: .28em; text-transform: uppercase; color: var(--or-silk-3); cursor: pointer; transition: all .3s; }
-.drawer__tab:hover { color: var(--or-silk-2); }
-.drawer__tab.is-active { color: var(--or-gold); border-bottom-color: var(--or-gold); }
-.drawer__tab svg { flex-shrink: 0; }
-.drawer__tab-badge { background: var(--or-gold); color: var(--or-void); font-family: var(--or-font-num); font-size: 8px; font-weight: 900; min-width: 15px; height: 15px; border-radius: 2px; display: flex; align-items: center; justify-content: center; padding: 0 3px; line-height: 1; }
-.drawer__tab-badge--saved { background: rgba(245,166,35,0.2); color: var(--or-gold); }
-.drawer__clear-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 32px; border-bottom: 0.5px solid var(--or-hair-2); background: transparent; position: relative; z-index: 1; flex-shrink: 0; }
-.drawer__clear-count { font-family: var(--or-font-num); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--or-silk-3); }
-.drawer__clear-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0.5px solid rgba(239,68,68,0.3); padding: 5px 12px; font-family: var(--font-sans); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: rgba(239,68,68,0.65); cursor: pointer; transition: all .25s; }
-.drawer__clear-btn:hover { border-color: rgba(239,68,68,0.7); color: #ef4444; background: rgba(239,68,68,0.05); }
-.drawer__confirm-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 32px; background: rgba(239,68,68,0.05); border-bottom: 0.5px solid rgba(239,68,68,0.2); flex-shrink: 0; position: relative; z-index: 1; }
-.drawer__confirm-txt { font-family: var(--font-sans); font-size: 10px; letter-spacing: .08em; color: rgba(239,68,68,0.8); }
-.drawer__confirm-btns { display: flex; gap: 8px; }
-.drawer__confirm-sim { background: rgba(239,68,68,0.15); border: 0.5px solid rgba(239,68,68,0.4); padding: 5px 12px; font-family: var(--font-sans); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: #ef4444; cursor: pointer; transition: background .2s; }
-.drawer__confirm-sim:hover { background: rgba(239,68,68,0.25); }
-.drawer__confirm-nao { background: none; border: 0.5px solid var(--or-hair-2); padding: 5px 12px; font-family: var(--font-sans); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--or-silk-3); cursor: pointer; transition: all .2s; }
-.drawer__confirm-nao:hover { border-color: var(--or-silk-3); color: var(--or-silk-2); }
-.drawer__ornament { display: flex; align-items: center; gap: 10px; padding: 8px 32px; background: transparent; position: relative; z-index: 1; }
-.drawer__ornament span { font-size: 6px; color: var(--or-gold); opacity: .35; }
-.drawer__ornament-line { flex: 1; height: .5px; background: linear-gradient(90deg, var(--or-gold), transparent); opacity: .2; }
-.drawer__ornament-line:last-of-type { background: linear-gradient(270deg, var(--or-gold), transparent); }
-.drawer__ornament-text { font-family: 'Noto Serif JP', serif; font-size: 8px; letter-spacing: .4em; color: var(--or-gold); opacity: .25; white-space: nowrap; }
-.drawer__items { flex: 1; overflow-y: auto; padding: 4px 0; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--or-hair) transparent; position: relative; z-index: 1; }
-.drawer__items::-webkit-scrollbar { width: 6px; }
-.drawer__items::-webkit-scrollbar-track { background: transparent; }
-.drawer__items::-webkit-scrollbar-thumb { background: var(--or-hair); border-radius: 3px; }
-.drawer__vazio { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 52px 40px; text-align: center; }
-.drawer__vazio__ico { width: 64px; height: 64px; border: 0.5px solid var(--or-hair); display: flex; align-items: center; justify-content: center; position: relative; }
-.drawer__vazio__ico::before { content:''; position:absolute; top:-1px; left:-1px; width:10px; height:10px; border-top:.5px solid var(--or-gold); border-left:.5px solid var(--or-gold); }
-.drawer__vazio__ico::after  { content:''; position:absolute; bottom:-1px; right:-1px; width:10px; height:10px; border-bottom:.5px solid var(--or-gold); border-right:.5px solid var(--or-gold); }
-.vazio-kanji { font-family: 'Noto Serif JP', serif; font-size: 28px; color: var(--or-gold); opacity: .35; line-height: 1; }
-.drawer__vazio__titulo { font-family: var(--font-sans); font-size: 9px; font-weight: 400; letter-spacing: .4em; text-transform: uppercase; color: var(--or-silk-2); }
-.drawer__vazio__sub { font-family: var(--font-sans); font-size: 11px; font-weight: 300; color: var(--or-silk-3); line-height: 1.7; max-width: 200px; letter-spacing: .04em; }
-.drawer__vazio__separador { display: flex; align-items: center; gap: 10px; color: var(--or-gold); opacity: .25; font-family: 'Noto Serif JP', serif; font-size: 12px; width: 100%; justify-content: center; }
-.vazio-sep-txt { font-family: var(--font-sans); font-size: 8px; letter-spacing: .4em; text-transform: uppercase; font-style: normal; }
-.drawer__vazio__cta { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 0.5px solid var(--or-gold); border-radius: 0; padding: 10px 24px; font-family: var(--font-sans); font-size: 8px; font-weight: 400; letter-spacing: .45em; text-transform: uppercase; color: var(--or-gold); cursor: pointer; transition: all .45s var(--or-easing); position: relative; overflow: hidden; }
-.drawer__vazio__cta::before { content:''; position:absolute; inset:0; background:var(--or-gold); transform:scaleX(0); transform-origin:left; transition:transform .5s var(--or-easing); z-index:-1; }
-.drawer__vazio__cta:hover::before { transform: scaleX(1); }
-.drawer__vazio__cta:hover { color: var(--or-void); }
-.drawer__vazio__cta-ghost { background:none; border:none; padding:6px 0; font-family:var(--font-sans); font-size:9px; font-weight:300; letter-spacing:.3em; text-transform:uppercase; color:var(--or-silk-3); cursor:pointer; text-decoration:underline; text-decoration-color:var(--or-hair-2); text-underline-offset:4px; transition:color .25s; }
-.drawer__vazio__cta-ghost:hover { color: var(--or-silk); }
-.di { display:grid; grid-template-columns: 28px 60px 1fr auto; gap: 12px; padding:16px 32px; border-bottom:0.5px solid var(--or-hair-2); background:transparent; align-items:start; transition:background .3s; position:relative; }
-.di:first-child { border-top: 0.5px solid var(--or-hair-2); }
-.di:hover { background: var(--or-gold-3); }
-.di::before { content:''; position:absolute; left:0; top:16px; bottom:16px; width:.5px; background:var(--or-gold); opacity:0; transition:opacity .35s; }
-.di:hover::before { opacity: .6; }
-.di--saved { opacity: .85; }
-.di__num { font-family: 'Noto Serif JP', serif; font-size: 12px; color: var(--or-gold); opacity: .25; line-height: 1; align-self: center; text-align: center; letter-spacing: 0; }
-.di__img { width:60px; height:60px; background:rgba(245,166,35,.03); overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:0.5px solid var(--or-hair-2); position:relative; }
-.di__img::before,.di__img::after { content:''; position:absolute; width:6px; height:6px; z-index:1; }
-.di__img::before { top:2px; left:2px; border-top:.5px solid var(--or-gold); border-left:.5px solid var(--or-gold); opacity:.5; }
-.di__img::after  { bottom:2px; right:2px; border-bottom:.5px solid var(--or-gold); border-right:.5px solid var(--or-gold); opacity:.5; }
-.di__img img { width:100%; height:100%; object-fit:cover; filter:saturate(.85); }
-.di__img__placeholder { color: var(--or-silk-3); }
-.di__info { display:flex; flex-direction:column; gap:4px; min-width:0; }
-.di__cat { font-size:7px; letter-spacing:.5em; text-transform:uppercase; color:var(--or-gold); opacity:.65; font-family:var(--font-sans); }
-.di__nome { font-size:12px; font-weight:300; letter-spacing:.06em; color:var(--or-silk); font-family:var(--font-sans); line-height:1.4; }
-.di__foot { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
-.di__qty { display:flex; align-items:center; border:0.5px solid var(--or-hair-2); }
-.di__qty button { background:none; border:none; color:var(--or-silk-2); width:22px; height:22px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .25s; line-height:1; }
-.di__qty button:hover { background:var(--or-gold); color:var(--or-void); }
-.di__qty span { font-family:var(--or-font-num); font-size:10px; color:var(--or-silk); min-width:28px; text-align:center; height:22px; display:flex; align-items:center; justify-content:center; border-left:0.5px solid var(--or-hair-2); border-right:0.5px solid var(--or-hair-2); letter-spacing:.1em; }
-.di__preco { font-family:var(--or-font-num); font-size:11px; color:var(--or-gold); }
-.di__remover { background:none; border:none; color:var(--or-silk-4); cursor:pointer; padding:2px; display:flex; transition:color .25s; align-self:flex-start; margin-top:2px; }
+.auth-watermark { position:absolute;bottom:52px;left:32px;right:32px;font-family:var(--font-serif);font-size:9px;font-weight:300;font-style:italic;letter-spacing:.45em;text-transform:uppercase;line-height:1.8;color:var(--or-gold);opacity:.10;pointer-events:none;z-index:0;text-align:center; }
+.auth-ssl { display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:20px;font-family:var(--font-sans);font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--or-silk-4);position:relative;z-index:1; }
+.auth-ssl svg { color:var(--or-gold);opacity:.5; }
+
+/* ── LADO DIREITO ── */
+.auth-dir { background:var(--or-deep);padding:32px 40px 28px;display:flex;flex-direction:column;position:relative;overflow-y:auto;scrollbar-width:none; }
+.auth-dir::-webkit-scrollbar { display:none; }
+.auth-dir::before { content:'';position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--cor-secundaria) 10%,var(--cor-primaria) 50%,var(--cor-secundaria) 90%,transparent);opacity:0.55; }
+.auth-close { position:absolute;top:16px;right:16px;width:28px;height:28px;background:none;border:0.5px solid var(--or-hair-2);display:flex;align-items:center;justify-content:center;color:var(--or-silk-3);cursor:pointer;transition:all .35s var(--or-easing);z-index:2; }
+.auth-close:hover { border-color:var(--or-gold);color:var(--or-gold);transform:rotate(90deg); }
+.auth-aviso { display:flex;align-items:center;gap:10px;background:rgba(245,166,35,0.05);border-left:0.5px solid var(--or-gold);padding:10px 14px;margin-bottom:12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.12em;color:var(--or-silk-2); }
+.auth-aviso svg { color:var(--or-gold);flex-shrink:0; }
+.auth-bloqueado { display:flex;align-items:flex-start;gap:12px;background:rgba(239,68,68,.06);border-left:0.5px solid rgba(239,68,68,.5);padding:12px 14px;margin-bottom:12px; }
+.auth-bloqueado svg { color:rgba(239,68,68,.8);flex-shrink:0;margin-top:2px; }
+.bloqueado-titulo { font-family:var(--font-sans);font-size:11px;font-weight:600;color:rgba(239,68,68,.9);letter-spacing:.06em;margin-bottom:3px; }
+.bloqueado-desc { font-family:var(--font-sans);font-size:10px;color:var(--or-silk-3);line-height:1.5; }
+.bloqueado-desc strong { color:rgba(239,68,68,.8);font-weight:700; }
+.auth-tentativas { display:flex;align-items:center;gap:10px;padding:8px 14px;margin-bottom:12px;background:rgba(245,166,35,.04);border-left:0.5px solid rgba(245,166,35,.3);font-family:var(--font-sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3); }
+.tentativas-dots { display:flex;gap:4px; }
+.tentativa-dot { width:8px;height:8px;border:0.5px solid var(--or-gold);background:var(--or-gold);opacity:.7;transition:all .3s; }
+.tentativa-dot.used { background:transparent;border-color:rgba(239,68,68,.5);opacity:.4; }
+.auth-tabs { display:flex;gap:0;border-bottom:0.5px solid var(--or-hair-2);margin-bottom:24px; }
+.auth-tab { flex:1;background:none;border:none;border-bottom:0.5px solid transparent;margin-bottom:-0.5px;padding:12px 0;font-family:var(--font-sans);font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;transition:all .35s;position:relative; }
+.auth-tab:hover { color:var(--or-silk-2); }
+.auth-tab.is-active { color:var(--or-gold);border-bottom-color:var(--or-gold); }
+
+/* ── FORMULÁRIO ── */
+.auth-form { display:flex;flex-direction:column;flex:1; }
+.af-step-header { display:flex;flex-direction:column;gap:4px;margin-bottom:18px; }
+.af-step-back { display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--font-sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;padding:0;margin-bottom:6px;transition:color .25s; }
+.af-step-back:hover { color:var(--or-gold); }
+.af-step-badge { font-family:var(--font-sans);font-size:7px;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);opacity:.7; }
+.af-step-title { font-family:var(--font-serif,'Playfair Display',serif);font-size:15px;font-style:italic;color:var(--or-silk);letter-spacing:.04em; }
+.af-duplo { display:grid;grid-template-columns:1fr 1fr;gap:24px; }
+.af-campo { display:flex;flex-direction:column;margin-bottom:14px;position:relative; }
+.af-campo label { font-family:var(--font-sans);font-size:7px;font-weight:400;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);opacity:.7;margin-bottom:8px; }
+.af-linha { display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--or-hair-2);transition:border-color .4s;padding-bottom:2px;position:relative; }
+.af-linha::after { content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:0;height:1.5px;background:var(--or-gold);transition:width .4s cubic-bezier(.16,1,.3,1); }
+.af-linha--focus::after { width:100%; }
+.af-linha--focus { border-bottom-color:transparent; }
+.af-linha--erro { border-bottom-color:rgba(239,68,68,.6)!important; }
+.af-linha--ok { border-bottom-color:rgba(34,197,94,.4); }
+.af-linha--ok::after { background:#22c55e!important;width:100%; }
+.af-linha input { flex:1;background:transparent!important;border:none;outline:none;font-family:var(--font-sans);font-size:13px;font-weight:300;letter-spacing:.04em;color:var(--or-silk)!important;padding:8px 0;caret-color:var(--or-gold);-webkit-text-fill-color:var(--or-silk)!important;transition:background-color 9999s ease-in-out 0s,color 9999s ease-in-out 0s; }
+.af-linha input:-webkit-autofill,.af-linha input:-webkit-autofill:hover,.af-linha input:-webkit-autofill:focus { -webkit-box-shadow:0 0 0 1000px var(--or-deep) inset!important;-webkit-text-fill-color:var(--or-gold)!important;caret-color:var(--or-gold); }
+.af-linha input::placeholder { color:var(--or-silk-4);font-size:12px;letter-spacing:.08em; }
+.af-linha input:disabled { opacity:.4;cursor:not-allowed; }
+.af-field-ok { color:#22c55e;font-size:12px;font-weight:700;flex-shrink:0; }
+.af-field-err { color:#ef4444;font-size:12px;font-weight:700;flex-shrink:0; }
+.af-eye { background:none;border:none;padding:4px;color:var(--or-silk-3);cursor:pointer;display:flex;transition:color .25s; }
+.af-eye:hover { color:var(--or-gold); }
+.af-campo-erro { font-family:var(--font-sans);font-size:9px;letter-spacing:.1em;color:rgba(239,68,68,.8);margin-top:5px; }
+.af-esqueceu { text-align:right;margin:-6px 0 16px; }
+.af-esqueceu a { font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3);text-decoration:none;transition:color .25s; }
+.af-esqueceu a:hover { color:var(--or-gold); }
+.af-forca { display:flex;align-items:center;gap:12px;margin-top:8px; }
+.forca-bar { flex:1;height:1px;background:var(--or-hair-2);position:relative; }
+.forca-fill { height:100%;position:absolute;left:0;top:0;transition:width .5s,background .5s; }
+.forca-txt { font-size:8px;letter-spacing:.3em;text-transform:uppercase;white-space:nowrap;font-family:var(--font-sans);min-width:68px;text-align:right; }
+.af-termos { margin-bottom:14px; }
+.af-check-row { display:flex;align-items:center;gap:10px;cursor:pointer; }
+.af-check-row input[type="checkbox"] { display:none; }
+.af-check-box { width:12px;height:12px;flex-shrink:0;border:0.5px solid var(--or-silk-3);display:flex;align-items:center;justify-content:center;background:transparent; }
+.af-check-row input:checked ~ .af-check-box { background:var(--or-gold);border-color:var(--or-gold); }
+.af-check-row input:checked ~ .af-check-box::after { content:'✓';font-size:8px;color:var(--or-void);font-weight:900;line-height:1; }
+.af-check-texto { font-size:10px;letter-spacing:.06em;color:var(--or-silk-3);line-height:1.5; }
+.af-link-termos { background:none;border:none;padding:0;color:var(--or-gold);cursor:pointer;font-size:10px;opacity:.8;text-decoration:none;transition:opacity .2s; }
+.af-link-termos:hover { opacity:1; }
+.termos-drop-enter-active,.termos-drop-leave-active { transition:opacity .3s,max-height .4s;overflow:hidden; }
+.termos-drop-enter-from,.termos-drop-leave-to { opacity:0;max-height:0; }
+.termos-drop-enter-to,.termos-drop-leave-from { opacity:1;max-height:120px; }
+.af-termos-body { margin-top:10px;padding:12px 14px;background:var(--or-gold-3);border-left:0.5px solid var(--or-gold);font-size:10px;font-weight:300;color:var(--or-silk-2);line-height:1.7; }
+.af-termos-body a { color:var(--or-gold);text-decoration:none; }
+.af-erro { display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.08em;color:rgba(220,100,100,.9);background:rgba(220,80,80,.05);border-left:0.5px solid rgba(220,100,100,.5);padding:8px 12px;margin-bottom:12px;line-height:1.5;font-family:var(--font-sans); }
+.af-erro svg { flex-shrink:0; }
+.af-submit { position:relative;overflow:hidden;background:transparent;border:0.5px solid var(--or-gold);font-family:var(--font-sans);font-size:8px;font-weight:400;letter-spacing:.55em;text-transform:uppercase;color:var(--or-gold);padding:14px;cursor:pointer;min-height:46px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;transition:color .45s;z-index:0;width:100%; }
+.af-submit::before { content:'';position:absolute;inset:0;background:var(--or-gold);transform:translateX(-101%) skewX(-8deg);transition:transform .55s cubic-bezier(.16,1,.3,1);z-index:-1; }
+.af-submit:hover:not(:disabled)::before { transform:translateX(0) skewX(0deg); }
+.af-submit:hover:not(:disabled) { color:var(--or-void); }
+.af-submit:disabled { opacity:.28;cursor:not-allowed; }
+.af-submit--success { border-color:#22c55e;color:#22c55e; }
+.af-submit--success::before { background:#22c55e; }
+.af-btn-ghost { background:none;border:0.5px solid var(--or-hair-2);padding:8px 20px;font-family:var(--font-sans);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;margin:0 auto; }
+.af-btn-ghost:hover { border-color:var(--or-gold);color:var(--or-gold); }
+.af-ou { display:flex;align-items:center;gap:16px;margin-bottom:10px; }
+.af-ou::before,.af-ou::after { content:'';flex:1;height:0.5px;background:var(--or-hair-2); }
+.af-ou span { font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--or-silk-4);white-space:nowrap; }
+.af-google-wrap { margin-bottom:12px; }
+.af-google { display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:0.5px solid var(--or-hair-2);padding:11px;cursor:pointer;font-family:var(--font-sans);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--or-silk-2);background:transparent;transition:all .35s; }
+.af-google:hover:not(:disabled) { border-color:var(--or-silk-3);background:var(--or-hair-2);color:var(--or-silk); }
+.af-google:disabled { opacity:.3;cursor:not-allowed; }
+.af-rodape { font-size:10px;letter-spacing:.1em;color:var(--or-silk-3);text-align:center;margin-top:auto;padding-top:8px; }
+.af-rodape button { background:none;border:none;font-size:10px;letter-spacing:.1em;color:var(--or-gold);cursor:pointer;opacity:.8;transition:opacity .25s; }
+.af-rodape button:hover { opacity:1; }
+
+/* ════════════════════════════════
+   VERIFICAÇÃO DE IDENTIDADE — STEP 2
+════════════════════════════════ */
+.id-aviso { display:flex;align-items:flex-start;gap:10px;background:rgba(245,166,35,0.04);border-left:0.5px solid rgba(245,166,35,0.4);padding:12px 14px;margin-bottom:8px; }
+.id-aviso--info { background:rgba(59,130,246,0.04);border-left-color:rgba(59,130,246,0.4); }
+.id-aviso svg { color:var(--or-gold);flex-shrink:0;margin-top:2px; }
+.id-aviso--info svg { color:#3b82f6; }
+.id-aviso p { font-family:var(--font-sans);font-size:10px;color:var(--or-silk-2);line-height:1.6;letter-spacing:.03em; }
+.id-aviso p strong { color:var(--or-gold);font-weight:600; }
+.id-upload-area { margin-bottom:12px; }
+.id-upload-label { display:flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:var(--or-gold);opacity:.7;margin-bottom:8px; }
+.id-upload-box { display:block;border:0.5px dashed var(--or-hair-2);cursor:pointer;position:relative;transition:all .25s;min-height:100px; }
+.id-upload-box:hover,.id-upload-box.is-drag { border-color:var(--or-gold);background:var(--or-gold-3); }
+.id-upload-box.has-file { border-style:solid;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.03); }
+.id-upload-input { position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2; }
+.id-upload-placeholder { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;color:var(--or-silk-3); }
+.id-upload-placeholder svg { color:var(--or-gold);opacity:.3; }
+.id-upload-placeholder span { font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;color:var(--or-silk-3);text-align:center; }
+.id-upload-sub { font-size:9px!important;opacity:.6; }
+.id-preview { position:relative;width:100%;padding-bottom:56.25%;overflow:hidden; }
+.id-preview img { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+.id-preview-del { position:absolute;top:8px;right:8px;z-index:3;background:rgba(0,0,0,.6);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:background .2s; }
+.id-preview-del:hover { background:rgba(239,68,68,.8); }
+.id-preview-ok { position:absolute;bottom:8px;left:8px;z-index:3;background:rgba(34,197,94,.85);color:#fff;font-family:var(--font-sans);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px; }
+
+/* ════════════════════════════════
+   RECONHECIMENTO FACIAL — STEP 3
+════════════════════════════════ */
+.face-cam-wrap { display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:16px; }
+.face-cam-frame { position:relative;width:260px;height:300px;background:rgba(0,0,0,.4);overflow:hidden;border:0.5px solid var(--or-hair-2);transition:border-color .3s; }
+.face-cam-frame.is-scanning { border-color:var(--or-gold); }
+.face-cam-frame.is-ok { border-color:#22c55e; }
+.face-cam-frame.is-erro { border-color:#ef4444; }
+.face-oval-guide { position:absolute;inset:0;z-index:2;pointer-events:none;color:rgba(245,166,35,0.35); }
+.face-oval-guide svg { width:100%;height:100%; }
+.face-corner { position:absolute;width:16px;height:16px;z-index:3;pointer-events:none; }
+.face-corner--tl { top:8px;left:8px;border-top:1.5px solid var(--or-gold);border-left:1.5px solid var(--or-gold); }
+.face-corner--tr { top:8px;right:8px;border-top:1.5px solid var(--or-gold);border-right:1.5px solid var(--or-gold); }
+.face-corner--bl { bottom:8px;left:8px;border-bottom:1.5px solid var(--or-gold);border-left:1.5px solid var(--or-gold); }
+.face-corner--br { bottom:8px;right:8px;border-bottom:1.5px solid var(--or-gold);border-right:1.5px solid var(--or-gold); }
+.face-video { width:100%;height:100%;object-fit:cover;transform:scaleX(-1);position:relative;z-index:1; }
+.face-canvas-hidden { position:absolute;top:-9999px;left:-9999px;visibility:hidden; }
+.face-preview { position:absolute;inset:0;z-index:4; }
+.face-preview img { width:100%;height:100%;object-fit:cover;transform:scaleX(-1); }
+.face-preview-ok { position:absolute;bottom:12px;right:12px;width:32px;height:32px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 16px rgba(34,197,94,.5); }
+.face-cam-idle { position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--or-silk-3); }
+.face-cam-idle svg { opacity:.3; }
+.face-cam-idle span { font-family:var(--font-sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase; }
+.face-scan-line { position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--or-gold),transparent);z-index:5;animation:face-scan 1.5s ease-in-out infinite; }
+@keyframes face-scan { 0%{top:0;opacity:1}50%{top:calc(100% - 2px);opacity:1}100%{top:0;opacity:0} }
+.face-status { text-align:center; }
+.face-status-txt { font-family:var(--font-sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--or-silk-3);display:flex;align-items:center;gap:8px;justify-content:center; }
+.face-status-txt--live { color:var(--or-silk-2); }
+.face-status-txt--scan { color:var(--or-gold); }
+.face-status-txt--ok { color:#22c55e;font-weight:600; }
+.face-status-txt--err { color:#ef4444; }
+.face-dot-live { width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dot-pulse 1.2s ease-in-out infinite;flex-shrink:0; }
+@keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)} }
+.face-dicas { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px; }
+.face-dicas li { font-family:var(--font-sans);font-size:9px;letter-spacing:.1em;color:var(--or-silk-3);text-align:center; }
+.face-dicas li::before { content:'· ';color:var(--or-gold);opacity:.5; }
+.face-btns { display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px; }
+.face-btns .af-submit { width:100%; }
+
+/* Checklist final */
+.verif-checklist { background:rgba(34,197,94,.04);border:0.5px solid rgba(34,197,94,.2);padding:14px 16px;margin-top:4px; }
+.verif-checklist__titulo { font-family:var(--font-sans);font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(34,197,94,.7);margin-bottom:10px; }
+.verif-checklist ul { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px; }
+.verif-item { display:flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:10px;letter-spacing:.06em;color:var(--or-silk-2); }
+.verif-item svg { flex-shrink:0; }
+.verif-item--ok { color:rgba(34,197,94,.85); }
+.verif-item--ok svg { color:#22c55e; }
+
+/* ════════════════════════════════
+   SEARCH PANEL
+════════════════════════════════ */
+.nb-search-panel { position:absolute;top:calc(100% + 12px);right:-80px;width:340px;background:var(--or-deep);border:0.5px solid var(--or-hair);box-shadow:0 20px 60px rgba(0,0,0,0.6);z-index:9999;overflow:hidden; }
+.nb-search-panel .or-panel-kamon { font-size:11px;opacity:.12;top:10px;right:12px; }
+.nb-search-label { display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(245,166,35,.025);border-bottom:0.5px solid var(--or-hair-2); }
+.search-kanji { font-family:'Noto Serif JP',serif;font-size:14px;color:var(--or-gold);opacity:.35;line-height:1; }
+.search-label-text { font-family:var(--font-sans);font-size:7px;letter-spacing:.6em;text-transform:uppercase;color:var(--or-silk-3); }
+.nb-search-field { display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:0.5px solid var(--or-hair-2);position:relative;z-index:1; }
+.nb-search-field svg { color:var(--or-gold);opacity:.6;flex-shrink:0; }
+.nb-search-field input { flex:1;background:none;border:none;outline:none;font-family:var(--font-sans);font-size:13px;font-weight:300;color:var(--or-silk);caret-color:var(--or-gold);padding:0;-webkit-text-fill-color:var(--or-silk); }
+.nb-search-field input::placeholder { color:var(--or-silk-4);font-size:12px; }
+.search-clear { background:none;border:none;color:var(--or-silk-3);cursor:pointer;display:flex;align-items:center;transition:color .2s;padding:2px; }
+.search-clear:hover { color:var(--or-gold); }
+.nb-search-skeletons { padding:8px 0; }
+.search-skeleton { display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:0.5px solid var(--or-hair-2); }
+.sk-img { width:40px;height:40px;background:var(--or-hair-2);flex-shrink:0;animation:sk-shimmer 1.4s ease-in-out infinite; }
+.sk-lines { flex:1;display:flex;flex-direction:column;gap:6px; }
+.sk-line { height:8px;background:var(--or-hair-2);border-radius:2px;animation:sk-shimmer 1.4s ease-in-out infinite; }
+.sk-line--name{width:65%;}.sk-line--price{width:30%;animation-delay:.1s;}
+@keyframes sk-shimmer { 0%{opacity:.4}50%{opacity:.9}100%{opacity:.4} }
+.nb-search-results { max-height:260px;overflow-y:auto; }
+.search-result { display:flex;align-items:center;gap:12px;width:100%;padding:11px 16px;background:none;border:none;border-bottom:0.5px solid var(--or-hair-2);cursor:pointer;transition:background .2s;text-align:left;position:relative; }
+.search-result::before { content:'';position:absolute;left:0;top:8px;bottom:8px;width:.5px;background:var(--or-gold);opacity:0;transition:opacity .2s; }
+.search-result.is-focused,.search-result:hover { background:var(--or-gold-3); }
+.search-result.is-focused::before,.search-result:hover::before { opacity:.7; }
+.search-result__img { width:40px;height:40px;background:rgba(245,166,35,0.04);border:0.5px solid var(--or-hair-2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0; }
+.search-result__img img { width:100%;height:100%;object-fit:cover; }
+.search-result__nome { display:block;font-family:var(--font-sans);font-size:12px;color:var(--or-silk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.search-result__preco { display:block;font-family:var(--or-font-num);font-size:10px;color:var(--or-gold);opacity:.8; }
+.search-empty { padding:20px 16px;font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;color:var(--or-silk-3);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px; }
+.search-empty-kanji { font-family:'Noto Serif JP',serif;font-size:24px;color:var(--or-gold);opacity:.2;line-height:1; }
+.nb-search-footer { padding:8px 16px;border-top:0.5px solid var(--or-hair-2);font-family:var(--font-sans);font-size:8px;letter-spacing:.15em;color:var(--or-silk-4);display:flex;justify-content:center;gap:4px;flex-wrap:wrap; }
+.nb-search-footer span { font-family:var(--or-font-num);color:var(--or-gold);opacity:.5;padding:0 3px;background:var(--or-hair-2);border-radius:2px; }
+
+/* ════════════════════════════════
+   DRAWER CARRINHO
+════════════════════════════════ */
+.drawer-overlay { position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(8px) saturate(.8);backdrop-filter:blur(8px) saturate(.8);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s var(--or-easing),visibility .5s; }
+.drawer-overlay.is-open { opacity:1;visibility:visible;pointer-events:auto; }
+.drawer { position:absolute;top:0;right:0;bottom:0;width:400px;background:var(--or-deep);border-left:0.5px solid var(--or-hair);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .65s var(--or-easing);overflow:hidden; }
+.drawer-overlay.is-open .drawer { transform:translateX(0); }
+.drawer-kamon { position:absolute;bottom:100px;right:28px;font-family:'Noto Serif JP',serif;font-size:56px;color:var(--or-gold);opacity:.04;pointer-events:none;z-index:0;line-height:1; }
+.drawer__header { display:flex;justify-content:space-between;align-items:center;padding:24px 32px 16px;border-bottom:0.5px solid var(--or-hair-2);flex-shrink:0;position:relative;z-index:1; }
+.drawer__header::before { content:'';position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--cor-secundaria) 20%,var(--cor-primaria) 50%,var(--cor-secundaria) 80%,transparent);opacity:.65; }
+.drawer__header__titles { display:flex;align-items:center;gap:12px; }
+.drawer__brasilia { display:flex;align-items:center;gap:5px;margin-right:12px;font-family:'DM Mono','Courier New',monospace;font-size:10px;color:var(--or-silk-3); }
+.drawer__brasilia svg { color:var(--or-gold);opacity:.45;flex-shrink:0; }
+.drawer__brasilia-label { font-family:var(--font-sans);font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:var(--or-silk-4);margin-left:2px; }
+.drawer__kanji { font-family:'Noto Serif JP',serif;font-size:22px;color:var(--or-gold);opacity:.25;line-height:1;flex-shrink:0; }
+.drawer__titulo { display:block;font-family:var(--font-serif,'Playfair Display',serif);font-size:11px;font-weight:400;font-style:italic;letter-spacing:.45em;text-transform:uppercase;color:var(--or-silk); }
+.drawer__qtd { display:block;font-family:var(--or-font-num);font-size:9px;letter-spacing:.2em;color:var(--or-gold);opacity:.7;margin-top:2px; }
+.drawer__close { width:28px;height:28px;background:none;border:0.5px solid var(--or-hair-2);display:flex;align-items:center;justify-content:center;color:var(--or-silk-3);cursor:pointer;transition:all .35s;flex-shrink:0; }
+.drawer__close:hover { border-color:var(--or-gold);color:var(--or-gold);transform:rotate(90deg); }
+.drawer__tabs { display:flex;border-bottom:0.5px solid var(--or-hair-2);flex-shrink:0;position:relative;z-index:1; }
+.drawer__tab { flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;background:none;border:none;border-bottom:0.5px solid transparent;margin-bottom:-0.5px;font-family:var(--font-sans);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;transition:all .3s; }
+.drawer__tab.is-active { color:var(--or-gold);border-bottom-color:var(--or-gold); }
+.drawer__tab-badge { background:var(--or-gold);color:var(--or-void);font-family:var(--or-font-num);font-size:8px;font-weight:900;min-width:15px;height:15px;border-radius:2px;display:flex;align-items:center;justify-content:center;padding:0 3px; }
+.drawer__tab-badge--saved { background:rgba(245,166,35,0.2);color:var(--or-gold); }
+.drawer__items { flex:1;overflow-y:auto;padding:4px 0;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:var(--or-hair) transparent;position:relative;z-index:1; }
+.drawer__vazio { flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:52px 40px;text-align:center; }
+.drawer__vazio__ico { width:64px;height:64px;border:0.5px solid var(--or-hair);display:flex;align-items:center;justify-content:center;position:relative; }
+.drawer__vazio__ico::before { content:'';position:absolute;top:-1px;left:-1px;width:10px;height:10px;border-top:.5px solid var(--or-gold);border-left:.5px solid var(--or-gold); }
+.drawer__vazio__ico::after  { content:'';position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-bottom:.5px solid var(--or-gold);border-right:.5px solid var(--or-gold); }
+.vazio-kanji { font-family:'Noto Serif JP',serif;font-size:28px;color:var(--or-gold);opacity:.35;line-height:1; }
+.drawer__vazio__titulo { font-family:var(--font-sans);font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--or-silk-2); }
+.drawer__vazio__sub { font-family:var(--font-sans);font-size:11px;font-weight:300;color:var(--or-silk-3);line-height:1.7;max-width:200px; }
+.drawer__vazio__cta { display:inline-flex;align-items:center;gap:10px;background:transparent;border:0.5px solid var(--or-gold);padding:10px 24px;font-family:var(--font-sans);font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:var(--or-gold);cursor:pointer;transition:all .45s var(--or-easing);position:relative;overflow:hidden; }
+.drawer__vazio__cta::before { content:'';position:absolute;inset:0;background:var(--or-gold);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--or-easing);z-index:-1; }
+.drawer__vazio__cta:hover::before { transform:scaleX(1); }
+.drawer__vazio__cta:hover { color:var(--or-void); }
+.di { display:grid;grid-template-columns:28px 60px 1fr auto;gap:12px;padding:16px 32px;border-bottom:0.5px solid var(--or-hair-2);background:transparent;align-items:start;transition:background .3s;position:relative; }
+.di:first-child { border-top:0.5px solid var(--or-hair-2); }
+.di:hover { background:var(--or-gold-3); }
+.di--saved { opacity:.85; }
+.di__num { font-family:'Noto Serif JP',serif;font-size:12px;color:var(--or-gold);opacity:.25;line-height:1;align-self:center;text-align:center; }
+.di__img { width:60px;height:60px;background:rgba(245,166,35,.03);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:0.5px solid var(--or-hair-2); }
+.di__img img { width:100%;height:100%;object-fit:cover; }
+.di__img__placeholder { color:var(--or-silk-3); }
+.di__info { display:flex;flex-direction:column;gap:4px;min-width:0; }
+.di__cat { font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:var(--or-gold);opacity:.65;font-family:var(--font-sans); }
+.di__nome { font-size:12px;font-weight:300;letter-spacing:.06em;color:var(--or-silk);font-family:var(--font-sans);line-height:1.4; }
+.di__foot { display:flex;align-items:center;justify-content:space-between;margin-top:10px; }
+.di__qty { display:flex;align-items:center;border:0.5px solid var(--or-hair-2); }
+.di__qty button { background:none;border:none;color:var(--or-silk-2);width:22px;height:22px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .25s;line-height:1; }
+.di__qty button:hover { background:var(--or-gold);color:var(--or-void); }
+.di__qty span { font-family:var(--or-font-num);font-size:10px;color:var(--or-silk);min-width:28px;text-align:center;height:22px;display:flex;align-items:center;justify-content:center;border-left:0.5px solid var(--or-hair-2);border-right:0.5px solid var(--or-hair-2); }
+.di__preco { font-family:var(--or-font-num);font-size:11px;color:var(--or-gold); }
+.di__remover { background:none;border:none;color:var(--or-silk-4);cursor:pointer;padding:2px;display:flex;transition:color .25s;align-self:flex-start;margin-top:2px; }
 .di__remover:hover { color:rgba(220,80,80,.7); }
-.di__salvar, .di__mover { display: inline-flex; align-items: center; gap: 5px; background: none; border: none; padding: 0; margin-top: 6px; font-family: var(--font-sans); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; transition: color .25s; }
-.di__salvar { color: var(--or-silk-4); } .di__salvar:hover { color: var(--or-silk-2); }
-.di__mover { color: var(--or-gold); opacity: .7; } .di__mover:hover { opacity: 1; }
-.drawer__footer { padding:18px 32px 26px; border-top:0.5px solid var(--or-hair-2); flex-shrink:0; background:var(--or-void); position:relative; z-index: 1; }
-.drawer__footer-ornament { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.fo-line { flex: 1; height: .5px; background: linear-gradient(90deg, transparent, var(--or-gold)); opacity: .2; }
-.fo-line:last-child { background: linear-gradient(270deg, transparent, var(--or-gold)); }
-.fo-kanji { font-family: 'Noto Serif JP', serif; font-size: 14px; color: var(--or-gold); opacity: .3; line-height: 1; }
-.drawer__totais { margin-bottom: 14px; }
-.dt-row { display:flex; justify-content:space-between; align-items:center; font-family:var(--font-sans); font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--or-silk-3); margin-bottom:8px; padding-bottom:8px; }
-.dt-row span:last-child { font-family:var(--or-font-num); letter-spacing:.08em; text-transform:none; }
-.dt-row--vip { color:var(--or-gold); opacity:.7; }
-.dt-row--vip span:first-child { display:flex; align-items:center; gap:6px; }
-.dt-row--total { font-size:10px; letter-spacing:.15em; color:var(--or-silk); margin-top:10px; padding-top:10px; border-top:0.5px solid var(--or-hair-2); margin-bottom:0; }
-.dt-row--total span:last-child { font-family:var(--or-font-num); font-size:14px; color:var(--or-gold); letter-spacing:.04em; }
-.drawer__checkout { width:100%; display:flex; align-items:center; justify-content:center; gap:12px; background:transparent; color:var(--or-gold); font-family:var(--font-sans); font-size:8px; font-weight:400; letter-spacing:.55em; text-transform:uppercase; padding:14px; border:0.5px solid var(--or-gold); border-radius:0; cursor:pointer; margin-bottom:10px; transition:color .45s; position:relative; overflow:hidden; z-index:0; }
-.drawer__checkout::before { content:''; position:absolute; inset:0; background:var(--or-gold); transform:scaleX(0); transform-origin:left; transition:transform .55s var(--or-easing); z-index:-1; }
+.di__mover { display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;margin-top:6px;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:color .25s;color:var(--or-gold);opacity:.7; }
+.di__mover:hover { opacity:1; }
+.drawer__footer { padding:18px 32px 26px;border-top:0.5px solid var(--or-hair-2);flex-shrink:0;background:var(--or-void);position:relative;z-index:1; }
+.drawer__totais { margin-bottom:14px; }
+.dt-row { display:flex;justify-content:space-between;align-items:center;font-family:var(--font-sans);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--or-silk-3);margin-bottom:8px;padding-bottom:8px; }
+.dt-row span:last-child { font-family:var(--or-font-num);letter-spacing:.08em;text-transform:none;font-size:14px;color:var(--or-gold); }
+.drawer__checkout { width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:transparent;color:var(--or-gold);font-family:var(--font-sans);font-size:8px;letter-spacing:.55em;text-transform:uppercase;padding:14px;border:0.5px solid var(--or-gold);cursor:pointer;margin-bottom:10px;transition:color .45s;position:relative;overflow:hidden;z-index:0; }
+.drawer__checkout::before { content:'';position:absolute;inset:0;background:var(--or-gold);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--or-easing);z-index:-1; }
 .drawer__checkout:hover:not(:disabled)::before { transform:scaleX(1); }
 .drawer__checkout:hover:not(:disabled) { color:var(--or-void); }
-.drawer__checkout:disabled { opacity:.20; cursor:not-allowed; border-color:var(--or-hair); }
-.drawer__seguro { display:flex; align-items:center; justify-content:center; gap:7px; font-family:var(--font-sans); font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--or-silk-4); text-align:center; }
-.drawer__seguro svg { color:var(--or-gold); opacity:.4; }
-.drawer__saved-info { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-sans); font-size: 9px; letter-spacing: .12em; color: var(--or-silk-4); margin-bottom: 12px; text-align: center; }
-.drawer__saved-info svg { color: var(--or-gold); opacity: .4; flex-shrink: 0; }
-.di__variantes { display: flex; align-items: center; gap: 6px; margin: 5px 0 3px; flex-wrap: wrap; }
-.di__swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 0.5px solid rgba(245, 240, 232, 0.22); flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.08); transition: transform 0.2s; }
-.di__swatch:hover { transform: scale(1.25); }
-.di__var-txt { font-family: 'DM Mono', 'Courier New', monospace; font-size: 9px; letter-spacing: 1.5px; color: rgba(237, 232, 224, 0.4); text-transform: uppercase; line-height: 1; }
-.di__var-sep { color: rgba(237, 232, 224, 0.18); font-size: 8px; line-height: 1; }
+.drawer__checkout:disabled { opacity:.20;cursor:not-allowed;border-color:var(--or-hair); }
 
-/* ── SIDEBAR ── */
-.sb-overlay { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.82); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); display:flex; }
-.sb { width:310px; height:100%; background:var(--or-deep); border-right:0.5px solid var(--or-hair); display:flex; flex-direction:column; overflow-y:auto; scrollbar-width:none; position:relative; }
+/* ════════════════════════════════
+   SIDEBAR MOBILE
+════════════════════════════════ */
+.sb-overlay { position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex; }
+.sb { width:310px;height:100%;background:var(--or-deep);border-right:0.5px solid var(--or-hair);display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;position:relative; }
 .sb::-webkit-scrollbar { display:none; }
-.sb-kamon { position: absolute; bottom: 80px; right: 16px; font-family: 'Noto Serif JP', serif; font-size: 52px; color: var(--or-gold); opacity: .04; pointer-events: none; z-index: 0; line-height: 1; }
-.sb__head { display:flex; justify-content:space-between; align-items:center; padding:20px 20px 16px; border-bottom:0.5px solid var(--or-hair-2); flex-shrink:0; position: relative; z-index: 1; }
-.sb__close { width:28px; height:28px; background:none; border:0.5px solid var(--or-hair-2); display:flex; align-items:center; justify-content:center; color:var(--or-silk-3); cursor:pointer; transition:all .3s; }
-.sb__close:hover { border-color:var(--or-gold); color:var(--or-gold); transform: rotate(90deg); }
-.sb__brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-.sb__brand__mark { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid rgba(245,166,35,0.4); display: flex; align-items: center; justify-content: center; }
-.sb__brand__mark::before { content: '⊕'; color: var(--cor-primaria); font-size: 10px; line-height: 1; }
-.sb__brand__txt { font-family: var(--font-serif); font-size: 13px; font-style: italic; letter-spacing: 0.14em; color: var(--cor-texto); }
-.sb__brand__txt em { color: var(--cor-primaria); font-style: normal; }
-.sb__perfil { display:flex; align-items:center; gap:14px; padding:18px 20px; border-bottom:0.5px solid var(--or-hair-2); background:transparent; position: relative; z-index: 1; }
-.sb__av-wrap { position: relative; flex-shrink: 0; }
-.sb__av { width:44px; height:44px; border-radius:0; background:var(--grad-btn); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:#0A0A0A; overflow:hidden; border:0.5px solid rgba(245,166,35,.35); }
-.sb__av img { width:100%; height:100%; object-fit:cover; }
-.sb__av-kanji { position: absolute; bottom: -8px; right: -8px; font-family: 'Noto Serif JP', serif; font-size: 9px; color: var(--or-gold); opacity: .5; background: var(--or-deep); padding: 1px 3px; border: 0.5px solid var(--or-hair); letter-spacing: .1em; line-height: 1; }
-.sb__perfil__info { min-width: 0; }
-.sb__perfil__nome { font-family:var(--font-sans); font-size:13px; font-weight:500; color:var(--or-silk); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sb__perfil__status { font-size:10px; letter-spacing:.08em; color:var(--or-silk-3); }
-.sb__perfil__vip { font-size:9px; letter-spacing:.15em; font-weight:700; background:var(--grad-texto); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.sb__ornament { display: flex; align-items: center; gap: 10px; padding: 10px 20px; position: relative; z-index: 1; }
-.sb__ornament--small { padding: 6px 20px; }
-.sb-orn-line { flex: 1; height: .5px; background: linear-gradient(90deg, var(--or-gold), transparent); opacity: .15; }
-.sb-orn-line:last-child { background: linear-gradient(270deg, var(--or-gold), transparent); }
-.sb-orn-kanji { font-family: 'Noto Serif JP', serif; font-size: 12px; color: var(--or-gold); opacity: .25; line-height: 1; }
-.sb__links { flex:1; padding: 8px 0; display:flex; flex-direction:column; gap:1px; position: relative; z-index: 1; }
-.sb__grupo-label { font-family:var(--font-sans); font-size:7px; letter-spacing:.55em; text-transform:uppercase; color:var(--or-gold); opacity:.5; padding:6px 20px 4px; display: flex; align-items: center; gap: 8px; }
-.sb__grupo-label span { font-family: 'Noto Serif JP', serif; font-size: 10px; opacity: .6; letter-spacing: .1em; }
-.sb__link { display:flex; align-items:center; gap:12px; padding:10px 20px; font-family:var(--font-sans); font-size:12px; color:var(--or-silk-2); text-decoration:none; cursor:pointer; background:none; border:none; width:100%; text-align:left; transition:all .2s; position:relative; }
-.sb__link::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:.5px; background:var(--or-gold); opacity:0; transition:opacity .2s; }
-.sb__link:hover { color:var(--or-silk); background:var(--or-gold-3); padding-left:24px; }
-.sb__link:hover::before { opacity:.6; }
-.sb__link svg { flex-shrink:0; color:var(--or-silk-3); transition:color .2s; }
-.sb__link:hover svg { color:var(--or-gold); }
-.sb__link-num { font-family: 'Noto Serif JP', serif; font-size: 11px; color: var(--or-gold); opacity: .3; line-height: 1; flex-shrink: 0; width: 16px; text-align: center; }
-.sb__link--gamer { color: var(--cor-primaria) !important; -webkit-text-fill-color: var(--cor-primaria) !important; font-weight: 600; }
-.sb__link--gamer:hover { color: var(--cor-primaria) !important; -webkit-text-fill-color: var(--cor-primaria) !important; background: var(--or-gold-3) !important; padding-left: 24px !important; }
-.sb__link--gamer::before { background: var(--cor-primaria) !important; width: 2px !important; }
-.sb__link--gamer__ico { font-family: 'Noto Serif JP', 'Yu Mincho', serif; font-size: 16px; color: var(--cor-primaria); opacity: 0.80; line-height: 1; flex-shrink: 0; transition: opacity .25s, transform .35s cubic-bezier(.16,1,.3,1); display: inline-block; }
-.sb__link--gamer:hover .sb__link--gamer__ico { opacity: 1; transform: rotate(-15deg) scale(1.15); }
-.sb__link--admin { color: var(--cor-secundaria) !important; }
-.sb__link--admin svg { color: var(--cor-secundaria) !important; }
-.sb__link--saved { color: var(--or-gold) !important; opacity: .75; }
-.sb__link--saved svg { color: var(--or-gold) !important; opacity: .65; }
-.sb__link--saved:hover { opacity: 1 !important; }
-.sb__link--cta { color: var(--or-gold) !important; font-weight: 600; }
-.sb__link--sair { color: rgba(239,68,68,.65) !important; }
-.sb__link--sair svg { color: rgba(239,68,68,.5) !important; }
-.sb__cart-num { margin-left:auto; background:var(--grad-btn); color:#0A0A0A; font-size:8px; font-weight:900; min-width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; padding:0 4px; }
-.sb__cart-num--saved { background: rgba(245,166,35,0.2); color: var(--or-gold); }
-.sb__rodape { padding:14px 20px 22px; border-top:0.5px solid var(--or-hair-2); flex-shrink:0; position: relative; z-index: 1; }
-.sb__rodape-ornament { text-align: center; margin-bottom: 10px; font-family: 'Noto Serif JP', serif; font-size: 8px; letter-spacing: .5em; color: var(--or-gold); opacity: .2; }
-.sb__realms { display: flex; gap: 6px; margin-bottom: 12px; }
-.sb__realm { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 6px; background: none; border: 0.5px solid var(--or-hair-2); font-family: var(--font-sans); font-size: 9px; letter-spacing: .1em; color: var(--or-silk-3); cursor: pointer; transition: all .25s; white-space: nowrap; }
-.sb__realm:hover, .sb__realm.is-active { border-color: var(--realm-sb-color, var(--or-gold)); color: var(--realm-sb-color, var(--or-gold)); background: var(--or-gold-3); }
-.sb__realm-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.sb__realm-dot--celestial { background: #F5A623; }
-.sb__realm-dot--autumn    { background: #3D6CBF; }
-.sb__realm-dot--ghost     { background: #C85014; }
-.sb__copy { font-family:var(--font-sans); font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--or-silk-4); display: flex; align-items: center; gap: 10px; }
-.sb__copy span { font-family: 'Noto Serif JP', serif; font-size: 11px; opacity: .6; letter-spacing: .1em; }
-.sb-fade-enter-active, .sb-fade-leave-active { transition: opacity .35s; }
-.sb-fade-enter-from, .sb-fade-leave-to { opacity: 0; }
+.sb-kamon { position:absolute;bottom:80px;right:16px;font-family:'Noto Serif JP',serif;font-size:52px;color:var(--or-gold);opacity:.04;pointer-events:none;z-index:0;line-height:1; }
+.sb__head { display:flex;justify-content:space-between;align-items:center;padding:20px 20px 16px;border-bottom:0.5px solid var(--or-hair-2);flex-shrink:0;position:relative;z-index:1; }
+.sb__close { width:28px;height:28px;background:none;border:0.5px solid var(--or-hair-2);display:flex;align-items:center;justify-content:center;color:var(--or-silk-3);cursor:pointer;transition:all .3s; }
+.sb__close:hover { border-color:var(--or-gold);color:var(--or-gold);transform:rotate(90deg); }
+.sb__brand { display:flex;align-items:center;gap:8px;text-decoration:none; }
+.sb__brand__mark { width:22px;height:22px;flex-shrink:0;border-radius:50%;border:1.5px solid rgba(245,166,35,0.4);display:flex;align-items:center;justify-content:center; }
+.sb__brand__mark::before { content:'⊕';color:var(--cor-primaria);font-size:10px;line-height:1; }
+.sb__brand__txt { font-family:var(--font-serif);font-size:13px;font-style:italic;letter-spacing:0.14em;color:var(--cor-texto); }
+.sb__brand__txt em { color:var(--cor-primaria);font-style:normal; }
+.sb__links { flex:1;padding:12px 0;display:flex;flex-direction:column;gap:1px;position:relative;z-index:1; }
+.sb__link { display:flex;align-items:center;gap:12px;padding:12px 20px;font-family:var(--font-sans);font-size:13px;color:var(--or-silk-2);text-decoration:none;cursor:pointer;background:none;border:none;width:100%;text-align:left;transition:all .2s; }
+.sb__link:hover { color:var(--or-silk);background:var(--or-gold-3);padding-left:26px; }
+.sb__link--gamer { color:var(--cor-primaria)!important; }
+.sb__link--admin { color:var(--cor-secundaria)!important; }
+.sb__link--cta { color:var(--or-gold)!important;font-weight:600; }
+.sb__link--sair { color:rgba(239,68,68,.65)!important; }
+.sb-fade-enter-active,.sb-fade-leave-active { transition:opacity .35s; }
+.sb-fade-enter-from,.sb-fade-leave-to { opacity:0; }
 
-/* ── RESPONSIVO ── */
-@media (max-width: 768px) {
-  .auth-modal { grid-template-columns:1fr; max-width:100%; height:95dvh; margin:0; }
+/* ── RESPONSIVO GLOBAL ── */
+@media (max-width:768px) {
+  .auth-modal { grid-template-columns:1fr;max-width:100%;height:95dvh;margin:0; }
   .auth-esq { display:none; }
-  .auth-dir { padding:32px 24px; }
-  .af-duplo { grid-template-columns:1fr; gap:0; }
+  .auth-dir { padding:24px 20px; }
+  .af-duplo { grid-template-columns:1fr;gap:0; }
   .drawer { width:100%; }
-  .di { padding:14px 20px; grid-template-columns: 22px 52px 1fr auto; gap: 10px; }
+  .di { padding:14px 20px;grid-template-columns:22px 52px 1fr auto;gap:10px; }
   .drawer__header { padding:20px 20px 14px; }
-  .drawer__ornament { padding: 6px 20px; }
   .drawer__footer { padding:14px 20px 22px; }
-  .drawer__clear-bar { padding: 8px 20px; }
-  .drawer__confirm-bar { padding: 10px 20px; flex-direction: column; align-items: flex-start; gap: 8px; }
-  .pref-panel { right: 16px; left: 16px; width: auto; top: calc(var(--navbar-h, 48px) + 12px); }
-  .nb-search-panel { right:-40px; width:calc(100vw - 32px); max-width:340px; }
-  .sb { width: 290px; }
-  .toast-container { bottom: 16px; right: 16px; left: 16px; }
-  .toast { min-width: unset; max-width: 100%; }
+  .pref-panel { right:16px;left:16px;width:auto;top:calc(var(--navbar-h,48px) + 12px); }
+  .nb-search-panel { right:-40px;width:calc(100vw - 32px);max-width:340px; }
+  .toast-container { bottom:16px;right:16px;left:16px; }
+  .toast { min-width:unset;max-width:100%; }
+  .face-cam-frame { width:220px;height:260px; }
 }
-
-body.light-mode .af-linha input:-webkit-autofill, body.light-mode .af-linha input:-webkit-autofill:hover, body.light-mode .af-linha input:-webkit-autofill:focus, body.light-mode .af-linha input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important; box-shadow: 0 0 0 1000px #ffffff inset !important; -webkit-text-fill-color: #0a0a1e !important; }
+body.light-mode .af-linha input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
+body.light-mode .nb-search-field input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
 </style>
