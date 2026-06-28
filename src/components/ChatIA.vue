@@ -6,31 +6,50 @@
       <button v-show="!chatAberto"
         class="cia-trigger"
         @click="toggleMenu"
-        :class="{ 'is-open': menuAberto }"
-        title="Assistente IA"
+        :class="{ 'is-open': menuAberto, 'is-active': chatAberto }"
+        title="Consultora IA"
         :aria-expanded="menuAberto"
         aria-haspopup="true"
         aria-label="Abrir menu de assistência"
       >
-        <!-- ícone SVG inline — sem dependência externa -->
-        <svg class="cia-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- cérebro estilizado -->
-          <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-          <!-- divisão central -->
-          <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="0.9" stroke-dasharray="1.5 1.5" opacity="0.5"/>
-          <!-- sulcos esquerda -->
-          <path d="M11 9C10 9.8 9.5 11 10 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
-          <path d="M10.5 13.5C10 14.2 10 15.2 10.5 16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
-          <!-- sulcos direita -->
-          <path d="M17 9C18 9.8 18.5 11 18 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
-          <path d="M17.5 13.5C18 14.2 18 15.2 17.5 16" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
-          <!-- brilho topo -->
-          <circle cx="11.5" cy="7.5" r="1" fill="currentColor" opacity="0.3"/>
-          <circle cx="16.5" cy="7.5" r="1" fill="currentColor" opacity="0.3"/>
+        <svg
+          class="cia-stand"
+          width="48"
+          height="48"
+          viewBox="0 0 48 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="0.9"/>
+          <circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="0.4" stroke-dasharray="2 2.5"/>
+          <g transform="translate(24,24)">
+            <ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/>
+            <path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#09090f"/>
+          </g>
+          <g transform="translate(24,24) rotate(72)">
+            <ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/>
+            <path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#09090f"/>
+          </g>
+          <g transform="translate(24,24) rotate(144)">
+            <ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/>
+            <path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#09090f"/>
+          </g>
+          <g transform="translate(24,24) rotate(216)">
+            <ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/>
+            <path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#09090f"/>
+          </g>
+          <g transform="translate(24,24) rotate(288)">
+            <ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/>
+            <path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#09090f"/>
+          </g>
+          <circle cx="24" cy="24" r="4.5" fill="currentColor"/>
+          <circle cx="24" cy="24" r="2" fill="#09090f"/>
         </svg>
 
         <span class="cia-badge" aria-hidden="true">IA</span>
         <span class="cia-dot-online" aria-hidden="true"></span>
+        <span class="cia-kanji-float" aria-hidden="true">花</span>
       </button>
 
       <!-- ══ MENU FLUTUANTE ══ -->
@@ -48,7 +67,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            Assistente IA
+            Consultora IA
           </button>
 
           <button class="cia-menu-item" role="menuitem" @click="irParaSuporte">
@@ -61,14 +80,14 @@
             Central de Suporte
           </button>
 
-          <div class="cia-menu-kanji" aria-hidden="true">機</div>
+          <div class="cia-menu-kanji" aria-hidden="true">桜</div>
         </div>
       </transition>
     </div>
 
     <!-- ══ JANELA DO CHAT ══ -->
     <transition name="cia-slide">
-      <div v-if="chatAberto" class="cia-janela" role="dialog" aria-modal="true" aria-label="Chat com Assistente IA">
+      <div v-if="chatAberto" class="cia-janela" role="dialog" aria-modal="true" aria-label="Chat com Consultora IA">
 
         <div class="cia-janela-realm-line" aria-hidden="true"></div>
 
@@ -86,11 +105,15 @@
           </div>
 
           <div class="cia-header-avatar" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-              <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
-              <path d="M11 9C10 9.8 9.5 11 10 12" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
-              <path d="M17 9C18 9.8 18.5 11 18 12" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+            <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5"/>
+              <g transform="translate(24,24)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/><path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#0A0A0A"/></g>
+              <g transform="translate(24,24) rotate(72)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/><path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#0A0A0A"/></g>
+              <g transform="translate(24,24) rotate(144)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/><path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#0A0A0A"/></g>
+              <g transform="translate(24,24) rotate(216)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/><path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#0A0A0A"/></g>
+              <g transform="translate(24,24) rotate(288)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/><path d="M0,-17.5 C-1.4,-16 -1.4,-13.5 0,-12.5 C1.4,-13.5 1.4,-16 0,-17.5Z" fill="#0A0A0A"/></g>
+              <circle cx="24" cy="24" r="4.5" fill="currentColor"/>
+              <circle cx="24" cy="24" r="2" fill="#0A0A0A"/>
             </svg>
           </div>
 
@@ -98,7 +121,7 @@
             <p class="cia-header-nome">Noir IA</p>
             <p class="cia-header-status">
               <span class="cia-status-dot" aria-hidden="true"></span>
-              Online · Assistente Noir & Or
+              Online · Consultora Noir & Or
             </p>
           </div>
 
@@ -131,7 +154,7 @@
 
         <!-- ── MENSAGENS ── -->
         <div class="cia-msgs" ref="msgsRef" role="log" aria-live="polite" aria-label="Conversa">
-          <div class="cia-msgs-kamon" aria-hidden="true">機</div>
+          <div class="cia-msgs-kamon" aria-hidden="true">桜</div>
 
           <div
             v-for="(msg, i) in mensagens"
@@ -139,9 +162,13 @@
             :class="['cia-msg', msg.role === 'user' ? 'cia-msg--user' : 'cia-msg--ia']"
           >
             <div v-if="msg.role === 'assistant'" class="cia-msg-avatar" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+              <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
+                <g transform="translate(24,24)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(72)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(144)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(216)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(288)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <circle cx="24" cy="24" r="4" fill="currentColor"/>
               </svg>
             </div>
 
@@ -156,11 +183,15 @@
           </div>
 
           <!-- typing indicator -->
-          <div v-if="carregando" class="cia-msg cia-msg--ia" aria-label="Assistente digitando">
+          <div v-if="carregando" class="cia-msg cia-msg--ia" aria-label="Consultora digitando">
             <div class="cia-msg-avatar" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4C10.5 4 8 6.5 8 9.5C8 10.8 8.5 12 9.3 12.9C8.5 13.5 8 14.5 8 15.5C8 17.4 9.4 19 11.2 19.3V22C11.2 22.6 11.6 23 12.2 23H15.8C16.4 23 16.8 22.6 16.8 22V19.3C18.6 19 20 17.4 20 15.5C20 14.5 19.5 13.5 18.7 12.9C19.5 12 20 10.8 20 9.5C20 6.5 17.5 4 14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                <line x1="14" y1="7" x2="14" y2="19" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 1.5" opacity="0.5"/>
+              <svg width="12" height="12" viewBox="0 0 48 48" fill="none">
+                <g transform="translate(24,24)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(72)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(144)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(216)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <g transform="translate(24,24) rotate(288)"><ellipse cx="0" cy="-11" rx="4.8" ry="6.5" fill="currentColor"/></g>
+                <circle cx="24" cy="24" r="4" fill="currentColor"/>
               </svg>
             </div>
             <div class="cia-bubble cia-bubble--ia cia-bubble--loading">
@@ -225,7 +256,7 @@
           </button>
         </div>
 
-        <p class="cia-footer-watermark" aria-hidden="true">機</p>
+        <p class="cia-footer-watermark" aria-hidden="true">桜</p>
 
       </div>
     </transition>
@@ -236,24 +267,22 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSiteStore } from '@/stores/site.js'
 
-/* ── Props ── */
-const props = defineProps({
-  rotaSuporte: {
-    type: String,
-    default: '/suporte'
-  }
-})
+import { useSiteStore } from '@/stores/site.js'
 
 let router = null
 try { router = useRouter() } catch {}
 
 const site = useSiteStore()
 
+// ════════════════════════════════════════════════════
+// ⚠️  CONFIGURAÇÃO — coloque sua chave aqui
+//     Ou use uma variável de ambiente: import.meta.env.VITE_GROQ_KEY
+// ════════════════════════════════════════════════════
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_KEY ?? 'SUA_CHAVE_AQUI'
 
-const SYSTEM_PROMPT = `Você é Noir, assistente virtual exclusiva da Noir & Or — marca de tecnologia de luxo.
+// System prompt — define a personalidade e conhecimento da Noir
+const SYSTEM_PROMPT = `Você é Noir, consultora virtual exclusiva da Noir & Or — marca de tecnologia de luxo.
 
 Seu estilo é sofisticado, preciso e elegante. Respostas curtas, diretas e refinadas. Nunca prolixo.
 
@@ -292,7 +321,7 @@ const sugestoes = [
 /* ── Mensagem inicial ── */
 const MSG_INICIAL = {
   role: 'assistant',
-  content: 'Olá! Sou a **Noir**, assistente virtual da Noir & Or. Estou aqui para ajudá-lo a encontrar a peça perfeita da nossa coleção exclusiva de tecnologia de luxo. Como posso ajudar?',
+  content: 'Olá! Sou a **Noir**, consultora virtual da Noir & Or. Estou aqui para ajudá-lo a encontrar a peça perfeita da nossa coleção exclusiva de tecnologia de luxo. Como posso ajudar?',
   isError: false,
 }
 
@@ -300,7 +329,7 @@ const mensagens = ref([{ ...MSG_INICIAL }])
 
 const mostrarSugestoes = computed(() => mensagens.value.length <= 1 && !carregando.value)
 
-/* ── Ações ── */
+/* ── Ações de navegação ── */
 const toggleMenu = () => { menuAberto.value = !menuAberto.value }
 
 const abrirChat = async () => {
@@ -312,11 +341,7 @@ const abrirChat = async () => {
 
 const irParaSuporte = () => {
   menuAberto.value = false
-  if (router) {
-    router.push(props.rotaSuporte)
-  } else {
-    window.location.href = props.rotaSuporte
-  }
+  router?.push?.('/contato')
 }
 
 /* ── Scroll ── */
@@ -346,7 +371,9 @@ const limparChat = () => {
   scrollBottom()
 }
 
-/* ── Enviar ── */
+/* ════════════════════════════════════════════════════
+   ENVIAR — chama a API do Groq (gratuito)
+════════════════════════════════════════════════════ */
 const enviar = async (texto) => {
   const msg = (texto || inputMsg.value).trim()
   if (!msg || carregando.value) return
@@ -401,7 +428,7 @@ const enviar = async (texto) => {
   } catch (error) {
     console.error('[Noir IA] Erro:', error.message)
 
-    let msgErro = 'Desculpe, estou com dificuldades técnicas agora. Entre em contato pelo WhatsApp para atendimento imediato.'
+    let msgErro = 'Desculpe, estou com dificuldades técnicas agora. Entre em contato pelo WhatsApp para atendimento imediato. 🌸'
 
     if (error.message === 'API_KEY_INVALIDA') {
       msgErro = 'Configuração pendente. Por favor, insira uma chave de API válida.'
@@ -415,6 +442,7 @@ const enviar = async (texto) => {
     await scrollBottom()
   }
 }
+
 
 /* ── Fechar ao clicar fora ── */
 const handleClickOutside = (e) => {
@@ -442,6 +470,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ══════════════════════════════════════════════════════
+   CONSULTORA IA — NOIR & OR
+   Ícone Sakura (mon japonês) · Sistema OR completo
+══════════════════════════════════════════════════════ */
+
 .cia {
   position: fixed;
   bottom: 28px;
@@ -450,34 +483,50 @@ onUnmounted(() => {
   font-family: var(--font-sans, 'Syne', sans-serif);
 }
 
-/* ══ KEYFRAMES ══ */
-@keyframes triggerPulse {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(200,168,75,0.1), inset 0 0 20px rgba(200,168,75,0.05); }
-  50%       { box-shadow: 0 0 0 5px rgba(200,168,75,0.12), 0 0 28px rgba(200,168,75,0.2), inset 0 0 20px rgba(200,168,75,0.08); }
+/* ══ KEYFRAMES ══════════════════════════════════════ */
+@keyframes sakuraFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  30%     { transform: translateY(-4px) rotate(3deg); }
+  70%     { transform: translateY(-2px) rotate(-2deg); }
 }
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-3px); }
+@keyframes sakuraSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes auraPulse {
+  0%,100% {
+    opacity: 0.50;
+    box-shadow: 0 0 18px 6px rgba(200,168,75,0.28), 0 0 44px 14px rgba(200,168,75,0.10);
+  }
+  50% {
+    opacity: 0.80;
+    box-shadow: 0 0 28px 10px rgba(200,168,75,0.44), 0 0 64px 22px rgba(200,168,75,0.16);
+  }
 }
 @keyframes badgeFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(-2px); }
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%     { transform: translateX(-50%) translateY(-2px); }
 }
 @keyframes dotBlink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.35; }
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.38; }
+}
+@keyframes kanjiRise {
+  0%   { opacity: 0; transform: translateY(2px); }
+  20%  { opacity: 0.75; }
+  100% { opacity: 0; transform: translateY(-20px) scale(0.75); }
 }
 @keyframes ciaDot {
-  0%, 80%, 100% { transform: scale(0.65); opacity: 0.45; }
-  40%            { transform: scale(1);    opacity: 1; }
+  0%,80%,100% { transform: scale(0.65); opacity: 0.45; }
+  40%         { transform: scale(1);    opacity: 1; }
 }
 @keyframes menuSlide {
   from { opacity: 0; transform: translateY(14px) scale(0.95); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 @keyframes ciaSlideUp {
   from { opacity: 0; transform: translateY(28px) scale(0.93); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 @keyframes confirmIn {
   from { opacity: 0; transform: translateY(-8px); }
@@ -488,45 +537,38 @@ onUnmounted(() => {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ══ BOTÃO ══ */
+/* ══ BOTÃO ══════════════════════════════════════════ */
 .cia-trigger {
   width: 64px; height: 64px;
-  background: rgba(200,168,75,0.07);
-  border: 1px solid rgba(200,168,75,0.5);
-  border-radius: 50%;
-  cursor: pointer;
+  background: none; border: none; border-radius: 0; box-shadow: none;
+  cursor: pointer; position: relative;
   display: flex; align-items: center; justify-content: center;
-  padding: 0; outline: none;
-  animation: triggerPulse 3.5s ease-in-out infinite;
-  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
-  will-change: transform, box-shadow;
+  overflow: visible; padding: 0; outline: none;
 }
-.cia-trigger:focus-visible {
-  outline: 1px solid var(--or-gold, #C8A84B);
-  outline-offset: 4px;
-}
-.cia-icon {
+.cia-trigger:focus-visible { outline: 1px solid var(--or-gold, #F5A623); outline-offset: 3px; }
+
+
+.cia-stand {
+  position: relative; z-index: 2;
   color: var(--or-gold, #C8A84B);
-  animation: iconFloat 4s ease-in-out infinite;
-  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.3s;
-  will-change: transform;
+  animation: sakuraFloat 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(200,168,75,0.30));
+  transition: filter 0.35s;
+  will-change: transform, filter;
 }
-.cia-trigger:hover {
-  animation: none;
-  transform: scale(1.08);
-  border-color: rgba(200,168,75,0.9);
-  box-shadow: 0 0 0 4px rgba(200,168,75,0.15), 0 0 32px rgba(200,168,75,0.25);
+.cia-trigger:hover .cia-stand {
+  animation: sakuraSpin 1.8s cubic-bezier(0.16,1,0.3,1) forwards;
+  filter: drop-shadow(0 0 16px rgba(200,168,75,0.75));
 }
-.cia-trigger:hover .cia-icon {
-  animation: none;
-  transform: scale(1.1);
-  color: #F5A623;
+.cia-trigger.is-active .cia-stand {
+  animation: sakuraSpin 0.6s cubic-bezier(0.36,0.07,0.19,0.97) forwards;
+  filter: drop-shadow(0 0 20px rgba(200,168,75,0.95));
 }
 
 .cia-badge {
-  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
   background: rgba(200,168,75,0.12); border: 0.5px solid rgba(200,168,75,0.52);
-  border-radius: 3px; padding: 1px 7px;
+  border-radius: 3px; padding: 1px 6px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 8px; font-weight: 700; letter-spacing: 0.18em;
   color: rgba(200,168,75,0.92); pointer-events: none; z-index: 5;
@@ -536,20 +578,28 @@ onUnmounted(() => {
 
 .cia-dot-online {
   position: absolute; top: 4px; right: 4px;
-  width: 10px; height: 10px;
+  width: 9px; height: 9px;
   background: #2ecc71; border-radius: 50%;
-  border: 2px solid #09090f;
+  border: 1.5px solid rgba(0,0,0,0.28);
   box-shadow: 0 0 8px rgba(46,204,113,0.9);
   animation: dotBlink 2.2s ease infinite; z-index: 6;
 }
 
-/* ══ MENU FLUTUANTE ══ */
+.cia-kanji-float {
+  position: absolute; top: 0; left: 2px;
+  font-family: var(--font-jp, 'Noto Serif JP', serif);
+  font-size: 9px; color: rgba(200,168,75,0.65);
+  pointer-events: none; opacity: 0; z-index: 3;
+}
+.cia-trigger:hover .cia-kanji-float { animation: kanjiRise 1.1s ease-out forwards; }
+
+/* ══ MENU FLUTUANTE ════════════════════════════════ */
 .cia-menu-container { position: relative; }
 
 .cia-menu {
-  position: absolute; bottom: 80px; right: 0;
+  position: absolute; bottom: 76px; right: 0;
   background: var(--or-deep, #09090f);
-  border: 0.5px solid rgba(200,168,75,0.15);
+  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
   width: 218px;
   box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(200,168,75,0.05);
   overflow: hidden;
@@ -578,7 +628,7 @@ onUnmounted(() => {
   background: none; border: none;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
-  color: rgba(237,232,224,0.50);
+  color: var(--or-silk-2, rgba(237,232,224,0.50));
   cursor: pointer; position: relative;
   transition: color 0.25s, padding-left 0.28s;
   text-align: left;
@@ -594,13 +644,10 @@ onUnmounted(() => {
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); z-index: 0;
 }
-.cia-menu-item:hover::before { opacity: 0.65; }
-.cia-menu-item:hover::after  { transform: scaleX(1); }
-.cia-menu-item:hover { color: #ede8e0; padding-left: 22px; }
-.cia-menu-item svg  {
-  flex-shrink: 0; opacity: 0.55; transition: opacity 0.25s;
-  position: relative; z-index: 1; color: var(--or-gold, #F5A623);
-}
+.cia-menu-item:hover::before  { opacity: 0.65; }
+.cia-menu-item:hover::after   { transform: scaleX(1); }
+.cia-menu-item:hover { color: var(--or-silk, #ede8e0); padding-left: 22px; }
+.cia-menu-item svg  { flex-shrink: 0; opacity: 0.55; transition: opacity 0.25s; position: relative; z-index: 1; color: var(--or-gold, #F5A623); }
 .cia-menu-item:hover svg { opacity: 1; }
 .cia-menu-num {
   font-family: var(--font-jp, 'Noto Serif JP', serif);
@@ -611,10 +658,10 @@ onUnmounted(() => {
 .cia-menu-item:hover .cia-menu-num { opacity: 0.55; }
 .cia-menu-kanji {
   text-align: center; padding: 4px 0 10px;
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 10px; font-weight: 700; letter-spacing: 0.3em;
+  font-family: var(--font-jp, 'Noto Serif JP', serif);
+  font-size: 14px; font-weight: 300;
   color: var(--or-gold, #F5A623); opacity: 0.10;
-  user-select: none;
+  letter-spacing: 0.35em; user-select: none;
 }
 
 .cia-menu-fade-enter-active,
@@ -622,24 +669,17 @@ onUnmounted(() => {
 .cia-menu-fade-enter-from,
 .cia-menu-fade-leave-to     { opacity: 0; transform: translateY(12px) scale(0.96); }
 
-/* ══ JANELA DO CHAT
-   CORREÇÃO: position fixed garante que o modal nunca seja cortado
-   por um pai com overflow:hidden ou transform. bottom/right calculados
-   para ficar acima do botão (28px margem + 64px botão + 16px gap = 108px)
-══ */
+/* ══ JANELA DO CHAT ════════════════════════════════ */
 .cia-janela {
-  position: fixed;
-  bottom: 108px;
-  right: 28px;
-  width: 368px;
-  height: 530px;
+  position: absolute; bottom: 76px; right: 0;
+  width: 368px; height: 530px;
   background: var(--or-deep, #09090f);
-  border: 0.5px solid rgba(200,168,75,0.15);
-  display: flex;
-  flex-direction: column;
+  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
+  border-radius: 0;
+  display: flex; flex-direction: column;
   overflow: hidden;
   box-shadow: 0 24px 64px rgba(0,0,0,0.65), 0 0 28px rgba(200,168,75,0.07);
-  z-index: 8499;
+  position: relative; /* para o watermark absolute funcionar */
 }
 
 .cia-janela-realm-line {
@@ -653,15 +693,15 @@ onUnmounted(() => {
   display: flex; align-items: center; gap: 10px;
   padding: 13px 16px;
   background: rgba(245,166,35,0.03);
-  border-bottom: 0.5px solid rgba(237,232,224,0.07);
+  border-bottom: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
   flex-shrink: 0; position: relative; overflow: hidden;
 }
 .cia-header-seigaiha { position: absolute; inset: 0; pointer-events: none; opacity: 0.55; }
 
 .cia-header-avatar {
   width: 36px; height: 36px; border-radius: 50%;
-  background: linear-gradient(135deg,#F5A623,#FF7A20);
-  border: 0.5px solid rgba(200,168,75,0.2);
+  background: var(--grad-btn, linear-gradient(135deg,#F5A623,#FF7A20));
+  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
   display: flex; align-items: center; justify-content: center;
   color: #0A0A0A; flex-shrink: 0; position: relative; z-index: 1;
 }
@@ -670,12 +710,12 @@ onUnmounted(() => {
 .cia-header-nome {
   font-family: var(--font-serif, 'Playfair Display', serif);
   font-size: 12px; font-weight: 400; font-style: italic;
-  color: #ede8e0; letter-spacing: 0.06em; margin: 0;
+  color: var(--or-silk, #ede8e0); letter-spacing: 0.06em;
 }
 .cia-header-status {
   display: flex; align-items: center; gap: 5px;
-  font-size: 9px; color: rgba(237,232,224,0.22);
-  margin-top: 2px; letter-spacing: 0.04em; margin-bottom: 0;
+  font-size: 9px; color: var(--or-silk-3, rgba(237,232,224,0.22));
+  margin-top: 2px; letter-spacing: 0.04em;
 }
 .cia-status-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -686,9 +726,11 @@ onUnmounted(() => {
 .cia-header-btn {
   width: 28px; height: 28px;
   background: rgba(245,166,35,0.06);
-  border: 0.5px solid rgba(237,232,224,0.07);
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border-radius: 0;
   display: flex; align-items: center; justify-content: center;
-  color: rgba(237,232,224,0.22); cursor: pointer;
+  color: var(--or-silk-3, rgba(237,232,224,0.22));
+  cursor: pointer;
   transition: border-color 0.25s, color 0.25s, transform 0.35s;
 }
 .cia-header-btn:hover { border-color: var(--or-gold, #F5A623); color: var(--or-gold, #F5A623); transform: rotate(15deg); }
@@ -712,13 +754,14 @@ onUnmounted(() => {
 }
 .cia-confirm-sim:hover { background: rgba(239,68,68,0.22); }
 .cia-confirm-nao {
-  background: none; border: 0.5px solid rgba(237,232,224,0.07);
+  background: none; border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
   padding: 4px 12px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(237,232,224,0.22); cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  color: var(--or-silk-3, rgba(237,232,224,0.22));
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
 }
-.cia-confirm-nao:hover { border-color: rgba(200,168,75,0.2); color: rgba(237,232,224,0.50); }
+.cia-confirm-nao:hover { border-color: var(--or-hair, rgba(245,166,35,0.12)); color: var(--or-silk-2, rgba(237,232,224,0.50)); }
 
 .cia-confirm-enter-active,
 .cia-confirm-leave-active { transition: all 0.2s; }
@@ -731,13 +774,13 @@ onUnmounted(() => {
   padding: 14px;
   display: flex; flex-direction: column; gap: 10px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(200,168,75,0.15) transparent;
+  scrollbar-color: var(--or-hair, rgba(245,166,35,0.12)) transparent;
   position: relative;
 }
 .cia-msgs-kamon {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 5rem; font-weight: 700; letter-spacing: 0.1em;
+  font-family: var(--font-jp, 'Noto Serif JP', serif);
+  font-size: 5rem; font-weight: 300;
   color: var(--or-gold, #F5A623); opacity: 0.025;
   pointer-events: none; user-select: none; line-height: 1;
 }
@@ -749,7 +792,7 @@ onUnmounted(() => {
 .cia-msg-avatar {
   width: 26px; height: 26px; border-radius: 50%;
   background: rgba(245,166,35,0.08);
-  border: 0.5px solid rgba(237,232,224,0.07);
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
   display: flex; align-items: center; justify-content: center;
   color: var(--or-gold, #F5A623); flex-shrink: 0;
 }
@@ -760,13 +803,13 @@ onUnmounted(() => {
   font-size: 13px; line-height: 1.65; font-weight: 300;
 }
 .cia-bubble--user {
-  background: linear-gradient(135deg,#F5A623,#FF7A20);
+  background: var(--grad-btn, linear-gradient(135deg,#F5A623,#FF7A20));
   color: #0A0A0A; border-bottom-right-radius: 3px;
 }
 .cia-bubble--ia {
   background: rgba(245,166,35,0.04);
-  border: 0.5px solid rgba(237,232,224,0.07);
-  color: rgba(237,232,224,0.55);
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  color: var(--or-silk-2, rgba(237,232,224,0.50));
   border-bottom-left-radius: 3px; position: relative;
 }
 .cia-bubble--ia::before {
@@ -800,11 +843,11 @@ onUnmounted(() => {
 .cia-sug {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(245,166,35,0.04);
-  border: 0.5px solid rgba(237,232,224,0.07);
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
   padding: 5px 11px;
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 10px; font-weight: 400; letter-spacing: 0.04em;
-  color: rgba(237,232,224,0.50);
+  color: var(--or-silk-2, rgba(237,232,224,0.50));
   cursor: pointer; position: relative; overflow: hidden;
   transition: border-color 0.25s, color 0.25s;
   animation: sugIn 0.35s ease both;
@@ -818,8 +861,8 @@ onUnmounted(() => {
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.38s cubic-bezier(0.16,1,0.3,1); z-index: 0;
 }
-.cia-sug:hover::before { transform: scaleX(1); }
-.cia-sug:hover { border-color: var(--or-gold, #F5A623); color: #ede8e0; }
+.cia-sug:hover::before  { transform: scaleX(1); }
+.cia-sug:hover { border-color: var(--or-gold, #F5A623); color: var(--or-silk, #ede8e0); }
 .cia-sug-gem { font-size: 4.5px; color: var(--or-gold, #F5A623); opacity: 0.28; position: relative; z-index: 1; transition: opacity 0.25s; }
 .cia-sug:hover .cia-sug-gem { opacity: 0.65; }
 
@@ -832,7 +875,7 @@ onUnmounted(() => {
 .cia-input-wrap {
   display: flex; align-items: center; gap: 8px;
   padding: 12px 14px;
-  border-top: 0.5px solid rgba(237,232,224,0.07);
+  border-top: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
   flex-shrink: 0; position: relative;
 }
 .cia-input-wrap::before {
@@ -844,28 +887,28 @@ onUnmounted(() => {
 .cia-input {
   flex: 1;
   background: rgba(245,166,35,0.03);
-  border: 0.5px solid rgba(237,232,224,0.07);
-  padding: 9px 13px;
-  color: #ede8e0;
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  border-radius: 0; padding: 9px 13px;
+  color: var(--or-silk, #ede8e0);
   font-family: var(--font-sans, 'Syne', sans-serif);
   font-size: 12px; font-weight: 300; letter-spacing: 0.03em;
   outline: none; transition: border-color 0.28s, box-shadow 0.28s;
-  -webkit-text-fill-color: #ede8e0;
+  -webkit-text-fill-color: var(--or-silk, #ede8e0);
   caret-color: var(--or-gold, #F5A623);
 }
 .cia-input:focus { border-color: rgba(200,168,75,0.35); box-shadow: 0 0 0 2px rgba(200,168,75,0.06); }
-.cia-input::placeholder { color: rgba(237,232,224,0.10); font-size: 11px; letter-spacing: 0.07em; }
+.cia-input::placeholder { color: var(--or-silk-4, rgba(237,232,224,0.10)); font-size: 11px; letter-spacing: 0.07em; }
 .cia-input:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .cia-char-count {
   font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 9px; color: rgba(237,232,224,0.22);
+  font-size: 9px; color: var(--or-silk-3, rgba(237,232,224,0.22));
   flex-shrink: 0; letter-spacing: 0.05em; transition: color 0.2s;
 }
 .cia-char-count--warn { color: rgba(239,68,68,0.72); }
 
 .cia-send {
-  width: 36px; height: 36px;
+  width: 36px; height: 36px; border-radius: 0;
   background: transparent; border: 0.5px solid var(--or-gold, #F5A623);
   color: var(--or-gold, #F5A623); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -879,44 +922,33 @@ onUnmounted(() => {
   transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); z-index: -1;
 }
 .cia-send:hover:not(:disabled)::before { transform: scaleX(1); }
-.cia-send:hover:not(:disabled) { color: #06060d; }
-.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: rgba(237,232,224,0.07); }
+.cia-send:hover:not(:disabled) { color: var(--or-void, #06060d); }
+.cia-send:disabled { opacity: 0.28; cursor: not-allowed; border-color: var(--or-hair-2); }
 .cia-send svg { position: relative; z-index: 1; }
 
 .cia-footer-watermark {
   position: absolute; bottom: 58px; right: 10px;
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
-  color: var(--or-gold, #F5A623); opacity: 0.06;
+  font-family: var(--font-jp, 'Noto Serif JP', serif);
+  font-size: 9px; font-weight: 300; letter-spacing: 0.22em;
+  color: var(--or-gold, #F5A623); opacity: 0.09;
   pointer-events: none; user-select: none; z-index: 0;
-  margin: 0;
 }
 
 /* ── TRANSIÇÃO JANELA ── */
 .cia-slide-enter-active { animation: ciaSlideUp 0.48s cubic-bezier(0.16,1,0.22,1); }
 .cia-slide-leave-active { animation: ciaSlideUp 0.26s reverse ease-in; }
 
-/* ══ RESPONSIVO ══ */
+/* ══ RESPONSIVO ════════════════════════════════════ */
 @media (max-width: 480px) {
   .cia { bottom: 16px; right: 16px; }
-  .cia-janela {
-    position: fixed;
-    width: calc(100vw - 32px);
-    height: calc(100dvh - 110px);
-    right: 16px;
-    bottom: 94px;
-  }
+  .cia-janela { width: calc(100vw - 32px); height: calc(100dvh - 100px); right: -8px; bottom: 80px; }
   .cia-trigger { width: 56px; height: 56px; }
-  .cia-icon    { width: 24px; height: 24px; }
-  .cia-menu    { width: 196px; bottom: 76px; }
+  .cia-stand   { width: 40px; height: 40px; }
+  .cia-menu    { width: 196px; bottom: 72px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cia-trigger,
-  .cia-icon,
-  .cia-badge,
-  .cia-dot-online,
-  .cia-bubble--loading span {
+  .cia-stand, .cia-aura, .cia-badge, .cia-dot-online, .cia-bubble--loading span {
     animation: none !important;
   }
 }
