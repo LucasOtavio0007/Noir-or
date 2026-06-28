@@ -7,13 +7,20 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+        }
+      }
+    }
+  },
   server: {
     port: 5173,
     strictPort: true,
-    // ✅ CORRIGIDO: porta do HMR explícita para evitar ws://localhost:undefined
-    hmr: {
-      port: 5173,
-    },
+    hmr: { port: 5173 },
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
