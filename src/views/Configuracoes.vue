@@ -1321,11 +1321,15 @@ const onAvatarChange = async (e) => {
     const base64 = ev.target.result
     perfil.value.avatar = base64
     marcarAlterado()
-    // Opcional: enviar pro servidor imediatamente
+    // Envia pro servidor imediatamente e sincroniza com a store de auth
+    // (assim o avatar atualiza na navbar sem precisar clicar em "Salvar")
     try {
-      await api.patch('/usuarios/avatar', { avatar: base64 })
+      const { data } = await api.patch('/usuarios/avatar', { avatar: base64 })
+      const novoAvatar = data?.avatar || data?.usuario?.avatar || base64
+      perfil.value.avatar = novoAvatar
+      if (auth.user) auth.user.avatar = novoAvatar
       mostrarToast('Foto atualizada!', '', 'sucesso')
-    } catch { /* salva localmente, vai junto no salvar */ }
+    } catch { /* mantém localmente, será enviado junto no próximo "Salvar" */ }
   }
   reader.readAsDataURL(file)
   e.target.value = ''
@@ -1488,6 +1492,31 @@ const perfil = ref({
   avatar:null
 })
 
+// Preenche o objeto local `perfil` a partir do usuário logado (auth.user).
+// Cobre nomes de campo alternativos que o backend possa devolver.
+const preencherPerfilDoLogin = (u) => {
+  if (!u) return
+  Object.assign(perfil.value, {
+    nome:        u.nome || u.firstName || u.first_name || perfil.value.nome || '',
+    sobrenome:   u.sobrenome || u.lastName || u.last_name || perfil.value.sobrenome || '',
+    email:       u.email || perfil.value.email || '',
+    telefone:    u.telefone || u.phone || u.celular || perfil.value.telefone || '',
+    bio:         u.bio || u.descricao || perfil.value.bio || '',
+    cep:         u.cep || u.endereco?.cep || perfil.value.cep || '',
+    cidade:      u.cidade || u.endereco?.cidade || perfil.value.cidade || '',
+    uf:          u.uf || u.estado || u.endereco?.uf || perfil.value.uf || '',
+    bairro:      u.bairro || u.endereco?.bairro || perfil.value.bairro || '',
+    endereco:    u.endereco?.logradouro || u.logradouro || (typeof u.endereco === 'string' ? u.endereco : perfil.value.endereco) || '',
+    numero:      u.numero || u.endereco?.numero || perfil.value.numero || '',
+    complemento: u.complemento || u.endereco?.complemento || perfil.value.complemento || '',
+    avatar:      u.avatar || u.foto || u.photoURL || perfil.value.avatar || null,
+  })
+}
+
+// Sempre que o usuário do login mudar (login concluído, refresh de sessão, etc.),
+// repopula o perfil — cobre o caso de `auth.user` chegar depois do mounted().
+watch(() => auth.user, (u) => { if (u) preencherPerfilDoLogin(u) }, { immediate: true, deep: true })
+
 // ── Senha — stepper ──────────────────────────────────
 const etapasSenha    = [{ id:'verificar', label:'Verificar' }, { id:'confirmar', label:'Confirmar' }, { id:'nova', label:'Nova Senha' }, { id:'concluido', label:'Concluído' }]
 const etapaSenha     = ref(0)
@@ -1576,9 +1605,10 @@ const reenviarOtp = async () => {
 }
 
 const emailMascarado = computed(() => {
-  const email = auth.user?.email || ''
-  if (!email) return 's****o@email.com'
+  const email = auth.user?.email || perfil.value.email || ''
+  if (!email || !email.includes('@')) return 's****o@email.com'
   const [local, domain] = email.split('@')
+  if (local.length <= 2) return `${local[0]}**@${domain}`
   return `${local[0]}****${local.slice(-1)}@${domain}`
 })
 
@@ -1748,7 +1778,7 @@ const salvar = async () => {
         salvando.value = false
         return
       }
-      await auth.updateProfile({
+      const payload = {
         nome:perfil.value.nome, sobrenome:perfil.value.sobrenome,
         telefone:perfil.value.telefone, bio:perfil.value.bio,
         cep:perfil.value.cep, cidade:perfil.value.cidade,
@@ -1756,7 +1786,15 @@ const salvar = async () => {
         endereco:perfil.value.endereco, numero:perfil.value.numero,
         complemento:perfil.value.complemento,
         avatar:perfil.value.avatar
-      })
+      }
+      const resultado = await auth.updateProfile(payload)
+      // Sincroniza a store de autenticação (e, por consequência, a navbar)
+      // com os dados que acabaram de ser salvos.
+      const usuarioAtualizado = resultado?.usuario || resultado?.user || resultado
+      if (auth.user) {
+        Object.assign(auth.user, payload, usuarioAtualizado && typeof usuarioAtualizado === 'object' ? usuarioAtualizado : {})
+      }
+      preencherPerfilDoLogin(auth.user)
       mostrarToast('Perfil atualizado!', '', 'sucesso')
     }
     if (secaoAtiva.value==='notificacoes') {
@@ -1768,18 +1806,8 @@ const salvar = async () => {
   finally { salvando.value = false }
 }
 const descartar = () => {
-  // Restaura dados do usuário original
-  const u = auth.user
-  if (u) {
-    Object.assign(perfil.value, {
-      nome:u.nome||'', sobrenome:u.sobrenome||'', email:u.email,
-      telefone:u.telefone||'', bio:u.bio||'',
-      cep:u.cep||'', cidade:u.cidade||'', uf:u.uf||'',
-      bairro:u.bairro||'', endereco:u.endereco||'',
-      numero:u.numero||'', complemento:u.complemento||'',
-      avatar:u.avatar||null
-    })
-  }
+  // Restaura dados do usuário original (vindos do login)
+  preencherPerfilDoLogin(auth.user)
   temAlteracoes.value = false
   mostrarToast('Alterações descartadas','','info')
 }
@@ -1787,18 +1815,15 @@ const descartar = () => {
 // ── Lifecycle ────────────────────────────────────────
 onMounted(async () => {
   const q = route.query.secao; if (q) secaoAtiva.value = q
-  const u = auth.user
-  if (u) {
-    Object.assign(perfil.value, {
-      nome:u.nome||'', sobrenome:u.sobrenome||'', email:u.email,
-      telefone:u.telefone||'', bio:u.bio||'',
-      cep:u.cep||'', cidade:u.cidade||'', uf:u.uf||'',
-      bairro:u.bairro||'', endereco:u.endereco||'',
-      numero:u.numero||'', complemento:u.complemento||'',
-      avatar:u.avatar||null
-    })
-    twoFA.value = u.twoFA || false
+
+  // Se a store ainda não tiver o usuário carregado (ex.: refresh de página),
+  // tenta buscar o usuário autenticado antes de preencher o perfil.
+  if (!auth.user && typeof auth.fetchUser === 'function') {
+    try { await auth.fetchUser() } catch {}
   }
+  preencherPerfilDoLogin(auth.user)
+  twoFA.value = auth.user?.twoFA || false
+
   await recarregarPedidos()
   try { const { data } = await api.get('/reembolsos/meus'); reembolsos.value = data.reembolsos||data||[] } catch {}
   try { const { data } = await api.get('/usuarios/sessions'); sessoes.value = data.sessoes||[] } catch {}
