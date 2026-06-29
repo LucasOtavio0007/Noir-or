@@ -802,6 +802,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import Banner from '@/components/Banner.vue'
 import { useProdutosStore } from '@/stores/produtos.js'
 import { useSiteStore } from '@/stores/site.js'
+import { useCartStore } from '@/stores/cart.js'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -816,43 +817,33 @@ const loading   = ref(true)
 const addedIds  = ref([])
 const modal     = ref(null)
 
-/* ─── CART STATE ─── */
+/* ─── CART STATE — usa useCartStore global ─── */
+const cart      = useCartStore()
 const cartOpen  = ref(false)
-const cartItems = ref([])
+const cartItems = computed(() => cart.items)
 
 const cartSubtotal = computed(() =>
-  cartItems.value.reduce((acc, i) => acc + (i.preco || 0) * i.qty, 0)
+  cart.items.reduce((acc, i) => acc + (i.preco || 0) * i.qty, 0)
 )
-const cartCount = computed(() =>
-  cartItems.value.reduce((a, i) => a + i.qty, 0)
-)
+const cartCount = computed(() => cart.totalItens)
 
 function addCart(p) {
   if (!p?.estoque) return
-  window.dispatchEvent(new CustomEvent('add-to-cart', { detail: p }))
+  cart.adicionar(p)
   const k = p._id || p.id
   addedIds.value.push(k)
   setTimeout(() => { addedIds.value = addedIds.value.filter(id => id !== k) }, 2200)
-  const existing = cartItems.value.find(i => (i._id || i.id) === k)
-  if (existing) { existing.qty++ }
-  else { cartItems.value.push({ ...p, qty: 1 }) }
-  cartOpen.value = true
+  window.dispatchEvent(new CustomEvent('abrir-carrinho'))
 }
 
 function removeItem(item) {
-  const k = item._id || item.id
-  cartItems.value = cartItems.value.filter(i => (i._id || i.id) !== k)
+  cart.remover(item._id || item.id)
 }
 function incrementItem(item) {
-  const found = cartItems.value.find(i => (i._id || i.id) === (item._id || item.id))
-  if (found) found.qty++
+  cart.alterarQty(item._id || item.id, 1)
 }
 function decrementItem(item) {
-  const k = item._id || item.id
-  const found = cartItems.value.find(i => (i._id || i.id) === k)
-  if (!found) return
-  if (found.qty <= 1) removeItem(item)
-  else found.qty--
+  cart.alterarQty(item._id || item.id, -1)
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1104,52 +1095,12 @@ function destroyCartCanvas() {
 }
 
 /* ─── Watcher Cart Open ─── */
-watch(cartOpen, async (val) => {
-  if (val) {
-    document.body.style.overflow = 'hidden'
-    await nextTick()
-    initCartCanvas()
+// cartOpen local removido — o drawer do Navbar já cuida disso.
+// O evento 'abrir-carrinho' é escutado pelo Navbar.
 
-    gsap.fromTo(cartDrawerRef.value,
-      { x: '100%', opacity: 0 },
-      {
-        x: '0%',
-        opacity: 1,
-        duration: 0.65,
-        ease: 'expo.out',
-        onComplete: () => {
-          const items = cartDrawerRef.value?.querySelectorAll('.cart-item')
-          if (items?.length) {
-            gsap.fromTo(items,
-              { x: 24, opacity: 0 },
-              { x: 0, opacity: 1, duration: 0.45, stagger: 0.07, ease: 'power3.out' }
-            )
-          }
-          const line = cartDrawerRef.value?.querySelector('.cart__realm-line')
-          if (line) {
-            gsap.fromTo(line, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: 'power3.out', transformOrigin: 'center' })
-          }
-        }
-      }
-    )
-  } else {
-    document.body.style.overflow = ''
-    if (cartDrawerRef.value) {
-      gsap.to(cartDrawerRef.value, {
-        x: '100%',
-        opacity: 0,
-        duration: 0.42,
-        ease: 'power3.in',
-        onComplete: destroyCartCanvas
-      })
-    } else {
-      destroyCartCanvas()
-    }
-  }
-})
-
-function handleOpenCart() { cartOpen.value = true }
-
+function handleOpenCart() {
+  window.dispatchEvent(new CustomEvent('abrir-carrinho'))
+}
 /* ─── DOM REFS ─── */
 const carousel       = ref(null)
 const previewRef     = ref(null)
@@ -1306,7 +1257,7 @@ function handleModalKeydown(e) {
   if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus() } }
   else            { if (document.activeElement === last)  { e.preventDefault(); first.focus() } }
 }
-function handleCartKeydown(e) { if (!cartOpen.value) return; if (e.key === 'Escape') cartOpen.value = false }
+
 
 /* ─── CAROUSEL ─── */
 const cardWidth = () => { const c = carousel.value?.querySelector('.prod-card'); return c ? c.offsetWidth+16 : 296 }
@@ -1475,7 +1426,7 @@ onMounted(async () => {
   document.addEventListener('visibilitychange', handleVisibility)
   document.addEventListener('keydown', handleModalKeydown)
   document.addEventListener('keydown', handleCartKeydown)
-  window.addEventListener('open-cart', handleOpenCart)
+ 
 })
 
 onUnmounted(() => {
@@ -1483,13 +1434,12 @@ onUnmounted(() => {
   if (sakuraRaf)  cancelAnimationFrame(sakuraRaf)
   if (sakuraRO)   sakuraRO.disconnect()
   if (carouselRO) carouselRO.disconnect()
-  destroyCartCanvas()
+
   triggers.forEach(t => t?.kill())
-  document.removeEventListener('visibilitychange', handleVisibility)
-  document.removeEventListener('keydown', handleModalKeydown)
-  document.removeEventListener('keydown', handleCartKeydown)
-  window.removeEventListener('open-cart', handleOpenCart)
-  document.body.style.overflow = ''
+document.removeEventListener('visibilitychange', handleVisibility)
+document.removeEventListener('keydown', handleModalKeydown)
+document.removeEventListener('keydown', handleCartKeydown)
+document.body.style.overflow = ''
 })
 </script>
 
