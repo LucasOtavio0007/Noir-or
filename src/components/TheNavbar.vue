@@ -996,6 +996,57 @@
         </div>
       </transition>
 
+      <!-- MODAL CONFIRMAÇÃO DE IDADE -->
+<transition name="fade" appear>
+  <div v-if="idadeModalOpen" class="nb-overlay" @click.self="recusarIdade" role="dialog"
+    aria-label="Confirmação de idade" aria-modal="true" style="z-index:10001">
+    <div class="age-modal">
+      <div class="age-modal__orb age-modal__orb--1"></div>
+      <div class="age-modal__orb age-modal__orb--2"></div>
+
+      <div class="age-modal__kamon" aria-hidden="true">年</div>
+
+      <div class="age-modal__top">
+        <span class="age-modal__badge">Verificação obrigatória</span>
+        <h2 class="age-modal__titulo">Confirme sua<br/><em>maioridade</em></h2>
+        <p class="age-modal__desc">
+          Este site vende produtos destinados exclusivamente a maiores de 18 anos.
+          Confirme que você tem 18 anos ou mais para continuar.
+        </p>
+      </div>
+
+      <div class="age-modal__icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span class="age-modal__icon-num">18+</span>
+      </div>
+
+      <div class="age-modal__btns">
+        <button class="age-modal__confirmar" @click="confirmarIdade">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Sim, tenho 18 anos ou mais
+        </button>
+        <button class="age-modal__recusar" @click="recusarIdade">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+          Não, sou menor de idade
+        </button>
+      </div>
+
+      <p class="age-modal__rodape">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Sua resposta é salva neste dispositivo
+      </p>
+    </div>
+  </div>
+</transition>
+
     </teleport>
   </div>
 </template>
@@ -1033,6 +1084,8 @@ const acessOpen      = ref(false)
 const userDropOpen   = ref(false)
 const userDropRef    = ref(null)
 const logoImgOk      = ref(true)
+const idadeModalOpen  = ref(false)
+const idadeConfirmada = ref(false)
 const form = ref({ email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' })
 
 /* ── Multi-step cadastro ── */
@@ -1585,6 +1638,86 @@ const irParaCheckout     = () => {
   window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
 }
 
+/* ── Verificação de idade ── */
+const CHAVE_IDADE = '_nor_age_ok'
+
+const jaConfirmouIdade = () => {
+  try { return !!localStorage.getItem(CHAVE_IDADE) } catch { return false }
+}
+const salvarConfirmacaoIdade = () => {
+  try { localStorage.setItem(CHAVE_IDADE, '1') } catch {}
+}
+const confirmarIdade = () => {
+  salvarConfirmacaoIdade()
+  idadeConfirmada.value  = true
+  idadeModalOpen.value   = false
+  prosseguirCheckout()
+}
+const recusarIdade = () => {
+  idadeModalOpen.value = false
+  addToast('Acesso restrito', 'Este site é destinado a maiores de 18 anos.', 'error')
+}
+const prosseguirCheckout = () => {
+  if (!auth.isLogado) { cartOpen.value = false; openModal('login', true); return }
+  const items = JSON.parse(JSON.stringify(cart.items))
+  if (!items.length) return
+  cartOpen.value = false
+  window.__noirCarrinho = items
+  window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
+}
+
+/* ── Simular envio de documentos (TCC/DEV) ── */
+const simularEnvioDocumento = () => {
+  // Preenche campos obrigatórios com dados fictícios
+  if (!form.value.rg || form.value.rg.replace(/\D/g, '').length < 7) {
+    form.value.rg = '12.345.678-9'
+  }
+  if (!form.value.orgaoEmissor.trim()) {
+    form.value.orgaoEmissor = 'SSP/SP'
+  }
+
+  // Cria uma imagem canvas simulada para frente e verso
+  const criarImagemSimulada = (label) => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 640; canvas.height = 400
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#1a1a2e'
+    ctx.fillRect(0, 0, 640, 400)
+    ctx.fillStyle = 'rgba(245,166,35,0.15)'
+    ctx.fillRect(20, 20, 600, 360)
+    ctx.strokeStyle = 'rgba(245,166,35,0.5)'
+    ctx.lineWidth = 2
+    ctx.strokeRect(30, 30, 580, 340)
+    ctx.fillStyle = '#F5A623'
+    ctx.font = 'bold 28px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('RG — ' + label, 320, 180)
+    ctx.fillStyle = 'rgba(245,166,35,0.4)'
+    ctx.font = '14px sans-serif'
+    ctx.fillText('Documento Simulado — Noir & Or TCC', 320, 220)
+    return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.85))
+  }
+
+  Promise.all([criarImagemSimulada('FRENTE'), criarImagemSimulada('VERSO')]).then(([blobFrente, blobVerso]) => {
+    const fileFrente = new File([blobFrente], 'rg-frente-sim.jpg', { type: 'image/jpeg' })
+    const fileVerso  = new File([blobVerso],  'rg-verso-sim.jpg',  { type: 'image/jpeg' })
+
+    rgFrente.value = fileFrente
+    rgVerso.value  = fileVerso
+
+    const readerF = new FileReader()
+    readerF.onload = e => { rgFrentePreview.value = e.target.result }
+    readerF.readAsDataURL(fileFrente)
+
+    const readerV = new FileReader()
+    readerV.onload = e => { rgVersoPreview.value = e.target.result }
+    readerV.readAsDataURL(fileVerso)
+
+    addToast('Documentos simulados', 'Campos preenchidos automaticamente', 'success')
+    formError.value = ''
+  })
+}
+
 /* ── Lock scroll ── */
 const lockScroll = (v) => { if (document) document.body.style.overflow = v ? 'hidden' : '' }
 watch([modalOpen, cartOpen, sidebarOpen], ([m, c, s]) => lockScroll(m || c || s))
@@ -1756,6 +1889,181 @@ watch(
 @media (max-width:1100px) { .nb-links{display:none;} .nb-burger{display:flex;} .navbar__inner{grid-template-columns:auto 1fr auto;} }
 @media (max-width:768px)  { .navbar__inner{padding:0 20px;} .nb-user__info,.nb-user__chevron{display:none;} }
 @media (max-width:480px)  { .navbar__inner{padding:0 16px;} .nb-sep,.nb-entrar{display:none;} }
+
+/* ── MODAL CONFIRMAÇÃO DE IDADE ── */
+.age-modal {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: var(--or-deep, #09090f);
+  border: 0.5px solid var(--or-hair, rgba(245,166,35,0.12));
+  box-shadow: 0 0 0 0.5px var(--or-hair), 0 60px 120px rgba(0,0,0,.9);
+  padding: 44px 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+  animation: or-modal-in 0.55s var(--or-easing, cubic-bezier(.16,1,.3,1)) both;
+}
+.age-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--or-gold, #F5A623) 30%, var(--or-gold, #F5A623) 70%, transparent);
+  opacity: 0.8;
+}
+.age-modal__orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(50px);
+}
+.age-modal__orb--1 {
+  width: 180px; height: 180px;
+  top: -60px; left: -40px;
+  background: radial-gradient(circle, rgba(245,166,35,0.14) 0%, transparent 70%);
+}
+.age-modal__orb--2 {
+  width: 120px; height: 120px;
+  bottom: -30px; right: -20px;
+  background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+}
+.age-modal__kamon {
+  position: absolute;
+  top: 14px; right: 18px;
+  font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: var(--or-gold, #F5A623);
+  opacity: 0.15;
+  pointer-events: none;
+  line-height: 1;
+}
+.age-modal__top { text-align: center; position: relative; z-index: 1; }
+.age-modal__badge {
+  display: inline-block;
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 7px;
+  letter-spacing: .55em;
+  text-transform: uppercase;
+  color: var(--or-gold, #F5A623);
+  opacity: .7;
+  margin-bottom: 12px;
+}
+.age-modal__titulo {
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: 26px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--or-silk, #ede8e0);
+  line-height: 1.25;
+  margin: 0 0 14px;
+}
+.age-modal__titulo em { color: var(--or-gold, #F5A623); font-style: italic; }
+.age-modal__desc {
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--or-silk-2, rgba(237,232,224,0.50));
+  line-height: 1.75;
+  letter-spacing: .03em;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.age-modal__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--or-gold, #F5A623);
+  opacity: .55;
+}
+.age-modal__icon-num {
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .35em;
+  color: var(--or-gold, #F5A623);
+}
+.age-modal__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+.age-modal__confirmar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 0.5px solid var(--or-gold, #F5A623);
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .5em;
+  text-transform: uppercase;
+  color: var(--or-gold, #F5A623);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: color .45s;
+  z-index: 0;
+}
+.age-modal__confirmar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--or-gold, #F5A623);
+  transform: translateX(-101%) skewX(-8deg);
+  transition: transform .55s cubic-bezier(.16,1,.3,1);
+  z-index: -1;
+}
+.age-modal__confirmar:hover::before { transform: translateX(0) skewX(0deg); }
+.age-modal__confirmar:hover { color: #06060d; }
+.age-modal__recusar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  border: 0.5px solid var(--or-hair-2, rgba(237,232,224,0.07));
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 8px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--or-silk-3, rgba(237,232,224,0.22));
+  cursor: pointer;
+  transition: all .25s;
+}
+.age-modal__recusar:hover {
+  border-color: rgba(239,68,68,.5);
+  color: rgba(239,68,68,.7);
+  background: rgba(239,68,68,.04);
+}
+.age-modal__rodape {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--or-silk-4, rgba(237,232,224,0.10));
+  position: relative;
+  z-index: 1;
+}
+.age-modal__rodape svg { color: var(--or-gold, #F5A623); opacity: .4; flex-shrink: 0; }
 </style>
 
 <style>
@@ -2212,4 +2520,75 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 }
 body.light-mode .af-linha input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
 body.light-mode .nb-search-field input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
+
+/* ── BOTÃO SIMULAR ENVIO (DEV) ── */
+.id-simular-wrap {
+  margin: 4px 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.id-simular-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.id-simular-divider::before,
+.id-simular-divider::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--or-hair-2, rgba(237,232,224,0.07));
+}
+.id-simular-divider span {
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 8px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--or-silk-4, rgba(237,232,224,0.10));
+  white-space: nowrap;
+}
+.id-simular-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(245,166,35,0.04);
+  border: 0.5px dashed rgba(245,166,35,0.25);
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 8px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(245,166,35,0.5);
+  cursor: pointer;
+  transition: all .25s;
+}
+.id-simular-btn:hover {
+  background: rgba(245,166,35,0.08);
+  border-color: rgba(245,166,35,0.5);
+  color: var(--or-gold, #F5A623);
+}
+.id-simular-btn svg { flex-shrink: 0; }
+.id-simular-tag {
+  font-size: 7px;
+  letter-spacing: .3em;
+  font-weight: 700;
+  background: rgba(245,166,35,0.15);
+  color: var(--or-gold, #F5A623);
+  padding: 2px 6px;
+  border-radius: 2px;
+  margin-left: auto;
+}
+.id-simular-note {
+  font-family: var(--font-sans, 'Syne', sans-serif);
+  font-size: 9px;
+  letter-spacing: .06em;
+  color: var(--or-silk-4, rgba(237,232,224,0.10));
+  text-align: center;
+  line-height: 1.5;
+}
 </style>
