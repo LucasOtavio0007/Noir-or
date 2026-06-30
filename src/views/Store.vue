@@ -3,28 +3,21 @@
 
     <!-- ══ FUNDO GLOBAL — mesmo DNA do footer ══ -->
     <div class="store__bg" aria-hidden="true">
-      <!-- Kamons de fundo como no footer -->
       <div class="store__kamon store__kamon--1" aria-hidden="true">蒐</div>
       <div class="store__kamon store__kamon--2" aria-hidden="true">金</div>
       <div class="store__kamon store__kamon--3" aria-hidden="true">集</div>
-      <!-- Realm line igual ao footer -->
       <div class="store__realm-line" aria-hidden="true"></div>
-      <!-- Washi grid igual ao hero banner -->
       <div class="store__washi" aria-hidden="true"></div>
-      <!-- Fog cinematográfica -->
       <div class="store__fog store__fog--1" aria-hidden="true"></div>
       <div class="store__fog store__fog--2" aria-hidden="true"></div>
     </div>
 
     <!-- ══ HERO ══ -->
     <section class="store__hero" ref="heroRef">
-
-      <!-- Linha editorial esquerda — igual ao banner -->
       <div class="store__edge-line" aria-hidden="true">
         <span class="store__edge-num">01</span>
       </div>
 
-      <!-- HUD direito — igual ao banner -->
       <div class="store__hud" aria-hidden="true">
         <span class="store__hud-label">COLLECTION · MMXXVI</span>
         <span class="store__hud-sep"></span>
@@ -34,26 +27,22 @@
       <div class="store__hero-inner">
         <div class="store__hero-left" ref="heroContent">
 
-          <!-- Kicker -->
           <div class="store__kicker" ref="heroKicker">
             <span class="store__kicker-num">01</span>
             <div class="store__kicker-bar"></div>
           </div>
 
-          <!-- Eyebrow — igual ao banner -->
           <div class="store__eyebrow" ref="heroEyebrow">
             <span class="store__ew-dot"></span>
             <span class="store__ew-text">Atelier · Édition de Colecionador 2026</span>
           </div>
 
-          <!-- Título -->
           <h1 class="store__titulo" ref="heroTitulo">
             <span class="store__t-thin">THE</span>
             <span class="store__t-gold">STORE</span>
             <span class="store__t-kanji" aria-hidden="true">漆黒と黄金</span>
           </h1>
 
-          <!-- Sep — igual ao banner -->
           <div class="store__sep" aria-hidden="true">
             <span class="store__sep-line"></span>
             <span class="store__sep-gem"></span>
@@ -64,7 +53,6 @@
             {{ totalGeral }} peças exclusivas · edições limitadas · tecnologia de elite
           </p>
 
-          <!-- Filtros rápidos — como nb-links -->
           <div class="store__hero-cats" ref="heroCatsRef">
             <button
               v-for="cat in heroCatsList" :key="cat"
@@ -77,9 +65,7 @@
           </div>
         </div>
 
-        <!-- Stats — como nb__stats -->
         <div class="store__hero-right" ref="heroRight">
-          <!-- Hanko decorativo — igual ao banner -->
           <svg class="store__hanko" viewBox="0 0 90 90" aria-hidden="true">
             <rect x="4" y="4" width="82" height="82" rx="6"
               fill="none" stroke="var(--lacre-mid)" stroke-width="1.5"/>
@@ -100,7 +86,6 @@
         </div>
       </div>
 
-      <!-- Strip como drawer__ornament mas mais rico -->
       <div class="store__strip" ref="heroStrip">
         <div class="store__strip-item" v-for="s in heroStripData" :key="s.title">
           <div class="store__strip-icon" v-html="s.icon"></div>
@@ -113,7 +98,7 @@
       </div>
     </section>
 
-    <!-- ══ TICKER — mesmo padrão ══ -->
+    <!-- ══ TICKER ══ -->
     <div class="store__ticker" aria-hidden="true">
       <div class="store__ticker-track">
         <span v-for="n in 4" :key="n" class="store__ticker-set">
@@ -127,7 +112,7 @@
       </div>
     </div>
 
-    <!-- ══ TOOLBAR — estilo navbar ══ -->
+    <!-- ══ TOOLBAR ══ -->
     <div class="store__toolbar" ref="toolbarRef" :class="{ 'is-scrolled': scrolled }">
       <div class="store__toolbar-border" aria-hidden="true"></div>
       <div class="store__toolbar-inner">
@@ -137,17 +122,15 @@
           <input
             v-model="busca"
             placeholder="探す · Buscar na coleção..."
-            @input="pagina=1"
             @focus="searchFocused=true"
             @blur="searchFocused=false"
             autocomplete="off"
           />
-          <button v-if="busca" @click="busca='';pagina=1" class="store__search-clear" aria-label="Limpar">
+          <button v-if="busca" @click="busca=''" class="store__search-clear" aria-label="Limpar">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <!-- Chips de categoria ativos -->
         <div v-if="categoriasAtivas.length" class="store__chips">
           <button v-for="cat in categoriasAtivas" :key="cat" class="store__chip" @click="toggleCat(cat)">
             {{ cat }}<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -184,19 +167,17 @@
     <!-- ══ LAYOUT PRINCIPAL ══ -->
     <div class="store__layout">
 
-      <!-- ══ SIDEBAR — estilo drawer ══ -->
+      <!-- ══ SIDEBAR ══ -->
       <aside
         class="store__sidebar"
         ref="sidebarEl"
         :class="{ 'is-open': sidebarOpen }"
         :style="sidebarStyle"
       >
-        <!-- Kamon como no drawer -->
         <div class="store__sb-kamon" aria-hidden="true">目録</div>
 
         <button class="store__sb-close-m" @click="sidebarOpen=false">閉じる ✕</button>
 
-        <!-- Ornamento de topo como drawer__ornament -->
         <div class="store__sb-ornament" aria-hidden="true">
           <span class="store__sb-orn-line"></span>
           <span class="store__sb-orn-kanji">目</span>
@@ -221,7 +202,6 @@
           </div>
         </div>
 
-        <!-- Sep igual ao drawer footer-ornament -->
         <div class="store__sb-sep" aria-hidden="true">
           <span class="store__sb-sep-line"></span>
           <span class="store__sb-sep-kanji">価</span>
@@ -233,19 +213,37 @@
           <p class="store__sb-lbl">
             <span class="store__sb-lbl-kanji">価</span>Faixa de preço
           </p>
-          <div class="store__sb-preco-vals">
-            <span>R$ {{ fmt(filtroPreco[0]) }}</span>
-            <span>R$ {{ fmt(filtroPreco[1]) }}</span>
+
+          <div class="store__sb-preco-inputs">
+            <div class="store__sb-preco-field">
+              <span>R$</span>
+              <input
+                type="number" min="0" :max="PRECO_MAX" step="1000"
+                v-model.number="filtroPreco[0]"
+                @change="clampPreco"
+                aria-label="Preço mínimo"
+              />
+            </div>
+            <span class="store__sb-preco-dash">—</span>
+            <div class="store__sb-preco-field">
+              <span>R$</span>
+              <input
+                type="number" min="0" :max="PRECO_MAX" step="1000"
+                v-model.number="filtroPreco[1]"
+                @change="clampPreco"
+                aria-label="Preço máximo"
+              />
+            </div>
           </div>
+
           <div class="store__sb-ranges">
-            <input type="range" min="0" max="500000" step="1000"
-              v-model.number="filtroPreco[0]" class="store__sb-range"
-              @input="clampPreco" aria-label="Preço mínimo"/>
-            <input type="range" min="0" max="500000" step="1000"
-              v-model.number="filtroPreco[1]" class="store__sb-range"
-              @input="clampPreco" aria-label="Preço máximo"/>
+            <input type="range" min="0" :max="PRECO_MAX" step="1000"
+              v-model.number="filtroPreco[0]" class="store__sb-range store__sb-range--min"
+              @input="clampPreco" aria-label="Preço mínimo (slider)"/>
+            <input type="range" min="0" :max="PRECO_MAX" step="1000"
+              v-model.number="filtroPreco[1]" class="store__sb-range store__sb-range--max"
+              @input="clampPreco" aria-label="Preço máximo (slider)"/>
           </div>
-          <button class="store__sb-apply" @click="pagina=1">適用 · Aplicar</button>
         </div>
 
         <div class="store__sb-sep" aria-hidden="true">
@@ -305,7 +303,6 @@
           全てクリア · Limpar filtros
         </button>
 
-        <!-- Footer da sidebar com watermark — como pref-watermark -->
         <div class="store__sb-watermark" aria-hidden="true">The Art of Silent Power</div>
       </aside>
 
@@ -322,14 +319,12 @@
           <span v-if="temFiltros" class="store__btn-filtros-badge">!</span>
         </button>
 
-        <!-- Erro -->
         <div v-if="produtosStore.erro && !loading" class="store__cat-erro">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <p>{{ produtosStore.erro }}</p>
           <button class="store__sb-apply" @click="produtosStore.recarregar()">再試行 · Tentar novamente</button>
         </div>
 
-        <!-- Skeleton — como no drawer -->
         <div v-else-if="loading" :class="['store__grid', viewMode==='grid' ? 'store__grid--grid' : 'store__grid--list']">
           <div v-for="n in 8" :key="n" class="store__card store__card--skel">
             <div class="store__skel-img"></div>
@@ -341,9 +336,7 @@
           </div>
         </div>
 
-        <!-- Vazio -->
         <div v-else-if="!produtosPaginados.length" class="store__cat-vazio">
-          <!-- Igual ao drawer vazio -->
           <div class="store__vazio-ico" aria-hidden="true">
             <span class="store__vazio-kanji">無</span>
           </div>
@@ -352,7 +345,6 @@
           <button class="store__sb-limpar" @click="limparFiltros">絞込解除 · Limpar</button>
         </div>
 
-        <!-- Grid -->
         <transition name="view-sw" mode="out-in">
           <div v-if="!loading && produtosPaginados.length" :key="viewMode"
             :class="['store__grid', viewMode==='grid' ? 'store__grid--grid' : 'store__grid--list']">
@@ -372,14 +364,11 @@
               tabindex="0"
               @keydown.enter="abrirModal(p)"
             >
-              <!-- Cantos decorativos — como no drawer__vazio__ico -->
               <span class="store__card-corner store__card-corner--tl" aria-hidden="true"></span>
               <span class="store__card-corner store__card-corner--br" aria-hidden="true"></span>
 
-              <!-- Numeração sequencial — como di__num -->
               <div class="store__card-num" aria-hidden="true">{{ String(i + 1 + (pagina-1)*POR_PAGINA).padStart(2,'0') }}</div>
 
-              <!-- Imagem -->
               <div class="store__card-img-wrap">
                 <div class="store__card-fallback" aria-hidden="true">
                   <span class="store__card-fb-letra">{{ (p.nome||'?').charAt(0) }}</span>
@@ -390,12 +379,10 @@
                   class="store__card-img" loading="lazy"
                   @error="e=>e.target.style.display='none'"/>
 
-                <!-- Overlay igual ao drawer -->
                 <div class="store__card-overlay">
                   <span class="store__card-overlay-txt">見る · Ver detalhes</span>
                 </div>
 
-                <!-- Badges — estilo nb-cart__badge -->
                 <span v-if="p.limitada" class="store__badge store__badge--ltd">◆ 限定</span>
                 <span v-else-if="p.novo && p.estoque" class="store__badge store__badge--novo">新</span>
                 <span v-if="!p.estoque" class="store__badge store__badge--esgo">売切</span>
@@ -403,7 +390,6 @@
                   残り{{ p.qtdEstoque }}個
                 </div>
 
-                <!-- Ações rápidas — como nb-icon -->
                 <div class="store__card-quick">
                   <button
                     class="store__quick-btn"
@@ -431,18 +417,15 @@
                   </button>
                 </div>
 
-                <!-- Shine tilt -->
                 <div class="store__card-shine" :ref="el => { if(el) shineRefs[i]=el }"></div>
               </div>
 
-              <!-- Info — estilo di__info -->
               <div class="store__card-info">
                 <span class="store__card-cat">{{ p.categoria }}</span>
                 <p class="store__card-marca">{{ p.marca }}</p>
                 <p class="store__card-nome">{{ p.nome }}</p>
                 <p v-if="viewMode==='list'" class="store__card-desc">{{ p.descricao }}</p>
 
-                <!-- Swatches em list mode -->
                 <div v-if="viewMode==='list' && p.cores?.length" class="store__card-cores">
                   <span v-for="cor in p.cores.slice(0,5)" :key="cor.nome"
                     class="store__card-swatch" :style="{ background: cor.hex }"
@@ -450,7 +433,6 @@
                   <span v-if="p.cores.length > 5" class="store__card-swatch-more">+{{ p.cores.length - 5 }}</span>
                 </div>
 
-                <!-- Bottom — como di__foot -->
                 <div class="store__card-bottom">
                   <div class="store__card-preco-wrap">
                     <p class="store__card-preco">R$ {{ fmt(p.preco) }}</p>
@@ -481,14 +463,12 @@
           </div>
         </transition>
 
-        <!-- Ornamento de separação antes da paginação — como footer sep -->
         <div v-if="totalPaginas > 1" class="store__pag-sep" aria-hidden="true">
           <span class="store__pag-sep-line"></span>
           <span class="store__pag-sep-kanji">頁</span>
           <span class="store__pag-sep-line store__pag-sep-line--r"></span>
         </div>
 
-        <!-- Paginação — estilo nb-link -->
         <div v-if="totalPaginas > 1" class="store__paginacao">
           <button class="store__pag-btn store__pag-btn--arrow"
             :disabled="pagina===1" @click="irPag(pagina-1)" aria-label="Anterior">‹</button>
@@ -506,7 +486,7 @@
       </div>
     </div>
 
-    <!-- ══ TOAST — idêntico ao sistema global ══ -->
+    <!-- ══ TOAST ══ -->
     <teleport to="body">
       <transition name="toast-slide">
         <div v-if="toast.visivel" :class="['store-toast', `store-toast--${toast.tipo}`]" role="status" aria-live="polite">
@@ -535,12 +515,9 @@
           </button>
 
           <div class="store__modal" ref="modalEl">
-            <!-- Kamon watermark como no drawer -->
             <div class="store__modal-kamon" aria-hidden="true">商</div>
-            <!-- Realm line como no footer -->
             <div class="store__modal-realm-line" aria-hidden="true"></div>
 
-            <!-- Cantos decorativos -->
             <span class="store__mc store__mc--tl"></span>
             <span class="store__mc store__mc--tr"></span>
             <span class="store__mc store__mc--bl"></span>
@@ -548,10 +525,8 @@
 
             <div class="store__modal-layout">
 
-              <!-- Col imagem -->
               <div class="store__modal-img-col">
                 <div class="store__modal-viewer">
-                  <!-- Fallback estilo di__img -->
                   <div class="store__modal-fallback" aria-hidden="true">
                     <span class="store__mf-letra">{{ (produtoModal.nome||'?').charAt(0) }}</span>
                     <span class="store__mf-kanji">{{ produtoModal._kanji || '品' }}</span>
@@ -577,7 +552,6 @@
                     拡大 · Ampliar
                   </div>
 
-                  <!-- Badges no modal -->
                   <div class="store__modal-badges">
                     <span v-if="produtoModal.limitada" class="store__modal-badge store__modal-badge--ltd">◆ 限定 Limited Edition</span>
                     <span v-else-if="produtoModal.novo && produtoModal.estoque" class="store__modal-badge store__modal-badge--novo">◆ 新 Novo</span>
@@ -585,7 +559,6 @@
                   </div>
                 </div>
 
-                <!-- Thumbnails -->
                 <div class="store__modal-thumbs" v-if="angulos.length > 1">
                   <button v-for="(ang, idx) in angulos" :key="idx"
                     :class="['store__modal-thumb', { 'is-active': anguloAtivo===idx }]"
@@ -597,17 +570,14 @@
                 </div>
               </div>
 
-              <!-- Col info -->
               <div class="store__modal-info" ref="modalInfoEl">
 
-                <!-- Ornament de topo -->
                 <div class="store__modal-ornament" aria-hidden="true">
                   <span class="store__mo-line"></span>
                   <span class="store__mo-kanji">{{ produtoModal._kanji || '至高' }}</span>
                   <span class="store__mo-line store__mo-line--r"></span>
                 </div>
 
-                <!-- Eyebrow -->
                 <div class="store__modal-eyebrow">
                   <span class="store__mey-dot"></span>
                   <span class="store__mey-txt">{{ produtoModal.categoria }}</span>
@@ -617,7 +587,6 @@
                 <h2 class="store__modal-titulo">{{ produtoModal.nome }}</h2>
                 <p class="store__modal-marca">por <strong>{{ produtoModal.marca }}</strong></p>
 
-                <!-- Divider estilo drawer footer -->
                 <div class="store__modal-divider" aria-hidden="true">
                   <span class="store__md-line"></span>
                   <span class="store__md-gem">✦</span>
@@ -626,7 +595,6 @@
 
                 <p class="store__modal-desc">{{ produtoModal.descricao }}</p>
 
-                <!-- Specs estilo dt-row -->
                 <div class="store__modal-specs" v-if="(produtoModal.specs||[]).length">
                   <div class="store__specs-hd">
                     <span class="store__specs-kanji">仕</span>
@@ -642,7 +610,6 @@
                   </div>
                 </div>
 
-                <!-- Quantidade -->
                 <div class="store__modal-qty-wrap">
                   <p class="store__modal-opt-lbl">数量 · Quantidade</p>
                   <div class="store__modal-qty">
@@ -655,7 +622,6 @@
                   </div>
                 </div>
 
-                <!-- Seletor de cor -->
                 <div class="store__modal-variant" v-if="coresDisponiveis.length">
                   <p class="store__modal-opt-lbl">
                     色 · Cor
@@ -672,7 +638,6 @@
                   </div>
                 </div>
 
-                <!-- Storage -->
                 <div class="store__modal-variant" v-if="storageOpcoes.length">
                   <p class="store__modal-opt-lbl">容量 · Armazenamento</p>
                   <div class="store__modal-storage">
@@ -687,7 +652,6 @@
                   </div>
                 </div>
 
-                <!-- Preço — estilo dt-row--total -->
                 <div class="store__modal-preco-wrap">
                   <div class="store__modal-preco-hd">
                     <span class="store__mp-kanji" aria-hidden="true">価</span>
@@ -704,7 +668,6 @@
                   </p>
                 </div>
 
-                <!-- Ações — estilo drawer checkout + nb-icon -->
                 <div class="store__modal-actions">
                   <button
                     class="store__modal-add"
@@ -748,7 +711,6 @@
                   </button>
                 </div>
 
-                <!-- Relacionados -->
                 <div class="store__modal-rel" v-if="produtosRelacionados.length">
                   <div class="store__modal-rel-hd">
                     <span class="store__rel-kanji">関連</span>
@@ -773,7 +735,6 @@
                   </div>
                 </div>
 
-                <!-- Footer note — como drawer__seguro -->
                 <div class="store__modal-footer-note">
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                   <span class="store__fn-kanji" aria-hidden="true">証</span>
@@ -785,7 +746,6 @@
         </div>
       </transition>
 
-      <!-- Notify modal -->
       <transition name="modal-fade">
         <div v-if="notifyModal" class="store__modal-bg store__modal-bg--sm"
           @click.self="notifyModal=false"
@@ -827,7 +787,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useProdutosStore } from '@/stores/produtos.js'
 import { useAuthStore }     from '@/stores/auth.js'
 import { useCartStore }     from '@/stores/cart.js'
@@ -837,6 +797,7 @@ import { ScrollTrigger }    from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const route         = useRoute()
+const router        = useRouter()
 const produtosStore = useProdutosStore()
 const auth          = useAuthStore()
 const cart          = useCartStore()
@@ -861,9 +822,13 @@ const shineRefs   = ref({})
 
 /* ── Estado ── */
 const loading          = ref(true)
-const busca            = ref('')
+const busca             = ref('')
+const buscaDebounced    = ref('')   // valor realmente usado no filtro, atualizado com delay
+let buscaTimer = null
+
 const categoriasAtivas = ref([])
-const filtroPreco = ref([0, 5000000])
+const PRECO_MAX        = 5000000
+const filtroPreco      = ref([0, PRECO_MAX])
 const apenasEstoque    = ref(false)
 const ordenacao        = ref('relevancia')
 const viewMode         = ref('grid')
@@ -922,6 +887,9 @@ const coresBase = [
 
 /* ── Sidebar style ── */
 const sidebarStyle = computed(() => {
+  // No mobile a sidebar é position:fixed (CSS cuida disso) — esse "top/height"
+  // calculado só se aplica no desktop, onde ela é sticky.
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) return {}
   const navH = getComputedStyle(document.documentElement).getPropertyValue('--navbar-h').trim() || '72px'
   return {
     top:      `calc(${navH} + ${toolbarHeight.value}px)`,
@@ -944,8 +912,8 @@ const heroStats = computed(() => [
 /* ── Filtros ── */
 const produtosFiltrados = computed(() => {
   let lista = [...todos.value]
-  if (busca.value.trim()) {
-    const q = busca.value.toLowerCase().trim()
+  if (buscaDebounced.value.trim()) {
+    const q = buscaDebounced.value.toLowerCase().trim()
     lista = lista.filter(p =>
       p.nome?.toLowerCase().includes(q) ||
       p.marca?.toLowerCase().includes(q) ||
@@ -972,8 +940,8 @@ const produtosPaginados = computed(() => {
   return produtosFiltrados.value.slice(s, s+POR_PAGINA)
 })
 const temFiltros = computed(() =>
-  busca.value || categoriasAtivas.value.length || apenasEstoque.value ||
-  filtroPreco.value[0] > 0 || filtroPreco.value[1] < 5000000
+  !!buscaDebounced.value || categoriasAtivas.value.length || apenasEstoque.value ||
+  filtroPreco.value[0] > 0 || filtroPreco.value[1] < PRECO_MAX
 )
 const paginasVisiveis = computed(() => {
   const t = totalPaginas.value, c = pagina.value
@@ -1010,7 +978,7 @@ const produtosRelacionados = computed(() => {
   return todos.value.filter(p => p.categoria===produtoModal.value.categoria && (p._id||p.id)!==(produtoModal.value._id||produtoModal.value.id)).slice(0,3)
 })
 
-/* ── Persistência ── */
+/* ── Persistência local ── */
 function salvarWishlist() { try { localStorage.setItem('noir_wishlist', JSON.stringify(wishlist.value)) } catch {} }
 function carregarWishlist() { try { const r=localStorage.getItem('noir_wishlist'); if(r) wishlist.value=JSON.parse(r) } catch {} }
 function salvarSaved() {
@@ -1023,10 +991,30 @@ function carregarSaved() { try { const r=localStorage.getItem('noir_saved'); if(
 watch(wishlist, salvarWishlist, {deep:true})
 watch(savedItems, salvarSaved, {deep:true})
 
-/* ── Watchers ── */
-watch(()=>route.query.q, q=>{if(q){busca.value=String(q);pagina.value=1}})
-watch(()=>route.query.cat, cat=>{if(cat){categoriasAtivas.value=[String(cat)];pagina.value=1}})
-watch([busca,categoriasAtivas,filtroPreco,apenasEstoque,ordenacao],()=>{pagina.value=1})
+/* ── Debounce de busca ── */
+watch(busca, (val) => {
+  clearTimeout(buscaTimer)
+  buscaTimer = setTimeout(() => { buscaDebounced.value = val; pagina.value = 1 }, 280)
+})
+
+/* ── Watchers de filtro → reset de página ── */
+watch([categoriasAtivas, filtroPreco, apenasEstoque, ordenacao], () => { pagina.value = 1 }, { deep: true })
+
+/* ── Sincronização com a URL (lê ao entrar / navegar) ── */
+watch(() => route.query.q,   q   => { if (q !== undefined) busca.value = String(q || '') })
+watch(() => route.query.cat, cat => { if (cat) categoriasAtivas.value = [String(cat)] })
+
+/* ── Sincronização com a URL (escreve quando filtros mudam) ── */
+let suprimirSyncUrl = false
+watch([buscaDebounced, categoriasAtivas, ordenacao], () => {
+  if (suprimirSyncUrl) return
+  const query = {}
+  if (buscaDebounced.value) query.q = buscaDebounced.value
+  if (categoriasAtivas.value.length) query.cat = categoriasAtivas.value[0]
+  if (ordenacao.value !== 'relevancia') query.sort = ordenacao.value
+  router.replace({ path: route.path, query }).catch(() => {})
+}, { deep: true })
+
 watch(produtosPaginados, async()=>{
   cardRefs.value={}
   await nextTick()
@@ -1053,12 +1041,19 @@ function toggleCat(cat) {
   else categoriasAtivas.value.splice(i,1)
 }
 function clampPreco() {
-  if (filtroPreco.value[0] > filtroPreco.value[1]-500)
-    filtroPreco.value[0] = filtroPreco.value[1]-500
+  // garante números válidos (input numérico pode vir vazio/NaN)
+  if (Number.isNaN(filtroPreco.value[0]) || filtroPreco.value[0] < 0) filtroPreco.value[0] = 0
+  if (Number.isNaN(filtroPreco.value[1]) || filtroPreco.value[1] > PRECO_MAX) filtroPreco.value[1] = PRECO_MAX
+  if (filtroPreco.value[0] > filtroPreco.value[1] - 1000)
+    filtroPreco.value[0] = Math.max(0, filtroPreco.value[1] - 1000)
 }
 function limparFiltros() {
-  busca.value=''; categoriasAtivas.value=[]; filtroPreco.value=[0,5000000]
+  suprimirSyncUrl = true
+  busca.value=''; buscaDebounced.value=''
+  categoriasAtivas.value=[]; filtroPreco.value=[0,PRECO_MAX]
   apenasEstoque.value=false; ordenacao.value='relevancia'; pagina.value=1
+  router.replace({ path: route.path, query: {} }).catch(() => {})
+  nextTick(() => { suprimirSyncUrl = false })
 }
 function irPag(p) {
   pagina.value=p
@@ -1078,13 +1073,9 @@ function toggleSaved(p) {
   else { savedItems.value=[...savedItems.value,{...p}]; mostrarToast('後で買う · Salvo para depois ◆') }
 }
 
-/* ── Carrinho ── */
+/* ── Carrinho — agora funciona logado ou não ── */
 function addToCart(p) {
   if (!p?.estoque) return
-  if (!auth.isLogado) {
-    window.dispatchEvent(new CustomEvent('abrir-modal-auth', { detail: 'login' }))
-    return
-  }
   const key = p._id || p.id
   if (addedIds.value.includes(key)) return
   const quantidade = modalAberto.value ? qtd.value : 1
@@ -1119,8 +1110,11 @@ function abrirModal(p) {
   nextTick(()=>animarModal())
 }
 function fecharModal() {
-  if (!modalEl.value) { modalAberto.value=false; document.body.style.overflow=''; return }
-  gsap.to(modalEl.value, {opacity:0, scale:.96, y:16, duration:.3, ease:'power2.in', onComplete:()=>{ modalAberto.value=false; zoomAtivo.value=false; document.body.style.overflow='' }})
+  if (!modalEl.value) { modalAberto.value=false; document.body.style.overflow = sidebarOpen.value ? 'hidden' : ''; return }
+  gsap.to(modalEl.value, {opacity:0, scale:.96, y:16, duration:.3, ease:'power2.in', onComplete:()=>{
+    modalAberto.value=false; zoomAtivo.value=false
+    document.body.style.overflow = sidebarOpen.value ? 'hidden' : ''
+  }})
 }
 function selecionarCor(cor) { corSelecionada.value=cor.nome; modalBgColor.value=cor.hex }
 function selecionarStorage(opt) { storageSelecionado.value=opt }
@@ -1133,6 +1127,12 @@ async function enviarNotify() {
   notifySent.value=true; mostrarToast('入荷時に通知します ◆')
   setTimeout(()=>{notifyModal.value=false},2200)
 }
+
+/* ── Mobile: trava o scroll do body quando a sidebar de filtros abre ── */
+watch(sidebarOpen, (open) => {
+  if (open) document.body.style.overflow = 'hidden'
+  else if (!modalAberto.value) document.body.style.overflow = ''
+})
 
 /* ── GSAP ── */
 function animarHero() {
@@ -1168,6 +1168,9 @@ function animarModal() {
 
 function initTilt() {
   nextTick(()=>{
+    // Em telas de toque o tilt 3D atrapalha mais do que ajuda — pula nesses casos
+    const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+    if (isTouch) return
     Object.entries(cardRefs.value).forEach(([idx,el])=>{
       if (!el||el._tiltBound) return
       el._tiltBound=true
@@ -1191,7 +1194,7 @@ function initTilt() {
   })
 }
 
-/* ── Scroll ── */
+/* ── Scroll / resize ── */
 const onScroll=()=>{ scrolled.value=window.scrollY>60 }
 function handleKeydown(e) {
   if (e.key!=='Escape') return
@@ -1205,16 +1208,26 @@ function handleKeydown(e) {
   }
 }
 const measureToolbar=()=>{ if(toolbarRef.value) toolbarHeight.value=toolbarRef.value.offsetHeight }
+// Fecha a sidebar mobile automaticamente se a tela crescer para desktop
+const onResize = () => {
+  measureToolbar()
+  if (window.innerWidth > 768 && sidebarOpen.value) sidebarOpen.value = false
+}
 
 onMounted(async()=>{
   if (!cart.synced) cart.init()
   await produtosStore.recarregar()
   loading.value=false
-  if (route.query.q) busca.value=String(route.query.q)
-  if (route.query.cat) categoriasAtivas.value=[String(route.query.cat)]
+
+  suprimirSyncUrl = true
+  if (route.query.q)   { busca.value = String(route.query.q); buscaDebounced.value = String(route.query.q) }
+  if (route.query.cat) categoriasAtivas.value = [String(route.query.cat)]
+  if (route.query.sort) ordenacao.value = String(route.query.sort)
+  nextTick(() => { suprimirSyncUrl = false })
+
   carregarWishlist(); carregarSaved()
   window.addEventListener('scroll',onScroll,{passive:true})
-  window.addEventListener('resize',measureToolbar,{passive:true})
+  window.addEventListener('resize',onResize,{passive:true})
   window.addEventListener('keydown',handleKeydown)
   window.addEventListener('saved-items-updated',e=>{ if(e.detail) savedItems.value=e.detail })
   await nextTick()
@@ -1224,9 +1237,10 @@ onMounted(async()=>{
 
 onBeforeUnmount(()=>{
   window.removeEventListener('scroll',onScroll)
-  window.removeEventListener('resize',measureToolbar)
+  window.removeEventListener('resize',onResize)
   window.removeEventListener('keydown',handleKeydown)
   clearTimeout(toastTimer)
+  clearTimeout(buscaTimer)
   ScrollTrigger.getAll().forEach(t=>t.kill())
   document.body.style.overflow=''
 })
@@ -1269,40 +1283,18 @@ onBeforeUnmount(()=>{
   overflow-x:    hidden;
 }
 
-/* ══ FUNDO GLOBAL — DNA do footer ══ */
+/* ══ FUNDO GLOBAL ══ */
 .store__bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-
-/* Kamons — igual ao footer __kamon */
-.store__kamon {
-  position:absolute;
-  font-family:var(--f-jp);
-  font-weight:200;
-  color:var(--or);
-  pointer-events:none;
-  user-select:none;
-  line-height:1;
-}
+.store__kamon { position:absolute; font-family:var(--f-jp); font-weight:200; color:var(--or); pointer-events:none; user-select:none; line-height:1; }
 .store__kamon--1 { font-size:clamp(200px,28vw,380px); bottom:-80px; right:-60px; opacity:.022; animation:kamonDrift 22s ease-in-out infinite; }
 .store__kamon--2 { font-size:clamp(120px,16vw,220px); top:10%; left:-40px; opacity:.016; animation:kamonDrift 28s ease-in-out infinite reverse; }
 .store__kamon--3 { font-size:clamp(80px,10vw,140px); top:42%; left:42%; opacity:.012; animation:kamonDrift 18s ease-in-out infinite; }
 @keyframes kamonDrift { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(1deg)} }
 
-/* Realm line — idêntica ao footer */
-.store__realm-line {
-  position:absolute; top:0; left:0; right:0; height:.5px;
-  background:linear-gradient(90deg, transparent 0%, transparent 6%, var(--or2,.6) 20%, var(--or) 50%, var(--or2,.6) 80%, transparent 94%, transparent 100%);
-  opacity:.65;
-}
+.store__realm-line { position:absolute; top:0; left:0; right:0; height:.5px; background:linear-gradient(90deg, transparent 0%, transparent 6%, var(--or2,.6) 20%, var(--or) 50%, var(--or2,.6) 80%, transparent 94%, transparent 100%); opacity:.65; }
 
-/* Washi — igual ao banner */
-.store__washi {
-  position:absolute; inset:0; opacity:.8;
-  background:
-    repeating-linear-gradient(90deg,rgba(255,255,255,.008) 0,rgba(255,255,255,.008) 1px,transparent 1px,transparent 54px),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.006) 0,rgba(255,255,255,.006) 1px,transparent 1px,transparent 42px);
-}
+.store__washi { position:absolute; inset:0; opacity:.8; background: repeating-linear-gradient(90deg,rgba(255,255,255,.008) 0,rgba(255,255,255,.008) 1px,transparent 1px,transparent 54px), repeating-linear-gradient(0deg,rgba(255,255,255,.006) 0,rgba(255,255,255,.006) 1px,transparent 1px,transparent 42px); }
 
-/* Fog */
 .store__fog { position:absolute; pointer-events:none; border-radius:50%; filter:blur(90px); }
 .store__fog--1 { width:70vw; height:70vw; bottom:-30vw; left:-15vw; background:radial-gradient(circle,rgba(6,6,13,.9) 0%,transparent 70%); animation:fogDrift1 20s ease-in-out infinite; }
 .store__fog--2 { width:45vw; height:45vw; top:-12vw; right:10vw; background:radial-gradient(circle,rgba(245,166,35,.018) 0%,transparent 70%); animation:fogDrift2 26s ease-in-out infinite; }
@@ -1310,123 +1302,49 @@ onBeforeUnmount(()=>{
 @keyframes fogDrift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(16px,16px)} }
 
 /* ══ HERO ══ */
-.store__hero {
-  position:relative; z-index:2;
-  padding:calc(var(--navbar-h,72px) + 64px) 80px 0;
-  border-bottom:.5px solid var(--hair2);
-  overflow:hidden;
-}
+.store__hero { position:relative; z-index:2; padding:calc(var(--navbar-h,72px) + 64px) 80px 0; border-bottom:.5px solid var(--hair2); overflow:hidden; }
+.store__edge-line { position:absolute; left:calc(6% - 1px); top:0; bottom:0; width:.5px; background:linear-gradient(to bottom,transparent 0%,var(--hair) 22%,var(--hair) 78%,transparent 100%); z-index:3; pointer-events:none; }
+.store__edge-num { position:absolute; top:calc(var(--navbar-h,72px)+40px); left:50%; transform:translateX(-50%) rotate(-90deg); font-family:var(--f-mono); font-size:7px; letter-spacing:.3em; color:var(--or); opacity:.32; white-space:nowrap; }
 
-/* Linha editorial — igual ao banner */
-.store__edge-line {
-  position:absolute; left:calc(6% - 1px); top:0; bottom:0; width:.5px;
-  background:linear-gradient(to bottom,transparent 0%,var(--hair) 22%,var(--hair) 78%,transparent 100%);
-  z-index:3; pointer-events:none;
-}
-.store__edge-num {
-  position:absolute; top:calc(var(--navbar-h,72px)+40px);
-  left:50%; transform:translateX(-50%) rotate(-90deg);
-  font-family:var(--f-mono); font-size:7px; letter-spacing:.3em;
-  color:var(--or); opacity:.32; white-space:nowrap;
-}
-
-/* HUD direito — igual ao banner */
-.store__hud {
-  position:absolute; right:28px; top:50%;
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  transform:translateY(-50%) rotate(90deg);
-  z-index:3; pointer-events:none;
-}
+.store__hud { position:absolute; right:28px; top:50%; display:flex; flex-direction:column; align-items:center; gap:8px; transform:translateY(-50%) rotate(90deg); z-index:3; pointer-events:none; }
 .store__hud-label { font-size:7px; letter-spacing:.52em; text-transform:uppercase; color:var(--silk4); }
 .store__hud-sep   { width:18px; height:.5px; background:linear-gradient(90deg,transparent,var(--or),transparent); opacity:.32; }
 .store__hud-coord { font-family:var(--f-mono); font-size:7px; letter-spacing:.28em; text-transform:uppercase; color:var(--or); opacity:.48; }
 
-.store__hero-inner {
-  display:grid; grid-template-columns:1fr 320px; gap:64px; align-items:center;
-  padding-left:calc(6% + 28px);
-}
+.store__hero-inner { display:grid; grid-template-columns:1fr 320px; gap:64px; align-items:center; padding-left:calc(6% + 28px); }
 
-/* Kicker */
 .store__kicker { display:flex; flex-direction:column; align-items:flex-start; gap:7px; margin-bottom:22px; }
 .store__kicker-num { font-family:var(--f-mono); font-size:9px; letter-spacing:.3em; color:var(--or); opacity:.4; }
 .store__kicker-bar { width:.5px; height:38px; background:linear-gradient(to bottom,var(--or),transparent); opacity:.28; }
 
-/* Eyebrow — igual ao banner */
 .store__eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
 .store__ew-dot  { width:5px; height:5px; border-radius:50%; background:var(--lacre); opacity:.8; flex-shrink:0; animation:dotPulse 2.5s ease-in-out infinite; }
 .store__ew-text { font-size:8px; font-weight:600; letter-spacing:.52em; text-transform:uppercase; color:var(--or); opacity:.7; }
 @keyframes dotPulse { 0%,100%{box-shadow:0 0 0 0 rgba(193,18,31,0)} 50%{box-shadow:0 0 0 5px rgba(193,18,31,0)} }
 
-/* Título — igual ao banner */
 .store__titulo { display:flex; flex-direction:column; margin:0; line-height:1; margin-bottom:20px; }
-.store__t-thin {
-  font-family:var(--f-sans);
-  font-size:clamp(1.4rem,3.5vw,3rem);
-  font-weight:300; color:var(--silk3); letter-spacing:-.01em;
-  text-transform:uppercase; line-height:1; display:block;
-}
-.store__t-gold {
-  font-family:var(--f-serif);
-  font-size:clamp(3.5rem,9vw,8rem);
-  font-weight:300; font-style:italic;
-  background:var(--grad-texto, linear-gradient(135deg,var(--or) 0%,var(--or2) 55%,#FF7A20 100%));
-  background-size:200% auto;
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:goldShine 6s linear infinite;
-  line-height:.9; display:block;
-}
+.store__t-thin { font-family:var(--f-sans); font-size:clamp(1.4rem,3.5vw,3rem); font-weight:300; color:var(--silk3); letter-spacing:-.01em; text-transform:uppercase; line-height:1; display:block; }
+.store__t-gold { font-family:var(--f-serif); font-size:clamp(3.5rem,9vw,8rem); font-weight:300; font-style:italic; background:var(--grad-texto, linear-gradient(135deg,var(--or) 0%,var(--or2) 55%,#FF7A20 100%)); background-size:200% auto; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:goldShine 6s linear infinite; line-height:.9; display:block; }
 @keyframes goldShine { from{background-position:0% center} to{background-position:200% center} }
+.store__t-kanji { font-family:var(--f-jp); font-weight:200; font-size:clamp(.9rem,1.4vw,1.3rem); letter-spacing:10px; color:var(--or); opacity:.18; margin-top:10px; display:block; }
 
-.store__t-kanji {
-  font-family:var(--f-jp); font-weight:200;
-  font-size:clamp(.9rem,1.4vw,1.3rem);
-  letter-spacing:10px; color:var(--or); opacity:.18;
-  margin-top:10px; display:block;
-}
-
-/* Sep — igual ao banner */
 .store__sep { display:flex; align-items:center; gap:10px; width:200px; margin:0 0 18px; }
 .store__sep-line { flex:1; height:.5px; background:linear-gradient(to right,var(--lacre),transparent); opacity:.45; }
 .store__sep-line--r { background:linear-gradient(to left,var(--lacre),transparent); }
 .store__sep-gem { width:5px; height:5px; flex-shrink:0; border:.5px solid color-mix(in srgb,var(--lacre) 50%,transparent); transform:rotate(45deg); }
 
-.store__sub {
-  font-family:var(--f-mono); font-size:9px; letter-spacing:2px;
-  color:var(--silk4); text-transform:uppercase; margin-bottom:24px;
-}
+.store__sub { font-family:var(--f-mono); font-size:9px; letter-spacing:2px; color:var(--silk4); text-transform:uppercase; margin-bottom:24px; }
 
-/* Hero cats — estilo nb-link com fill */
 .store__hero-cats { display:flex; flex-wrap:wrap; gap:7px; }
-.store__hero-cat {
-  position:relative; overflow:hidden;
-  background:transparent; border:.5px solid var(--hair2);
-  padding:8px 16px;
-  font-family:var(--f-mono); font-size:8px; letter-spacing:3px; text-transform:uppercase;
-  color:var(--silk3); cursor:pointer; transition:color .45s; z-index:0;
-}
-.store__hero-cat-fill {
-  position:absolute; inset:0; transform:scaleX(0); transform-origin:left;
-  background:var(--or); transition:transform .5s var(--ease); z-index:-1;
-}
-.store__hero-cat:hover .store__hero-cat-fill,
-.store__hero-cat.is-active .store__hero-cat-fill { transform:scaleX(1); }
-.store__hero-cat:hover,
-.store__hero-cat.is-active { color:var(--void); border-color:var(--or); }
+.store__hero-cat { position:relative; overflow:hidden; background:transparent; border:.5px solid var(--hair2); padding:8px 16px; font-family:var(--f-mono); font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--silk3); cursor:pointer; transition:color .45s; z-index:0; }
+.store__hero-cat-fill { position:absolute; inset:0; transform:scaleX(0); transform-origin:left; background:var(--or); transition:transform .5s var(--ease); z-index:-1; }
+.store__hero-cat:hover .store__hero-cat-fill, .store__hero-cat.is-active .store__hero-cat-fill { transform:scaleX(1); }
+.store__hero-cat:hover, .store__hero-cat.is-active { color:var(--void); border-color:var(--or); }
 
-/* Stats — igual ao banner nb__stats */
 .store__hero-right { display:flex; flex-direction:column; gap:4px; position:relative; }
-.store__hanko {
-  position:absolute; right:-16px; top:-24px;
-  width:78px; height:78px;
-  opacity:.65; pointer-events:none;
-}
+.store__hanko { position:absolute; right:-16px; top:-24px; width:78px; height:78px; opacity:.65; pointer-events:none; }
 .store__stats { display:flex; flex-direction:column; gap:5px; margin-top:16px; }
-.store__stat {
-  background:rgba(245,166,35,.025); border:.5px solid var(--hair2);
-  padding:12px 14px; position:relative; overflow:hidden;
-  transition:border-color .25s,background .25s;
-}
+.store__stat { background:rgba(245,166,35,.025); border:.5px solid var(--hair2); padding:12px 14px; position:relative; overflow:hidden; transition:border-color .25s,background .25s; }
 .store__stat:hover { border-color:var(--hair); background:var(--gold3); }
 .store__stat::before { content:''; position:absolute; left:0; top:0; bottom:0; width:.5px; background:linear-gradient(to bottom,var(--or),transparent); opacity:0; transition:opacity .25s; }
 .store__stat:hover::before { opacity:1; }
@@ -1435,40 +1353,19 @@ onBeforeUnmount(()=>{
 .store__stat-num   { display:block; font-family:var(--f-serif); font-size:1.6rem; font-weight:300; font-style:italic; color:var(--or); }
 .store__stat-label { display:block; font-family:var(--f-mono); font-size:6.5px; letter-spacing:3px; text-transform:uppercase; color:var(--silk4); margin-top:2px; }
 
-/* Strip — como drawer__ornament mas full-width */
-.store__strip {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  border-top:.5px solid var(--hair2); margin:40px -80px 0; padding:0 80px;
-  position:relative; z-index:2;
-}
-.store__strip::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:.5px;
-  background:linear-gradient(90deg,transparent,var(--or2) 20%,var(--or) 50%,var(--or2) 80%,transparent);
-  opacity:.3;
-}
-.store__strip-item {
-  display:flex; align-items:center; gap:11px;
-  padding:16px 20px 16px 0; margin-right:20px;
-  border-right:.5px solid var(--hair2); position:relative;
-}
+.store__strip { display:grid; grid-template-columns:repeat(4,1fr); border-top:.5px solid var(--hair2); margin:40px -80px 0; padding:0 80px; position:relative; z-index:2; }
+.store__strip::before { content:''; position:absolute; top:0; left:0; right:0; height:.5px; background:linear-gradient(90deg,transparent,var(--or2) 20%,var(--or) 50%,var(--or2) 80%,transparent); opacity:.3; }
+.store__strip-item { display:flex; align-items:center; gap:11px; padding:16px 20px 16px 0; margin-right:20px; border-right:.5px solid var(--hair2); position:relative; }
 .store__strip-item:last-child { border-right:none; padding-right:0; margin-right:0; }
-.store__strip-icon {
-  width:32px; height:32px; border:.5px solid var(--hair2);
-  display:flex; align-items:center; justify-content:center;
-  color:var(--or); flex-shrink:0; transition:all .25s;
-}
+.store__strip-icon { width:32px; height:32px; border:.5px solid var(--hair2); display:flex; align-items:center; justify-content:center; color:var(--or); flex-shrink:0; transition:all .25s; }
 .store__strip-item:hover .store__strip-icon { border-color:var(--hair); background:var(--gold3); }
 .store__strip-title { font-size:10px; font-weight:600; color:var(--silk2); letter-spacing:.5px; margin-bottom:2px; }
 .store__strip-sub   { font-family:var(--f-mono); font-size:7.5px; color:var(--silk4); letter-spacing:1px; }
 .store__strip-kanji { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-family:var(--f-jp); font-size:24px; font-weight:200; color:var(--or); opacity:.06; pointer-events:none; transition:opacity .3s; }
 .store__strip-item:hover .store__strip-kanji { opacity:.14; }
 
-/* ══ TICKER — mesmo padrão do original ══ */
-.store__ticker {
-  background:var(--deep); border-bottom:.5px solid var(--hair2);
-  height:28px; display:flex; align-items:center; overflow:hidden;
-  position:relative; z-index:10;
-}
+/* ══ TICKER ══ */
+.store__ticker { background:var(--deep); border-bottom:.5px solid var(--hair2); height:28px; display:flex; align-items:center; overflow:hidden; position:relative; z-index:10; }
 .store__ticker::before,.store__ticker::after { content:''; position:absolute; top:0; bottom:0; width:60px; z-index:2; pointer-events:none; }
 .store__ticker::before { left:0; background:linear-gradient(to right,var(--deep),transparent); }
 .store__ticker::after  { right:0; background:linear-gradient(to left,var(--deep),transparent); }
@@ -1478,31 +1375,13 @@ onBeforeUnmount(()=>{
 .store__t-sep  { color:var(--or); font-size:5px; opacity:.35; flex-shrink:0; padding:0 3px; }
 @keyframes tickerMove { from{transform:translateX(0)} to{transform:translateX(-25%)} }
 
-/* ══ TOOLBAR — estilo navbar ══ */
-.store__toolbar {
-  position:sticky; top:0; z-index:50;
-  background:rgba(9,9,15,.94); backdrop-filter:blur(20px);
-  border-bottom:.5px solid var(--hair2);
-  transition:box-shadow .3s,border-color .3s;
-  overflow:hidden;
-}
-.store__toolbar-border {
-  position:absolute; top:0; left:0; right:0; height:.5px;
-  background:linear-gradient(90deg,transparent,var(--or2) 20%,var(--or) 50%,var(--or2) 80%,transparent);
-  opacity:.35; pointer-events:none;
-}
+/* ══ TOOLBAR ══ */
+.store__toolbar { position:sticky; top:0; z-index:50; background:rgba(9,9,15,.94); backdrop-filter:blur(20px); border-bottom:.5px solid var(--hair2); transition:box-shadow .3s,border-color .3s; overflow:hidden; }
+.store__toolbar-border { position:absolute; top:0; left:0; right:0; height:.5px; background:linear-gradient(90deg,transparent,var(--or2) 20%,var(--or) 50%,var(--or2) 80%,transparent); opacity:.35; pointer-events:none; }
 .store__toolbar.is-scrolled { box-shadow:0 4px 28px rgba(0,0,0,.22); border-bottom-color:var(--hair); }
-.store__toolbar-inner {
-  max-width:1600px; margin:0 auto; padding:10px 26px;
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-}
+.store__toolbar-inner { max-width:1600px; margin:0 auto; padding:10px 26px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 
-.store__search-wrap {
-  display:flex; align-items:center; gap:8px;
-  background:rgba(255,255,255,.025); border:.5px solid var(--hair2);
-  padding:8px 12px; min-width:190px; flex:1; max-width:300px;
-  transition:border-color .25s,box-shadow .25s;
-}
+.store__search-wrap { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.025); border:.5px solid var(--hair2); padding:8px 12px; min-width:190px; flex:1; max-width:300px; transition:border-color .25s,box-shadow .25s; }
 .store__search-wrap.is-focus { border-color:var(--hair); box-shadow:0 0 0 3px rgba(245,166,35,.04); }
 .store__search-wrap svg { color:var(--or); flex-shrink:0; opacity:.5; }
 .store__search-wrap input { background:none; border:none; outline:none; color:var(--silk); font-family:var(--f-mono); font-size:10px; width:100%; letter-spacing:.05em; }
@@ -1511,12 +1390,7 @@ onBeforeUnmount(()=>{
 .store__search-clear:hover { color:var(--or); }
 
 .store__chips { display:flex; gap:5px; flex-wrap:wrap; }
-.store__chip {
-  display:flex; align-items:center; gap:6px;
-  background:var(--gold3); border:.5px solid var(--hair);
-  padding:4px 10px; font-family:var(--f-mono); font-size:7px;
-  letter-spacing:2px; color:var(--or); cursor:pointer; transition:all .2s;
-}
+.store__chip { display:flex; align-items:center; gap:6px; background:var(--gold3); border:.5px solid var(--hair); padding:4px 10px; font-family:var(--f-mono); font-size:7px; letter-spacing:2px; color:var(--or); cursor:pointer; transition:all .2s; }
 .store__chip:hover { background:rgba(245,166,35,.12); }
 
 .store__toolbar-right { display:flex; align-items:center; gap:10px; margin-left:auto; }
@@ -1532,72 +1406,38 @@ onBeforeUnmount(()=>{
 .store__view-toggle button.is-active { border-color:var(--hair); color:var(--or); background:var(--gold3); }
 
 /* ══ LAYOUT ══ */
-.store__layout {
-  display:grid; grid-template-columns:230px 1fr;
-  max-width:1600px; margin:0 auto; min-height:70vh;
-  position:relative; z-index:2;
-}
+.store__layout { display:grid; grid-template-columns:230px 1fr; max-width:1600px; margin:0 auto; min-height:70vh; position:relative; z-index:2; }
 
-/* ══ SIDEBAR — estilo drawer ══ */
-.store__sidebar {
-  background:var(--deep); border-right:.5px solid var(--hair2);
-  padding:0; position:sticky;
-  display:flex; flex-direction:column;
-  transition:transform .35s var(--ease);
-  scrollbar-width:thin; scrollbar-color:rgba(245,166,35,.12) transparent;
-  overflow:hidden;
-}
+/* ══ SIDEBAR ══ */
+.store__sidebar { background:var(--deep); border-right:.5px solid var(--hair2); padding:0; position:sticky; display:flex; flex-direction:column; transition:transform .35s var(--ease); scrollbar-width:thin; scrollbar-color:rgba(245,166,35,.12) transparent; overflow:hidden; }
 .store__sidebar::-webkit-scrollbar { width:3px; }
 .store__sidebar::-webkit-scrollbar-thumb { background:rgba(245,166,35,.15); border-radius:2px; }
 
-/* Kamon like drawer-kamon */
-.store__sb-kamon {
-  position:absolute; bottom:80px; right:10px;
-  font-family:var(--f-jp); font-size:44px; font-weight:200;
-  color:var(--or); opacity:.038; pointer-events:none; z-index:0; line-height:1;
-}
+.store__sb-kamon { position:absolute; bottom:80px; right:10px; font-family:var(--f-jp); font-size:44px; font-weight:200; color:var(--or); opacity:.038; pointer-events:none; z-index:0; line-height:1; }
 
-/* Watermark como pref-watermark */
-.store__sb-watermark {
-  text-align:center; padding:12px 16px 16px; margin-top:auto;
-  font-family:var(--f-serif); font-size:8px; font-style:italic;
-  letter-spacing:.5em; text-transform:uppercase; line-height:1.7;
-  color:var(--or); opacity:.09; pointer-events:none; user-select:none;
-  position:relative; z-index:1;
-}
+.store__sb-watermark { text-align:center; padding:12px 16px 16px; margin-top:auto; font-family:var(--f-serif); font-size:8px; font-style:italic; letter-spacing:.5em; text-transform:uppercase; line-height:1.7; color:var(--or); opacity:.09; pointer-events:none; user-select:none; position:relative; z-index:1; }
 
 .store__sb-close-m { display:none; background:none; border:none; color:var(--silk4); font-family:var(--f-mono); font-size:8px; letter-spacing:3px; cursor:pointer; padding:14px 16px 0; text-align:left; }
 .store__sb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.78); z-index:98; opacity:0; transition:opacity .3s; backdrop-filter:blur(6px); }
 .store__sb-overlay.is-vis { display:block; opacity:1; }
 
-/* Ornamento da sidebar — como drawer__ornament */
 .store__sb-ornament { display:flex; align-items:center; gap:10px; padding:16px 16px 10px; position:relative; z-index:1; }
 .store__sb-orn-line { flex:1; height:.5px; background:linear-gradient(90deg,var(--or),transparent); opacity:.18; }
 .store__sb-orn-line--r { background:linear-gradient(270deg,var(--or),transparent); }
 .store__sb-orn-kanji { font-family:var(--f-jp); font-size:13px; color:var(--or); opacity:.28; line-height:1; flex-shrink:0; }
 
 .store__sb-sec { padding:0 16px; position:relative; z-index:1; flex-shrink:0; }
-.store__sb-lbl {
-  font-family:var(--f-mono); font-size:6px; letter-spacing:5px; color:var(--or);
-  margin-bottom:10px; display:flex; align-items:center; gap:7px;
-  text-transform:uppercase; opacity:.7;
-}
+.store__sb-lbl { font-family:var(--f-mono); font-size:6px; letter-spacing:5px; color:var(--or); margin-bottom:10px; display:flex; align-items:center; gap:7px; text-transform:uppercase; opacity:.7; }
 .store__sb-lbl-kanji { font-family:var(--f-jp); font-size:13px; font-weight:200; color:var(--or); opacity:.6; letter-spacing:0; line-height:1; }
 .store__sb-count { font-family:var(--f-mono); font-size:8px; color:var(--silk4); margin-left:5px; }
 
-/* Sep como footer ft__sep */
 .store__sb-sep { display:flex; align-items:center; gap:10px; padding:12px 16px; position:relative; z-index:1; }
 .store__sb-sep-line { flex:1; height:.5px; background:linear-gradient(90deg,transparent,rgba(245,166,35,.18)); }
 .store__sb-sep-line--r { background:linear-gradient(to left,transparent,rgba(245,166,35,.18)); }
 .store__sb-sep-kanji { font-family:var(--f-jp); font-size:11px; font-weight:200; color:var(--or); opacity:.28; flex-shrink:0; line-height:1; }
 
 .store__sb-cats { display:flex; flex-direction:column; gap:1px; }
-.store__sb-cat {
-  display:flex; align-items:center; justify-content:space-between; gap:7px;
-  background:none; border:.5px solid transparent; padding:7px 8px;
-  cursor:pointer; width:100%; font-family:var(--f-sans); font-size:10.5px;
-  color:var(--silk3); transition:all .2s; position:relative;
-}
+.store__sb-cat { display:flex; align-items:center; justify-content:space-between; gap:7px; background:none; border:.5px solid transparent; padding:7px 8px; cursor:pointer; width:100%; font-family:var(--f-sans); font-size:10.5px; color:var(--silk3); transition:all .2s; position:relative; }
 .store__sb-cat::before { content:''; position:absolute; left:0; top:6px; bottom:6px; width:.5px; background:var(--or); opacity:0; transition:opacity .2s; }
 .store__sb-cat:hover { background:var(--gold3); color:var(--silk2); padding-left:12px; }
 .store__sb-cat:hover::before { opacity:.6; }
@@ -1607,10 +1447,34 @@ onBeforeUnmount(()=>{
 .store__sb-cat.is-active .store__sb-cat-check { opacity:1; }
 .store__sb-cat-n { font-family:var(--f-mono); font-size:8px; color:var(--silk4); margin-left:auto; }
 
-.store__sb-preco-vals { display:flex; justify-content:space-between; font-family:var(--f-mono); font-size:9px; color:var(--silk4); margin-bottom:8px; }
-.store__sb-ranges { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-.store__sb-range { width:100%; height:2px; -webkit-appearance:none; background:rgba(245,166,35,.15); border-radius:2px; cursor:pointer; accent-color:var(--or); }
-.store__sb-range::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:var(--or); cursor:pointer; border:2px solid var(--void); box-shadow:0 0 6px rgba(245,166,35,.25); }
+/* Inputs numéricos de preço */
+.store__sb-preco-inputs { display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+.store__sb-preco-field { display:flex; align-items:center; gap:4px; flex:1; background:rgba(255,255,255,.025); border:.5px solid var(--hair2); padding:5px 7px; transition:border-color .2s; }
+.store__sb-preco-field:focus-within { border-color:var(--hair); }
+.store__sb-preco-field span { font-family:var(--f-mono); font-size:8px; color:var(--silk4); flex-shrink:0; }
+.store__sb-preco-field input { width:100%; min-width:0; background:none; border:none; outline:none; color:var(--silk2); font-family:var(--f-mono); font-size:9px; -moz-appearance:textfield; }
+.store__sb-preco-field input::-webkit-outer-spin-button,
+.store__sb-preco-field input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+.store__sb-preco-dash { color:var(--silk4); font-size:9px; flex-shrink:0; }
+
+/* Dual range — pointer-events só no thumb para conseguir mexer nos dois */
+.store__sb-ranges { position:relative; height:18px; margin-bottom:10px; }
+.store__sb-range {
+  position:absolute; left:0; top:7px; width:100%; height:2px;
+  -webkit-appearance:none; appearance:none;
+  background:rgba(245,166,35,.15); border-radius:2px;
+  pointer-events:none; margin:0;
+}
+.store__sb-range::-webkit-slider-thumb {
+  -webkit-appearance:none; pointer-events:all;
+  width:12px; height:12px; border-radius:50%; background:var(--or);
+  cursor:pointer; border:2px solid var(--void); box-shadow:0 0 6px rgba(245,166,35,.25);
+}
+.store__sb-range::-moz-range-thumb {
+  pointer-events:all; width:12px; height:12px; border-radius:50%;
+  background:var(--or); cursor:pointer; border:2px solid var(--void); box-shadow:0 0 6px rgba(245,166,35,.25);
+}
+.store__sb-range::-moz-range-track { background:transparent; }
 
 .store__sb-toggle-row { display:flex; align-items:center; gap:9px; cursor:pointer; }
 .store__sb-toggle { width:32px; height:18px; border-radius:18px; background:rgba(245,166,35,.06); border:.5px solid var(--hair2); position:relative; transition:background .2s; flex-shrink:0; }
@@ -1619,14 +1483,7 @@ onBeforeUnmount(()=>{
 .store__sb-toggle.is-on .store__sb-toggle-thumb { left:16px; }
 .store__sb-toggle-row span { font-size:10px; color:var(--silk3); }
 
-/* Apply button — como drawer checkout */
-.store__sb-apply {
-  position:relative; overflow:hidden;
-  background:transparent; border:.5px solid var(--or); border-radius:0;
-  font-family:var(--f-mono); font-size:7px; letter-spacing:3px; text-transform:uppercase;
-  color:var(--or); padding:9px; cursor:pointer; width:100%; margin-top:10px;
-  transition:color .45s; z-index:0;
-}
+.store__sb-apply { position:relative; overflow:hidden; background:transparent; border:.5px solid var(--or); border-radius:0; font-family:var(--f-mono); font-size:7px; letter-spacing:3px; text-transform:uppercase; color:var(--or); padding:9px; cursor:pointer; width:100%; margin-top:10px; transition:color .45s; z-index:0; }
 .store__sb-apply::before { content:''; position:absolute; inset:0; background:var(--or); transform:scaleX(0); transform-origin:left; transition:transform .5s var(--ease); z-index:-1; }
 .store__sb-apply:hover::before { transform:scaleX(1); }
 .store__sb-apply:hover { color:var(--void); }
@@ -1656,7 +1513,6 @@ onBeforeUnmount(()=>{
 
 .store__cat-erro { display:flex; flex-direction:column; align-items:center; gap:14px; padding:72px 0; font-size:12px; color:rgba(239,68,68,.7); text-align:center; }
 
-/* Vazio — estilo drawer__vazio */
 .store__cat-vazio { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:80px 40px; text-align:center; }
 .store__vazio-ico { width:64px; height:64px; border:.5px solid var(--hair2); display:flex; align-items:center; justify-content:center; position:relative; }
 .store__vazio-ico::before { content:''; position:absolute; top:-1px; left:-1px; width:10px; height:10px; border-top:.5px solid var(--or); border-left:.5px solid var(--or); }
@@ -1666,51 +1522,28 @@ onBeforeUnmount(()=>{
 .store__vazio-sub    { font-family:var(--f-sans); font-size:11px; font-weight:300; color:var(--silk4); line-height:1.7; max-width:200px; }
 
 /* ══ GRID ══ */
-.store__grid--grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:0; border-top:.5px solid var(--hair2); border-left:.5px solid var(--hair2);
-}
+.store__grid--grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0; border-top:.5px solid var(--hair2); border-left:.5px solid var(--hair2); }
 .store__grid--list { display:flex; flex-direction:column; gap:0; border-top:.5px solid var(--hair2); }
 
-/* ══ CARD — DNA do drawer di + estilo próprio ══ */
-.store__card {
-  background:var(--deep); border-right:.5px solid var(--hair2); border-bottom:.5px solid var(--hair2);
-  overflow:hidden; cursor:pointer; display:flex; flex-direction:column; position:relative;
-  transform:translateY(12px); opacity:0;
-  animation:cardReveal .7s var(--card-delay, 0ms) var(--ease) forwards;
-  transition:border-color .3s,box-shadow .35s,background .3s;
-  transform-style:preserve-3d; will-change:transform;
-}
+.store__card { background:var(--deep); border-right:.5px solid var(--hair2); border-bottom:.5px solid var(--hair2); overflow:hidden; cursor:pointer; display:flex; flex-direction:column; position:relative; transform:translateY(12px); opacity:0; animation:cardReveal .7s var(--card-delay, 0ms) var(--ease) forwards; transition:border-color .3s,box-shadow .35s,background .3s; transform-style:preserve-3d; will-change:transform; }
 @keyframes cardReveal { to{opacity:1;transform:translateY(0)} }
 
-.store__card:hover {
-  background:rgba(245,166,35,.018);
-  box-shadow:0 8px 32px rgba(245,166,35,.055),0 2px 8px rgba(0,0,0,.22);
-  border-color:var(--hair);
-}
+.store__card:hover { background:rgba(245,166,35,.018); box-shadow:0 8px 32px rgba(245,166,35,.055),0 2px 8px rgba(0,0,0,.22); border-color:var(--hair); }
 .store__card--esgotado { opacity:.6; }
 .store__card--list { flex-direction:row; }
 .store__card--list .store__card-img-wrap { width:190px; flex-shrink:0; aspect-ratio:auto; height:auto; }
 .store__card--list .store__card-info     { padding:20px 24px; }
 
-/* Cantos decorativos — como drawer__vazio__ico */
 .store__card-corner { position:absolute; z-index:5; width:10px; height:10px; border-color:rgba(245,166,35,0); border-style:solid; pointer-events:none; transition:border-color .3s; }
 .store__card-corner--tl { top:6px; left:6px; border-width:1px 0 0 1px; }
 .store__card-corner--br { bottom:6px; right:6px; border-width:0 1px 1px 0; }
 .store__card:hover .store__card-corner { border-color:rgba(245,166,35,.3); }
 
-/* Número — como di__num */
 .store__card-num { position:absolute; top:8px; left:10px; z-index:4; font-family:var(--f-jp); font-size:11px; color:var(--or); opacity:.22; line-height:1; pointer-events:none; transition:opacity .3s; }
 .store__card:hover .store__card-num { opacity:.45; }
 
-/* Imagem */
 .store__card-img-wrap { position:relative; aspect-ratio:4/3; overflow:hidden; flex-shrink:0; }
-.store__card-fallback {
-  position:absolute; inset:0; z-index:0;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-  background:linear-gradient(135deg,var(--deep) 0%,rgba(245,166,35,.025) 100%);
-  pointer-events:none;
-}
+.store__card-fallback { position:absolute; inset:0; z-index:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg,var(--deep) 0%,rgba(245,166,35,.025) 100%); pointer-events:none; }
 .store__card-fb-letra { font-family:var(--f-serif); font-size:2.2rem; font-style:italic; font-weight:300; color:var(--or); opacity:.22; line-height:1; }
 .store__card-fb-kanji { font-family:var(--f-jp); font-size:.9rem; font-weight:200; color:var(--or); opacity:.12; letter-spacing:2px; }
 .store__card-fb-cat   { font-family:var(--f-mono); font-size:5px; letter-spacing:4px; text-transform:uppercase; color:var(--silk4); }
@@ -1726,20 +1559,16 @@ onBeforeUnmount(()=>{
 
 .store__card-urgencia { position:absolute; bottom:8px; left:8px; z-index:4; font-family:var(--f-mono); font-size:6px; letter-spacing:1.5px; text-transform:uppercase; background:rgba(0,0,0,.75); border:.5px solid rgba(239,68,68,.4); color:rgba(239,68,68,.85); padding:3px 8px; }
 
-/* Badges — estilo nb-cart__badge mas para produto */
 .store__badge { position:absolute; top:10px; left:10px; z-index:4; font-family:var(--f-mono); font-size:6px; font-weight:700; letter-spacing:2px; padding:3px 8px; text-transform:uppercase; }
 .store__badge--ltd,.store__badge--novo { background:var(--or); color:var(--void); }
 .store__badge--esgo { background:rgba(0,0,0,.7); border:.5px solid var(--hair2); color:var(--silk4); }
 
-/* Quick actions */
 .store__card-quick { position:absolute; top:10px; right:10px; z-index:4; display:flex; flex-direction:column; gap:4px; opacity:0; transform:translateX(6px); transition:opacity .25s,transform .25s; }
 .store__card:hover .store__card-quick { opacity:1; transform:translateX(0); }
 .store__quick-btn { width:26px; height:26px; background:rgba(0,0,0,.6); backdrop-filter:blur(5px); border:.5px solid var(--hair2); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .25s; color:var(--or); }
 .store__quick-btn:hover,.store__quick-btn.is-active { border-color:var(--hair); background:var(--gold3); transform:scale(1.08); }
 
-/* Card info */
 .store__card-info { padding:14px 16px 16px; display:flex; flex-direction:column; gap:2px; flex:1; }
-/* Cat — como di__cat */
 .store__card-cat   { font-size:7px; letter-spacing:.5em; text-transform:uppercase; color:var(--or); opacity:.6; font-family:var(--f-mono); }
 .store__card-marca { font-family:var(--f-mono); font-size:6.5px; letter-spacing:3px; color:var(--or); text-transform:uppercase; opacity:.55; }
 .store__card-nome  { font-size:12.5px; font-weight:500; color:var(--silk); line-height:1.4; min-height:2.8em; flex:1; }
@@ -1748,28 +1577,17 @@ onBeforeUnmount(()=>{
 .store__card-swatch { width:10px; height:10px; border-radius:50%; border:.5px solid rgba(255,255,255,.12); }
 .store__card-swatch-more { font-family:var(--f-mono); font-size:7px; color:var(--silk4); }
 
-/* Bottom — como di__foot */
 .store__card-bottom { display:flex; align-items:flex-end; justify-content:space-between; margin-top:auto; padding-top:10px; border-top:.5px solid var(--hair2); }
 .store__card-preco  { font-family:var(--f-serif); font-size:1.1rem; color:var(--silk); font-weight:300; }
 .store__card-parcela { font-family:var(--f-mono); font-size:7.5px; color:var(--silk4); margin-top:2px; }
 
-/* Add button — estilo drawer checkout compacto */
-.store__card-add {
-  position:relative; overflow:hidden;
-  width:34px; height:34px; flex-shrink:0;
-  background:transparent; border:.5px solid var(--hair2);
-  color:var(--or); cursor:pointer; display:flex; align-items:center; justify-content:center;
-  transition:color .45s; z-index:0;
-}
+.store__card-add { position:relative; overflow:hidden; width:34px; height:34px; flex-shrink:0; background:transparent; border:.5px solid var(--hair2); color:var(--or); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:color .45s; z-index:0; }
 .store__card-add-fill { position:absolute; inset:0; background:var(--or); transform:scale(0); transform-origin:center; border-radius:50%; transition:transform .4s var(--ease); z-index:-1; }
-.store__card-add:hover:not(:disabled) .store__card-add-fill,
-.store__card-add.is-added .store__card-add-fill { transform:scale(1.5); border-radius:0; }
-.store__card-add:hover:not(:disabled),
-.store__card-add.is-added { color:var(--void); border-color:var(--or); }
+.store__card-add:hover:not(:disabled) .store__card-add-fill, .store__card-add.is-added .store__card-add-fill { transform:scale(1.5); border-radius:0; }
+.store__card-add:hover:not(:disabled), .store__card-add.is-added { color:var(--void); border-color:var(--or); }
 .store__card-add:disabled { opacity:.28; cursor:not-allowed; }
 .store__card-add svg { position:relative; z-index:1; }
 
-/* Skeleton */
 .store__card--skel { pointer-events:none; animation:none !important; opacity:1 !important; transform:none !important; border-right:.5px solid var(--hair2); border-bottom:.5px solid var(--hair2); }
 .store__skel-img { aspect-ratio:4/3; background:linear-gradient(90deg,rgba(245,166,35,.04) 25%,rgba(245,166,35,.07) 50%,rgba(245,166,35,.04) 75%); background-size:200% 100%; animation:shimmerSkel 1.8s infinite; }
 .store__sk-line { height:8px; border-radius:1px; margin-bottom:7px; background:linear-gradient(90deg,rgba(245,166,35,.04) 25%,rgba(245,166,35,.07) 50%,rgba(245,166,35,.04) 75%); background-size:200% 100%; animation:shimmerSkel 1.8s infinite; }
@@ -1777,13 +1595,13 @@ onBeforeUnmount(()=>{
 .store__sk-line--xs { width:30%; }
 @keyframes shimmerSkel { from{background-position:0% 50%} to{background-position:200% 50%} }
 
-/* ══ PAGINAÇÃO — estilo nb-link ══ */
+/* ══ PAGINAÇÃO ══ */
 .store__pag-sep { display:flex; align-items:center; gap:16px; margin:44px 0 24px; }
 .store__pag-sep-line { flex:1; height:.5px; background:linear-gradient(90deg,transparent,rgba(245,166,35,.18)); }
 .store__pag-sep-line--r { background:linear-gradient(to left,transparent,rgba(245,166,35,.18)); }
 .store__pag-sep-kanji { font-family:var(--f-jp); font-size:11px; font-weight:200; color:var(--or); opacity:.28; flex-shrink:0; line-height:1; }
 
-.store__paginacao { display:flex; justify-content:center; align-items:center; gap:5px; margin-bottom:12px; }
+.store__paginacao { display:flex; justify-content:center; align-items:center; gap:5px; margin-bottom:12px; flex-wrap:wrap; }
 .store__pag-btn { width:36px; height:36px; background:transparent; border:.5px solid var(--hair2); color:var(--silk4); cursor:pointer; font-family:var(--f-mono); font-size:10px; display:flex; align-items:center; justify-content:center; transition:all .25s; position:relative; overflow:hidden; }
 .store__pag-btn::before { content:''; position:absolute; inset:0; background:var(--or); transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ease); z-index:-1; }
 .store__pag-btn:hover:not(:disabled)::before { transform:scaleX(1); }
@@ -1794,15 +1612,8 @@ onBeforeUnmount(()=>{
 .store__pag-ellipsis { font-family:var(--f-mono); font-size:10px; color:var(--silk4); padding:0 4px; }
 .store__pag-info { text-align:center; margin-top:8px; font-family:var(--f-mono); font-size:7px; letter-spacing:3px; color:var(--silk4); }
 
-/* ══ TOAST — igual ao sistema global ══ */
-.store-toast {
-  position:fixed; bottom:24px; right:24px; z-index:99999;
-  display:flex; align-items:center; gap:10px;
-  min-width:260px; max-width:320px;
-  background:var(--deep); border:.5px solid var(--hair);
-  padding:13px 14px; overflow:hidden;
-  box-shadow:0 12px 36px rgba(0,0,0,.55);
-}
+/* ══ TOAST ══ */
+.store-toast { position:fixed; bottom:24px; right:24px; z-index:99999; display:flex; align-items:center; gap:10px; min-width:260px; max-width:320px; background:var(--deep); border:.5px solid var(--hair); padding:13px 14px; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,.55); }
 .store-toast::before { content:''; position:absolute; top:0; left:0; right:0; height:.5px; background:linear-gradient(90deg,transparent,var(--toast-accent,var(--or)),transparent); opacity:.7; }
 .store-toast--success { --toast-accent:#22c55e; }
 .store-toast--info    { --toast-accent:var(--or); }
@@ -1817,31 +1628,18 @@ onBeforeUnmount(()=>{
 .toast-slide-leave-active { transition:opacity .25s,transform .3s; }
 .toast-slide-enter-from,.toast-slide-leave-to { opacity:0; transform:translateX(20px) scale(.96); }
 
-/* ══ MODAL — DNA do auth-modal ══ */
-.store__modal-bg {
-  position:fixed; inset:0; z-index:9000;
-  background:rgba(0,0,0,.86); backdrop-filter:blur(22px);
-  display:flex; align-items:center; justify-content:center; padding:18px;
-}
+/* ══ MODAL ══ */
+.store__modal-bg { position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,.86); backdrop-filter:blur(22px); display:flex; align-items:center; justify-content:center; padding:18px; }
 .store__modal-bg--sm { }
 .modal-fade-enter-active,.modal-fade-leave-active { transition:opacity .3s; }
 .modal-fade-enter-from,.modal-fade-leave-to { opacity:0; }
 
-.store__modal {
-  background:var(--deep); border:.5px solid var(--hair);
-  position:relative; max-width:1000px; width:100%; max-height:92vh;
-  overflow-y:auto;
-  box-shadow:0 0 0 1px rgba(245,166,35,.04),0 60px 120px rgba(0,0,0,.65);
-  scrollbar-width:thin; scrollbar-color:rgba(245,166,35,.12) transparent;
-}
+.store__modal { background:var(--deep); border:.5px solid var(--hair); position:relative; max-width:1000px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 0 0 1px rgba(245,166,35,.04),0 60px 120px rgba(0,0,0,.65); scrollbar-width:thin; scrollbar-color:rgba(245,166,35,.12) transparent; }
 
-/* Kamon watermark — como no drawer */
 .store__modal-kamon { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:var(--f-jp); font-size:200px; font-weight:200; color:var(--or); opacity:.016; pointer-events:none; z-index:0; user-select:none; line-height:1; }
 
-/* Realm line — como no footer */
 .store__modal-realm-line { position:absolute; top:0; left:0; right:0; height:.5px; background:linear-gradient(90deg,transparent,var(--or2) 20%,var(--or) 50%,var(--or2) 80%,transparent); opacity:.7; z-index:2; }
 
-/* Cantos — como auth-modal */
 .store__mc { position:absolute; z-index:10; width:20px; height:20px; border-color:rgba(245,166,35,.25); border-style:solid; pointer-events:none; transition:border-color .4s; }
 .store__mc--tl { top:10px; left:10px; border-width:1.5px 0 0 1.5px; }
 .store__mc--tr { top:10px; right:10px; border-width:1.5px 1.5px 0 0; }
@@ -1854,7 +1652,6 @@ onBeforeUnmount(()=>{
 
 .store__modal-layout { display:grid; grid-template-columns:50% 50%; position:relative; z-index:1; min-height:520px; }
 
-/* Col imagem */
 .store__modal-img-col { display:flex; flex-direction:column; background:rgba(0,0,0,.14); border-right:.5px solid rgba(245,166,35,.06); }
 .store__modal-viewer  { position:relative; flex:1; min-height:320px; overflow:hidden; background:var(--void); }
 .store__modal-fallback { position:absolute; inset:0; z-index:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:linear-gradient(135deg,var(--void) 0%,rgba(245,166,35,.02) 100%); pointer-events:none; }
@@ -1877,16 +1674,13 @@ onBeforeUnmount(()=>{
 .store__modal-thumb img { width:100%; height:38px; object-fit:cover; display:block; }
 .store__modal-thumb-fb { width:100%; height:38px; display:flex; align-items:center; justify-content:center; font-family:var(--f-serif); font-size:.9rem; font-style:italic; color:var(--or); opacity:.3; }
 
-/* Col info */
 .store__modal-info { padding:32px 28px 24px; display:flex; flex-direction:column; background:var(--deep); position:relative; overflow:hidden; }
 
-/* Ornamento — como drawer__ornament */
 .store__modal-ornament { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
 .store__mo-line { flex:1; height:.5px; background:linear-gradient(90deg,var(--or),transparent); opacity:.2; }
 .store__mo-line--r { background:linear-gradient(270deg,var(--or),transparent); }
 .store__mo-kanji { font-family:var(--f-jp); font-size:14px; color:var(--or); opacity:.25; line-height:1; flex-shrink:0; }
 
-/* Eyebrow como banner */
 .store__modal-eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
 .store__mey-dot { width:4px; height:4px; border-radius:50%; background:var(--lacre); opacity:.75; flex-shrink:0; }
 .store__mey-txt { font-size:7px; letter-spacing:6px; font-weight:700; text-transform:uppercase; background:linear-gradient(135deg,var(--or),var(--or2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -1895,7 +1689,6 @@ onBeforeUnmount(()=>{
 .store__modal-marca  { font-family:var(--f-mono); font-size:8px; letter-spacing:3px; color:var(--silk4); text-transform:uppercase; }
 .store__modal-marca strong { color:var(--silk3); font-weight:400; }
 
-/* Divider — como ft__sep */
 .store__modal-divider { display:flex; align-items:center; gap:10px; margin:16px 0; }
 .store__md-line { flex:1; height:.5px; background:linear-gradient(90deg,transparent,rgba(245,166,35,.2)); }
 .store__md-line--r { background:linear-gradient(to left,transparent,rgba(245,166,35,.2)); }
@@ -1903,7 +1696,6 @@ onBeforeUnmount(()=>{
 
 .store__modal-desc { font-size:11.5px; color:var(--silk4); line-height:1.9; margin-bottom:18px; font-weight:300; }
 
-/* Specs — como store spec rows (dt-row) */
 .store__modal-specs  { margin-bottom:18px; }
 .store__specs-hd { font-family:var(--f-mono); font-size:6px; letter-spacing:5px; text-transform:uppercase; color:var(--or); opacity:.6; margin-bottom:10px; display:flex; align-items:center; gap:7px; }
 .store__specs-hd::after { content:''; flex:1; height:.5px; background:linear-gradient(to right,rgba(245,166,35,.2),transparent); }
@@ -1916,7 +1708,6 @@ onBeforeUnmount(()=>{
 .store__spec-dots { flex:1; height:.5px; min-width:10px; background:repeating-linear-gradient(90deg,rgba(245,166,35,.12) 0,rgba(245,166,35,.12) 2px,transparent 2px,transparent 5px); margin-bottom:1px; }
 .store__spec-v    { font-size:11px; color:var(--silk3); text-align:right; }
 
-/* Quantidade */
 .store__modal-qty-wrap { margin-bottom:16px; }
 .store__modal-opt-lbl { font-family:var(--f-mono); font-size:6px; letter-spacing:4px; text-transform:uppercase; color:var(--or); opacity:.68; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
 .store__modal-sel  { font-style:normal; color:var(--silk3); font-size:7px; letter-spacing:2px; opacity:.8; }
@@ -1926,7 +1717,6 @@ onBeforeUnmount(()=>{
 .store__qty-btn:disabled { opacity:.2; cursor:not-allowed; }
 .store__qty-val { font-family:var(--f-mono); font-size:11px; color:var(--silk); min-width:36px; height:28px; display:flex; align-items:center; justify-content:center; border-left:.5px solid var(--hair2); border-right:.5px solid var(--hair2); letter-spacing:.1em; }
 
-/* Variantes */
 .store__modal-variant { margin-bottom:16px; padding-top:14px; border-top:.5px solid rgba(245,166,35,.06); }
 .store__modal-swatches { display:flex; gap:8px; flex-wrap:wrap; }
 .store__modal-swatch { width:22px; height:22px; border-radius:50%; border:1.5px solid transparent; cursor:pointer; transition:transform .25s,box-shadow .25s,border-color .25s; }
@@ -1937,7 +1727,6 @@ onBeforeUnmount(()=>{
 .store__modal-storage-btn:hover,.store__modal-storage-btn.is-active { border-color:var(--hair); color:var(--or); background:var(--gold3); }
 .store__storage-diff { font-size:7px; color:var(--or); opacity:.7; }
 
-/* Preço — como dt-row--total */
 .store__modal-preco-wrap { margin-bottom:20px; padding:16px 0; border-top:.5px solid rgba(245,166,35,.06); }
 .store__modal-preco-hd { display:flex; align-items:center; gap:7px; margin-bottom:7px; }
 .store__mp-kanji { font-family:var(--f-jp); font-size:16px; font-weight:200; color:var(--or); opacity:.5; line-height:1; }
@@ -1949,16 +1738,8 @@ onBeforeUnmount(()=>{
 .store__modal-parcela { font-family:var(--f-mono); font-size:9px; color:var(--silk4); margin-top:4px; display:flex; gap:7px; flex-wrap:wrap; }
 .store__modal-parcela span { color:rgba(245,166,35,.35); }
 
-/* Ações — estilo drawer checkout */
 .store__modal-actions { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
-.store__modal-add {
-  flex:1; min-width:160px; position:relative; overflow:hidden;
-  background:transparent; border:.5px solid var(--or); border-radius:0;
-  font-family:var(--f-mono); font-size:7.5px; font-weight:700; letter-spacing:3.5px;
-  color:var(--or); padding:13px 18px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  transition:color .45s; z-index:0; text-transform:uppercase;
-}
+.store__modal-add { flex:1; min-width:160px; position:relative; overflow:hidden; background:transparent; border:.5px solid var(--or); border-radius:0; font-family:var(--f-mono); font-size:7.5px; font-weight:700; letter-spacing:3.5px; color:var(--or); padding:13px 18px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:color .45s; z-index:0; text-transform:uppercase; }
 .store__modal-add-fill { position:absolute; inset:0; background:var(--or); transform:scaleX(0); transform-origin:left; transition:transform .55s var(--ease); z-index:-1; }
 .store__modal-add:hover:not(:disabled) .store__modal-add-fill { transform:scaleX(1); }
 .store__modal-add:hover:not(:disabled) { color:var(--void); }
@@ -1972,7 +1753,6 @@ onBeforeUnmount(()=>{
 .store__modal-icon-btn { width:42px; flex-shrink:0; background:var(--gold3); border:.5px solid var(--hair2); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .25s; color:var(--or); }
 .store__modal-icon-btn:hover,.store__modal-icon-btn.is-active { border-color:var(--hair); background:rgba(245,166,35,.1); transform:scale(1.05); }
 
-/* Relacionados */
 .store__modal-rel { margin-top:20px; padding-top:16px; border-top:.5px solid rgba(245,166,35,.06); }
 .store__modal-rel-hd { font-family:var(--f-mono); font-size:6px; letter-spacing:5px; text-transform:uppercase; color:var(--or); opacity:.58; margin-bottom:12px; display:flex; align-items:center; gap:7px; }
 .store__rel-kanji { font-family:var(--f-jp); font-size:11px; font-weight:200; color:var(--or); opacity:.65; letter-spacing:0; line-height:1; }
@@ -2041,7 +1821,7 @@ onBeforeUnmount(()=>{
 @media (max-width:768px) {
   .store__sidebar {
     position:fixed !important; top:0 !important; left:0 !important; bottom:0 !important;
-    width:290px; z-index:99; transform:translateX(-100%);
+    width:min(290px, 84vw); z-index:99; transform:translateX(-100%);
     padding:0; height:100vh !important; overflow-y:auto !important;
   }
   .store__sidebar.is-open { transform:translateX(0); }
@@ -2054,8 +1834,13 @@ onBeforeUnmount(()=>{
   .store__strip-item:nth-child(2) { border-right:none; }
   .store__strip-item:nth-child(3) { border-top:.5px solid var(--hair2); }
   .store__toolbar-inner { padding:9px 14px; }
+  .store__search-wrap { max-width:none; min-width:0; }
+  .store__toolbar-right { width:100%; justify-content:space-between; margin-left:0; }
   .store__catalogo { padding:18px; }
   .store__modal-rel-grid { grid-template-columns:1fr 1fr; }
+  .store__modal-actions { flex-direction:column; }
+  .store__modal-add { min-width:0; width:100%; }
+  .store__modal-icon-btn { width:100%; height:38px; }
 }
 @media (max-width:480px) {
   .store__hero { padding:calc(var(--navbar-h,70px)+24px) 16px 0; }
@@ -2064,6 +1849,9 @@ onBeforeUnmount(()=>{
   .store__strip { grid-template-columns:1fr 1fr; }
   .store__grid--grid { grid-template-columns:repeat(2,1fr); }
   .store__modal-rel-grid { grid-template-columns:1fr; }
+  .store__card-img-wrap { aspect-ratio:1/1; }
+  .store__card-nome { font-size:11.5px; }
+  .store__card-preco { font-size:.95rem; }
 }
 @media (prefers-reduced-motion:reduce) {
   .store__t-gold,.store__modal-preco em,.store__ticker-track,.store__kamon,
