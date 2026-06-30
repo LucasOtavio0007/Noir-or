@@ -174,6 +174,10 @@
                     <span>通知 · Notificações</span>
                     <button @click="marcarTodasLidas" class="adm-notif-panel__mark">Marcar lidas</button>
                   </div>
+                  <button class="btn btn--ghost btn--sm" @click="exportarRelatorioWord" :disabled="exportandoWord">
+  <span v-if="exportandoWord" class="adm-spinner adm-spinner--sm"></span>
+  {{ exportandoWord ? 'Gerando…' : '↓ Relatório Word' }}
+</button>
                   <div v-if="!notificacoes.length" class="adm-notif-panel__vazio">Nenhuma notificação</div>
                   <div v-for="n in notificacoes" :key="n.id"
                     :class="['adm-notif-item', { 'adm-notif-item--nova': !n.lida }]"
@@ -253,6 +257,10 @@
                 <span class="adm-card__kanji">売</span>
                 <div><p class="adm-card__titulo">Receita Mensal</p><p class="adm-card__sub">{{ anoAtual }}</p></div>
                 <button class="btn btn--ghost btn--sm" style="margin-left:auto" @click="exportarReceitaCSV">↓ CSV</button>
+                <button class="btn btn--ghost btn--sm" style="margin-left:auto" @click="exportarReceitaCSV">↓ CSV</button>
+<button class="btn btn--ghost btn--sm" @click="exportarRelatorioWord" :disabled="exportandoWord">
+  {{ exportandoWord ? 'Gerando…' : '↓ Word' }}
+</button>
               </div>
               <div class="adm-card__body">
                 <div class="adm-bar">
@@ -1374,6 +1382,11 @@ import { useProdutosStore } from '@/stores/produtos.js'
 import { useSiteStore }     from '@/stores/site.js'
 import api from '@/api.js'
 
+import {
+  Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+  AlignmentType, HeadingLevel, WidthType, ShadingType
+} from 'docx'
+
 // ─── Diretiva click-outside ───────────────────────────────────────────────────
 const vClickOutside = {
   mounted(el, binding) {
@@ -1541,6 +1554,158 @@ const exportarPedidosCSV = () => {
   downloadCSV([cols,...rows],`pedidos_${Date.now()}.csv`)
 }
 
+// ─── EXPORT WORD (Relatório Completo) ────────────────────────────────────────
+const exportandoWord = ref(false)
+
+const wTitulo = (text) => new Paragraph({
+  heading: HeadingLevel.HEADING_1,
+  spacing: { before: 300, after: 160 },
+  children: [new TextRun({ text, bold: true })]
+})
+const wSubtitulo = (text) => new Paragraph({
+  heading: HeadingLevel.HEADING_2,
+  spacing: { before: 220, after: 120 },
+  children: [new TextRun({ text, bold: true })]
+})
+
+const wCell = (text, opts = {}) => new TableCell({
+  width: { size: opts.width || 2000, type: WidthType.DXA },
+  shading: opts.header ? { fill: 'C8A84B', type: ShadingType.CLEAR } : undefined,
+  margins: { top: 80, bottom: 80, left: 100, right: 100 },
+  children: [new Paragraph({
+    children: [new TextRun({ text: String(text ?? '—'), bold: !!opts.header, color: opts.header ? 'FFFFFF' : undefined })]
+  })]
+})
+
+const wTabela = (headers, rows, widths) => new Table({
+  width: { size: widths.reduce((a, b) => a + b, 0), type: WidthType.DXA },
+  columnWidths: widths,
+  rows: [
+    new TableRow({ children: headers.map((h, i) => wCell(h, { header: true, width: widths[i] })) }),
+    ...rows.map(r => new TableRow({ children: r.map((c, i) => wCell(c, { width: widths[i] })) }))
+  ]
+})
+
+const exportarRelatorioWord = async () => {
+  exportandoWord.value = true
+  try {
+    const children = []
+
+    // Capa
+    children.push(
+      new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 600, after: 100 },
+        children: [new TextRun({ text: 'Noir & Or', bold: true, size: 48 })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 400 },
+        children: [new TextRun({ text: `Relatório Administrativo · ${new Date().toLocaleDateString('pt-BR')}`, size: 24, color: '666666' })] }),
+    )
+
+    // Resumo geral
+    children.push(wTitulo('Resumo Geral'))
+    children.push(wTabela(
+      ['Métrica', 'Valor'],
+      [
+        ['Receita Total', `R$ ${fmt(receitaTotal.value)}`],
+        ['Total de Pedidos', String(todosPedidos.value.length)],
+        ['Pedidos Pendentes', String(todosPedidos.value.filter(p => p.status === 'pendente').length)],
+        ['Total de Usuários', String(todosUsuarios.value.length)],
+        ['Total de Produtos', String(todosProdutos.value.length)],
+        ['Produtos Esgotados', String(todosProdutos.value.filter(p => !p.estoque || p.estoque <= 0).length)],
+        ['Ticket Médio', ticketMedio.value],
+        ['Taxa de Conversão', `${taxaConversao.value}%`],
+      ],
+      [4680, 4680]
+    ))
+
+    // Receita mensal
+    children.push(wSubtitulo('Receita Mensal'))
+    children.push(wTabela(
+      ['Mês', 'Receita (R$)'],
+      MESES_FULL.map((m, i) => [m, fmtNum(revenueData.value[i])]),
+      [4680, 4680]
+    ))
+
+    // Pedidos
+    children.push(wTitulo('Pedidos'))
+    children.push(wTabela(
+      ['ID', 'Cliente', 'Total', 'Status', 'Data'],
+      pedidosFiltrados.value.slice(0, 200).map(p => [
+        `#${(p._id || '').slice(-8).toUpperCase()}`,
+        p.cliente?.nome || '—',
+        `R$ ${fmt(p.total)}`,
+        statusLabel(p.status),
+        fmtDate(p.criadoEm),
+      ]),
+      [1700, 2900, 1700, 1700, 1360]
+    ))
+
+    // Produtos
+    children.push(wTitulo('Produtos'))
+    children.push(wTabela(
+      ['Nome', 'Categoria', 'Preço', 'Estoque'],
+      produtosFiltrados.value.slice(0, 200).map(p => [
+        p.nome, p.categoria, `R$ ${fmt(p.preco)}`, String(p.estoque ?? 0)
+      ]),
+      [4000, 2360, 1500, 1500]
+    ))
+
+    // Usuários
+    children.push(wTitulo('Usuários'))
+    children.push(wTabela(
+      ['Nome', 'E-mail', 'Role', 'Cadastro'],
+      usuariosFiltrados.value.slice(0, 200).map(u => [
+        `${u.nome} ${u.sobrenome || ''}`.trim(),
+        mascararEmail(u.email),
+        u.role === 'admin' ? 'ADMIN' : 'USER',
+        fmtDate(u.criadoEm),
+      ]),
+      [3000, 3360, 1500, 1500]
+    ))
+
+    // Cupons
+    if (cupons.value.length) {
+      children.push(wTitulo('Cupons'))
+      children.push(wTabela(
+        ['Código', 'Tipo', 'Valor', 'Uso', 'Status'],
+        cupons.value.map(c => [
+          c.codigo,
+          c.tipo === 'pct' ? 'Percentual' : c.tipo === 'frete' ? 'Frete Grátis' : 'Valor Fixo',
+          c.tipo === 'pct' ? `${c.valor}%` : c.tipo === 'frete' ? '—' : `R$ ${fmt(c.valor)}`,
+          `${c.usos || 0} / ${c.limiteTotal || '∞'}`,
+          c.ativo ? 'Ativo' : 'Inativo',
+        ]),
+        [1872, 1872, 1872, 1872, 1872]
+      ))
+    }
+
+    const doc = new Document({
+      styles: { default: { document: { run: { font: 'Arial', size: 22 } } } },
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+          }
+        },
+        children
+      }]
+    })
+
+    const blob = await Packer.toBlob(doc)
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `relatorio_noir_or_${Date.now()}.docx`
+    a.click()
+    URL.revokeObjectURL(a.href)
+
+    mostrarToast('Relatório Word gerado!', '', 'sucesso')
+    registrarLog('Relatório Word exportado')
+  } catch (e) {
+    console.error(e)
+    mostrarToast('Erro ao gerar relatório Word.', '', 'erro')
+  } finally {
+    exportandoWord.value = false
+  }
+}
 // ═══════════════════ DASHBOARD ═══════════════════
 const pedidosRecentes = ref([])
 const revenueData = computed(() => {
