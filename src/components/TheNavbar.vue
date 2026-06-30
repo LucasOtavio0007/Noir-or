@@ -993,29 +993,9 @@
           </div>
 
           <footer class="drawer__footer">
-            <div class="drawer__cupom" v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
-              <div v-if="!cupomAplicado" class="cupom-row">
-                <input v-model="cupomCodigo" type="text" placeholder="Código do cupom" class="cupom-input" @keydown.enter="aplicarCupom" />
-                <button class="cupom-btn" :disabled="cupomLoading" @click="aplicarCupom">
-                  <span v-if="cupomLoading" class="or-spinner-sm"></span>
-                  <span v-else>Aplicar</span>
-                </button>
-              </div>
-              <div v-else class="cupom-aplicado">
-                <span class="cupom-aplicado__txt">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  Cupom <strong>{{ cupomAplicado.codigo }}</strong> aplicado · −R$ {{ fmt(cupomAplicado.desconto) }}
-                </span>
-                <button class="cupom-aplicado__remover" @click="removerCupom" aria-label="Remover cupom">✗</button>
-              </div>
-              <p v-if="cupomErro" class="cupom-erro">{{ cupomErro }}</p>
-            </div>
-
             <template v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
               <div class="drawer__totais">
-                <div class="dt-row"><span>Subtotal</span><span>R$ {{ totalPreco }}</span></div>
-                <div class="dt-row" v-if="cupomAplicado"><span>Desconto</span><span style="color:#22c55e">− R$ {{ fmt(cupomAplicado.desconto) }}</span></div>
-                <div class="dt-row dt-row--total"><span>Total</span><span>R$ {{ fmt(totalComDesconto) }}</span></div>
+                <div class="dt-row dt-row--total"><span>Total</span><span>R$ {{ totalPreco }}</span></div>
               </div>
             </template>
             <button class="drawer__checkout" :disabled="!auth.isLogado || !cartItems.length" @click="irParaCheckout">
@@ -1103,7 +1083,7 @@
         <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
-        Sua resposta é salva neste dispositivo
+        Sua resposta é salva nesta conta
       </p>
     </div>
   </div>
@@ -1180,41 +1160,6 @@ let cameraStream    = null
 /* ── Drawer ── */
 const drawerTab  = ref('carrinho')
 const savedItems = ref([])
-
-/* ── Cupom ── */
-const cupomCodigo   = ref('')
-const cupomAplicado = ref(null) // { codigo, desconto }
-const cupomErro     = ref('')
-const cupomLoading  = ref(false)
-
-const totalComDesconto = computed(() => {
-  const total = cart.totalBruto ?? cartItems.value.reduce((s, i) => s + (i.preco * i.qty), 0)
-  if (!cupomAplicado.value) return total
-  return Math.max(0, total - cupomAplicado.value.desconto)
-})
-
-const aplicarCupom = async () => {
-  cupomErro.value = ''
-  const codigo = cupomCodigo.value.trim().toUpperCase()
-  if (!codigo) { cupomErro.value = 'Digite um código de cupom.'; return }
-  cupomLoading.value = true
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/cupons/validar`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ codigo, itens: cart.items })
-    })
-    const data = await res.json()
-    if (!res.ok || !data.valido) { cupomErro.value = data.mensagem || 'Cupom inválido ou expirado.'; cupomAplicado.value = null; return }
-    cupomAplicado.value = { codigo, desconto: data.desconto }
-    addToast('Cupom aplicado', `${codigo} — R$ ${fmt(data.desconto)} de desconto`, 'success')
-  } catch {
-    cupomErro.value = 'Não foi possível validar o cupom agora.'
-  } finally {
-    cupomLoading.value = false
-  }
-}
-const removerCupom = () => { cupomAplicado.value = null; cupomCodigo.value = ''; cupomErro.value = '' }
 
 /* ── Busca ── */
 const searchOpen     = ref(false)
@@ -1327,14 +1272,14 @@ const totalPreco = computed(() => cart.totalBrutoFmt)
 const fmt = (v) => (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
 /* ── Ações de item do carrinho ── */
-const verDetalhesItem = (item) => {
+const irParaProdutoModal = (item, editar = false) => {
   cartOpen.value = false
-  router.push(`/produto/${item.id || item._id}`)
+  const destino = item.categoria === 'GAMING' ? '/gamer' : '/loja'
+  router.push({ path: destino, query: { produto: item.id || item._id, ...(editar ? { editar: '1' } : {}) } })
 }
-const editarItem = (item) => {
-  cartOpen.value = false
-  router.push({ path: `/produto/${item.id || item._id}`, query: { editar: '1' } })
-}
+const verDetalhesItem = (item) => irParaProdutoModal(item)
+const editarItem = (item) => irParaProdutoModal(item, true)
+
 const salvarParaDepois = (item) => {
   if (!savedItems.value.some(i => (i.id || i._id) === (item.id || item._id))) {
     savedItems.value.push({ ...item })
@@ -1788,13 +1733,28 @@ const abrirComprasFuturas = () => { userDropOpen.value = false; cartOpen.value =
 const irParaConta        = () => { userDropOpen.value = false; sidebarOpen.value = false; router.push('/configuracoes?secao=pedidos') }
 const changeQty          = (item, d) => cart.alterarQty(item.id || item._id, d)
 const removeItem         = (id) => { cart.remover(id); addToast('Item removido', '', 'info') }
-const irParaCheckout     = () => {
-  if (!auth.isLogado) {
-    window.__noirRetomarCheckoutAposLogin = true
-    cartOpen.value = false
-    openModal('login', true, 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.')
-    return
-  }
+
+/* ── Verificação de idade (por usuário) ── */
+const chaveIdadeUsuario = () => `_nor_age_ok_${auth.user?._id || auth.user?.id || auth.user?.email || 'anon'}`
+
+const jaConfirmouIdade = () => {
+  try { return !!localStorage.getItem(chaveIdadeUsuario()) } catch { return false }
+}
+const salvarConfirmacaoIdade = () => {
+  try { localStorage.setItem(chaveIdadeUsuario(), '1') } catch {}
+}
+const confirmarIdade = () => {
+  salvarConfirmacaoIdade()
+  idadeConfirmada.value = true
+  idadeModalOpen.value = false
+  finalizarPedido()
+}
+const recusarIdade = () => {
+  idadeModalOpen.value = false
+  addToast('Acesso restrito', 'Este site é destinado a maiores de 18 anos.', 'error')
+}
+
+const finalizarPedido = () => {
   const items = JSON.parse(JSON.stringify(cart.items))
   if (!items.length) return
   cartOpen.value = false
@@ -1802,25 +1762,21 @@ const irParaCheckout     = () => {
   window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
 }
 
-/* ── Verificação de idade ── */
-const CHAVE_IDADE = '_nor_age_ok'
+const irParaCheckout = () => {
+  if (!auth.isLogado) {
+    window.__noirRetomarCheckoutAposLogin = true
+    cartOpen.value = false
+    openModal('login', true, 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.')
+    return
+  }
+  if (!jaConfirmouIdade()) {
+    cartOpen.value = false
+    idadeModalOpen.value = true
+    return
+  }
+  finalizarPedido()
+}
 
-const jaConfirmouIdade = () => {
-  try { return !!localStorage.getItem(CHAVE_IDADE) } catch { return false }
-}
-const salvarConfirmacaoIdade = () => {
-  try { localStorage.setItem(CHAVE_IDADE, '1') } catch {}
-}
-const confirmarIdade = () => {
-  salvarConfirmacaoIdade()
-  idadeConfirmada.value  = true
-  idadeModalOpen.value   = false
-  prosseguirCheckout()
-}
-const recusarIdade = () => {
-  idadeModalOpen.value = false
-  addToast('Acesso restrito', 'Este site é destinado a maiores de 18 anos.', 'error')
-}
 const prosseguirCheckout = () => {
   if (!auth.isLogado) {
     window.__noirRetomarCheckoutAposLogin = true
@@ -1828,11 +1784,12 @@ const prosseguirCheckout = () => {
     openModal('login', true, 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.')
     return
   }
-  const items = JSON.parse(JSON.stringify(cart.items))
-  if (!items.length) return
-  cartOpen.value = false
-  window.__noirCarrinho = items
-  window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
+  if (!jaConfirmouIdade()) {
+    cartOpen.value = false
+    idadeModalOpen.value = true
+    return
+  }
+  finalizarPedido()
 }
 
 /* ── Ouve pedidos de login vindos de outras páginas (ex: tela de checkout) ── */
@@ -2646,27 +2603,20 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .di__qty button:hover { background:var(--or-gold);color:var(--or-void); }
 .di__qty span { font-family:var(--or-font-num);font-size:10px;color:var(--or-silk);min-width:28px;text-align:center;height:22px;display:flex;align-items:center;justify-content:center;border-left:0.5px solid var(--or-hair-2);border-right:0.5px solid var(--or-hair-2); }
 .di__preco { font-family:var(--or-font-num);font-size:11px;color:var(--or-gold); }
-.di__remover { background:none;border:none;color:var(--or-silk-4);cursor:pointer;padding:2px;display:flex;transition:color .25s;align-self:flex-start;margin-top:2px; }
-.di__remover:hover { color:rgba(220,80,80,.7); }
+.di__remover {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(239,68,68,.06); border:0.5px solid rgba(239,68,68,.35);
+  color:rgba(239,68,68,.85); cursor:pointer; padding:5px 9px;
+  font-family:var(--font-sans); font-size:8px; letter-spacing:.15em; text-transform:uppercase;
+  align-self:flex-start; transition:all .2s;
+}
+.di__remover:hover { background:rgba(239,68,68,.14); border-color:rgba(239,68,68,.6); color:#ef4444; }
 .di__mover { display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;margin-top:0;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:color .25s;color:var(--or-gold);opacity:.7; }
 .di__mover:hover { opacity:1; }
 .di__actions { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
 .di__action { display:flex; align-items:center; gap:4px; background:none; border:none; padding:0; cursor:pointer; font-family:var(--font-sans); font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--or-silk-3); transition:color .2s; }
 .di__action:hover { color:var(--or-gold); }
 .drawer__footer { padding:18px 32px 26px;border-top:0.5px solid var(--or-hair-2);flex-shrink:0;background:var(--or-void);position:relative;z-index:1; }
-.drawer__cupom { margin-bottom:14px; }
-.cupom-row { display:flex; gap:8px; }
-.cupom-input { flex:1; background:transparent; border:0.5px solid var(--or-hair-2); padding:9px 12px; font-family:var(--font-sans); font-size:11px; color:var(--or-silk); outline:none; transition:border-color .25s; }
-.cupom-input:focus { border-color:var(--or-gold); }
-.cupom-input::placeholder { color:var(--or-silk-4); }
-.cupom-btn { background:none; border:0.5px solid var(--or-gold); color:var(--or-gold); padding:0 16px; font-family:var(--font-sans); font-size:8px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; transition:all .25s; display:flex; align-items:center; justify-content:center; }
-.cupom-btn:hover:not(:disabled) { background:var(--or-gold); color:var(--or-void); }
-.cupom-btn:disabled { opacity:.4; cursor:not-allowed; }
-.cupom-aplicado { display:flex; align-items:center; justify-content:space-between; gap:8px; background:rgba(34,197,94,.06); border:0.5px solid rgba(34,197,94,.3); padding:8px 12px; }
-.cupom-aplicado__txt { display:flex; align-items:center; gap:7px; font-family:var(--font-sans); font-size:10px; color:rgba(34,197,94,.9); }
-.cupom-aplicado__txt svg { flex-shrink:0; }
-.cupom-aplicado__remover { background:none; border:none; color:rgba(34,197,94,.6); cursor:pointer; font-size:10px; }
-.cupom-erro { font-family:var(--font-sans); font-size:9px; color:rgba(239,68,68,.8); margin-top:6px; }
 .drawer__totais { margin-bottom:14px; }
 .dt-row { display:flex;justify-content:space-between;align-items:center;font-family:var(--font-sans);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--or-silk-3);margin-bottom:8px;padding-bottom:8px; }
 .dt-row span:last-child { font-family:var(--or-font-num);letter-spacing:.08em;text-transform:none;font-size:14px;color:var(--or-gold); }
