@@ -341,7 +341,7 @@ const abrirChat = async () => {
 
 const irParaSuporte = () => {
   menuAberto.value = false
-  router?.push?.('/contato')
+  router?.push?.('/suporte')
 }
 
 /* ── Scroll ── */
