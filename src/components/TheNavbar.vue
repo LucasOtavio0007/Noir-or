@@ -445,7 +445,7 @@
               <transition name="slide-down">
                 <div v-if="loginNecessario" class="auth-aviso" role="alert">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  <span>Faça login para adicionar ao carrinho</span>
+                  <span>{{ loginAvisoMsg }}</span>
                 </div>
               </transition>
 
@@ -684,6 +684,10 @@
                             <span class="id-upload-sub">JPG, PNG ou WEBP — máx. 5MB</span>
                           </div>
                         </label>
+                        <button type="button" class="id-upload-pc" @click="abrirSeletorArquivo('frente')">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          Selecionar do computador
+                        </button>
                       </div>
 
                       <!-- Upload RG Verso -->
@@ -706,7 +710,21 @@
                             <span class="id-upload-sub">JPG, PNG ou WEBP — máx. 5MB</span>
                           </div>
                         </label>
+                        <button type="button" class="id-upload-pc" @click="abrirSeletorArquivo('verso')">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          Selecionar do computador
+                        </button>
                       </div>
+
+                      <!-- Inputs ocultos usados pelo botão "Selecionar do computador" -->
+                      <input ref="fileInputFrente" type="file" accept="image/*" class="id-upload-input-hidden" @change="onFileRG($event, 'frente')" />
+                      <input ref="fileInputVerso" type="file" accept="image/*" class="id-upload-input-hidden" @change="onFileRG($event, 'verso')" />
+
+                      <!-- Botão de simulação (uso em desenvolvimento / TCC) -->
+                      <button type="button" class="af-btn-ghost id-btn-simular" @click="simularEnvioDocumento">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                        Simular envio de documentos (dev/TCC)
+                      </button>
 
                       <p v-if="formError" class="af-erro" role="alert">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -800,6 +818,10 @@
                         <button v-if="!cameraAtiva && !faceCapturada" type="button" class="af-submit" @click="iniciarCamera">
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                           Ativar câmera
+                        </button>
+                        <button v-if="!cameraAtiva && !faceCapturada" type="button" class="af-btn-ghost" @click="simularFaceMatch">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                          Simular selfie (dev/TCC)
                         </button>
                         <button v-else-if="cameraAtiva && !faceCapturada" type="button" class="af-submit" :disabled="faceScanning" @click="capturarSelfie">
                           <span v-if="faceScanning" class="or-spinner-sm"></span>
@@ -921,8 +943,22 @@
                     </div>
                     <span class="di__preco">R$ {{ fmt(item.preco * item.qty) }}</span>
                   </div>
+                  <div class="di__actions">
+                    <button class="di__action" @click="verDetalhesItem(item)" title="Ver detalhes">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Detalhes
+                    </button>
+                    <button class="di__action" @click="editarItem(item)" title="Editar item">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                      Editar
+                    </button>
+                    <button class="di__action" @click="salvarParaDepois(item)" title="Salvar para depois">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                      Salvar
+                    </button>
+                  </div>
                 </div>
-                <button class="di__remover" @click="removeItem(item.id || item._id)">
+                <button class="di__remover" @click="removeItem(item.id || item._id)" title="Remover">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
@@ -941,9 +977,15 @@
                 <div class="di__info">
                   <p class="di__nome">{{ item.nome }}</p>
                   <div class="di__foot"><span class="di__preco">R$ {{ fmt(item.preco) }}</span></div>
-                  <button class="di__mover" @click="moverParaCarrinho(item)">Mover para carrinho</button>
+                  <div class="di__actions">
+                    <button class="di__action" @click="verDetalhesItem(item)" title="Ver detalhes">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Detalhes
+                    </button>
+                    <button class="di__mover" @click="moverParaCarrinho(item)">Mover para carrinho</button>
+                  </div>
                 </div>
-                <button class="di__remover" @click="removerSalvo(item.id || item._id)">
+                <button class="di__remover" @click="removerSalvo(item.id || item._id)" title="Remover">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
@@ -951,9 +993,29 @@
           </div>
 
           <footer class="drawer__footer">
+            <div class="drawer__cupom" v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
+              <div v-if="!cupomAplicado" class="cupom-row">
+                <input v-model="cupomCodigo" type="text" placeholder="Código do cupom" class="cupom-input" @keydown.enter="aplicarCupom" />
+                <button class="cupom-btn" :disabled="cupomLoading" @click="aplicarCupom">
+                  <span v-if="cupomLoading" class="or-spinner-sm"></span>
+                  <span v-else>Aplicar</span>
+                </button>
+              </div>
+              <div v-else class="cupom-aplicado">
+                <span class="cupom-aplicado__txt">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  Cupom <strong>{{ cupomAplicado.codigo }}</strong> aplicado · −R$ {{ fmt(cupomAplicado.desconto) }}
+                </span>
+                <button class="cupom-aplicado__remover" @click="removerCupom" aria-label="Remover cupom">✗</button>
+              </div>
+              <p v-if="cupomErro" class="cupom-erro">{{ cupomErro }}</p>
+            </div>
+
             <template v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
               <div class="drawer__totais">
-                <div class="dt-row"><span>Total</span><span>R$ {{ totalPreco }}</span></div>
+                <div class="dt-row"><span>Subtotal</span><span>R$ {{ totalPreco }}</span></div>
+                <div class="dt-row" v-if="cupomAplicado"><span>Desconto</span><span style="color:#22c55e">− R$ {{ fmt(cupomAplicado.desconto) }}</span></div>
+                <div class="dt-row dt-row--total"><span>Total</span><span>R$ {{ fmt(totalComDesconto) }}</span></div>
               </div>
             </template>
             <button class="drawer__checkout" :disabled="!auth.isLogado || !cartItems.length" @click="irParaCheckout">
@@ -1080,6 +1142,7 @@ const campoErro      = ref('')
 const focusField     = ref('')
 const cartBounce     = ref(false)
 const loginNecessario = ref(false)
+const loginAvisoMsg   = ref('Faça login para adicionar ao carrinho')
 const acessOpen      = ref(false)
 const userDropOpen   = ref(false)
 const userDropRef    = ref(null)
@@ -1101,6 +1164,8 @@ const rgFrente      = ref(null)   // File
 const rgVerso       = ref(null)   // File
 const rgFrentePreview = ref('')
 const rgVersoPreview  = ref('')
+const fileInputFrente = ref(null)
+const fileInputVerso  = ref(null)
 
 /* ── Reconhecimento facial ── */
 const cameraAtiva   = ref(false)
@@ -1115,6 +1180,41 @@ let cameraStream    = null
 /* ── Drawer ── */
 const drawerTab  = ref('carrinho')
 const savedItems = ref([])
+
+/* ── Cupom ── */
+const cupomCodigo   = ref('')
+const cupomAplicado = ref(null) // { codigo, desconto }
+const cupomErro     = ref('')
+const cupomLoading  = ref(false)
+
+const totalComDesconto = computed(() => {
+  const total = cart.totalBruto ?? cartItems.value.reduce((s, i) => s + (i.preco * i.qty), 0)
+  if (!cupomAplicado.value) return total
+  return Math.max(0, total - cupomAplicado.value.desconto)
+})
+
+const aplicarCupom = async () => {
+  cupomErro.value = ''
+  const codigo = cupomCodigo.value.trim().toUpperCase()
+  if (!codigo) { cupomErro.value = 'Digite um código de cupom.'; return }
+  cupomLoading.value = true
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/cupons/validar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo, itens: cart.items })
+    })
+    const data = await res.json()
+    if (!res.ok || !data.valido) { cupomErro.value = data.mensagem || 'Cupom inválido ou expirado.'; cupomAplicado.value = null; return }
+    cupomAplicado.value = { codigo, desconto: data.desconto }
+    addToast('Cupom aplicado', `${codigo} — R$ ${fmt(data.desconto)} de desconto`, 'success')
+  } catch {
+    cupomErro.value = 'Não foi possível validar o cupom agora.'
+  } finally {
+    cupomLoading.value = false
+  }
+}
+const removerCupom = () => { cupomAplicado.value = null; cupomCodigo.value = ''; cupomErro.value = '' }
 
 /* ── Busca ── */
 const searchOpen     = ref(false)
@@ -1226,6 +1326,24 @@ const totalItens = computed(() => cart.totalItens)
 const totalPreco = computed(() => cart.totalBrutoFmt)
 const fmt = (v) => (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
 
+/* ── Ações de item do carrinho ── */
+const verDetalhesItem = (item) => {
+  cartOpen.value = false
+  router.push(`/produto/${item.id || item._id}`)
+}
+const editarItem = (item) => {
+  cartOpen.value = false
+  router.push({ path: `/produto/${item.id || item._id}`, query: { editar: '1' } })
+}
+const salvarParaDepois = (item) => {
+  if (!savedItems.value.some(i => (i.id || i._id) === (item.id || item._id))) {
+    savedItems.value.push({ ...item })
+    persistirSalvos()
+  }
+  cart.remover(item.id || item._id)
+  addToast('Salvo para depois', item.nome, 'info')
+}
+
 /* ── Compras futuras ── */
 const carregarSalvos = () => {
   try { const s = localStorage.getItem('noir_saved'); if (s) savedItems.value = JSON.parse(s) } catch {}
@@ -1335,6 +1453,12 @@ const validarArquivo = (file) => {
   return null
 }
 
+/* Botão "Selecionar do computador" — dispara o input file oculto correspondente */
+const abrirSeletorArquivo = (lado) => {
+  if (lado === 'frente') fileInputFrente.value?.click()
+  else fileInputVerso.value?.click()
+}
+
 const onFileRG = (event, lado) => {
   const file = event.target.files[0]
   processarArquivoRG(file, lado)
@@ -1433,6 +1557,30 @@ const resetarFace = () => {
   faceErro.value      = ''
   selfiePreview.value = ''
   pararCamera()
+}
+
+/* Simula a selfie + biometria sem precisar de câmera (uso em dev/TCC) */
+const simularFaceMatch = async () => {
+  faceErro.value = ''
+  selfiePreview.value = await new Promise(resolve => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 280; canvas.height = 320
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 280, 320)
+    ctx.fillStyle = 'rgba(245,166,35,0.15)'; ctx.fillRect(15, 15, 250, 290)
+    ctx.strokeStyle = 'rgba(245,166,35,0.5)'; ctx.lineWidth = 2; ctx.strokeRect(20, 20, 240, 280)
+    ctx.fillStyle = '#F5A623'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'
+    ctx.fillText('Selfie Simulada', 140, 155)
+    ctx.font = '10px sans-serif'; ctx.fillStyle = 'rgba(245,166,35,0.5)'
+    ctx.fillText('Modo dev / TCC', 140, 175)
+    canvas.toBlob(blob => {
+      const r = new FileReader()
+      r.onload = e => resolve(e.target.result)
+      r.readAsDataURL(blob)
+    }, 'image/jpeg', 0.85)
+  })
+  faceCapturada.value = true
+  addToast('Biometria simulada', 'Identidade confirmada (modo dev)', 'success')
 }
 
 /* ════════════════════════════════
@@ -1548,9 +1696,11 @@ const handleOutsideClick = (e) => {
 }
 
 /* ── Modal ── */
-const openModal = (tab, comAviso = false) => {
+const openModal = (tab, comAviso = false, mensagemAviso = '') => {
   modalTab.value = tab; formError.value = ''; campoErro.value = ''; focusField.value = ''
-  loginNecessario.value = comAviso; cadastroStep.value = 1
+  loginNecessario.value = comAviso
+  loginAvisoMsg.value = mensagemAviso || 'Faça login para adicionar ao carrinho'
+  cadastroStep.value = 1
   form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' }
   cpfValido.value = null; idadeValida.value = null
   showPass.value = false; showPass2.value = false; aceitouTermos.value = false; termosOpen.value = false
@@ -1579,6 +1729,11 @@ const fazerLogin = async () => {
     await auth.login(form.value.email, form.value.senha)
     registrarSucesso(); closeModal()
     addToast('Bem-vindo de volta!', primeiroNome.value || '', 'success')
+    /* Se o usuário veio de uma tentativa de checkout/pedido sem login, retoma o fluxo */
+    if (window.__noirRetomarCheckoutAposLogin) {
+      window.__noirRetomarCheckoutAposLogin = false
+      prosseguirCheckout()
+    }
   } catch {
     registrarFalha()
     const restantes = tentativasRestantes.value
@@ -1609,6 +1764,10 @@ const loginGoogle = () => {
         }
         registrarSucesso(); closeModal()
         addToast('Login com Google realizado!', '', 'success')
+        if (window.__noirRetomarCheckoutAposLogin) {
+          window.__noirRetomarCheckoutAposLogin = false
+          prosseguirCheckout()
+        }
       } catch {
         formError.value = 'Erro ao autenticar com Google.'
         addToast('Erro Google OAuth', formError.value, 'error')
@@ -1630,7 +1789,12 @@ const irParaConta        = () => { userDropOpen.value = false; sidebarOpen.value
 const changeQty          = (item, d) => cart.alterarQty(item.id || item._id, d)
 const removeItem         = (id) => { cart.remover(id); addToast('Item removido', '', 'info') }
 const irParaCheckout     = () => {
-  if (!auth.isLogado) { cartOpen.value = false; openModal('login', true); return }
+  if (!auth.isLogado) {
+    window.__noirRetomarCheckoutAposLogin = true
+    cartOpen.value = false
+    openModal('login', true, 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.')
+    return
+  }
   const items = JSON.parse(JSON.stringify(cart.items))
   if (!items.length) return
   cartOpen.value = false
@@ -1658,12 +1822,25 @@ const recusarIdade = () => {
   addToast('Acesso restrito', 'Este site é destinado a maiores de 18 anos.', 'error')
 }
 const prosseguirCheckout = () => {
-  if (!auth.isLogado) { cartOpen.value = false; openModal('login', true); return }
+  if (!auth.isLogado) {
+    window.__noirRetomarCheckoutAposLogin = true
+    cartOpen.value = false
+    openModal('login', true, 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.')
+    return
+  }
   const items = JSON.parse(JSON.stringify(cart.items))
   if (!items.length) return
   cartOpen.value = false
   window.__noirCarrinho = items
   window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
+}
+
+/* ── Ouve pedidos de login vindos de outras páginas (ex: tela de checkout) ── */
+const handlePrecisaLogin = (e) => {
+  window.__noirRetomarCheckoutAposLogin = true
+  cartOpen.value = false
+  const msg = e?.detail?.mensagem || 'Você precisa estar logado para enviar seu pedido. Faça login para continuar.'
+  openModal('login', true, msg)
 }
 
 /* ── Simular envio de documentos (TCC/DEV) ── */
@@ -1744,6 +1921,7 @@ onMounted(() => {
   window.addEventListener('click',          handleOutsideClick)
   window.addEventListener('keydown',        handleKeydown)
   window.addEventListener('auth:expirado',  handleAuthExpirado)
+  window.addEventListener('precisa-login',  handlePrecisaLogin)
   carregarEstadoSeguranca()
   carregarSalvos()
   updateClock()
@@ -1755,6 +1933,7 @@ onUnmounted(() => {
   window.removeEventListener('click',         handleOutsideClick)
   window.removeEventListener('keydown',       handleKeydown)
   window.removeEventListener('auth:expirado', handleAuthExpirado)
+  window.removeEventListener('precisa-login', handlePrecisaLogin)
   clearTimeout(searchTimer)
   clearInterval(bloqueioInterval)
   clearInterval(clockInterval)
@@ -2317,6 +2496,10 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .id-upload-box:hover,.id-upload-box.is-drag { border-color:var(--or-gold);background:var(--or-gold-3); }
 .id-upload-box.has-file { border-style:solid;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.03); }
 .id-upload-input { position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2; }
+.id-upload-input-hidden { position:absolute;width:1px;height:1px;opacity:0;pointer-events:none; }
+.id-upload-pc { display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:6px;background:none;border:0.5px solid var(--or-hair-2);padding:7px;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3);cursor:pointer;transition:all .25s; }
+.id-upload-pc:hover { border-color:var(--or-gold);color:var(--or-gold); }
+.id-btn-simular { width:100%; margin:4px 0 8px; }
 .id-upload-placeholder { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;color:var(--or-silk-3); }
 .id-upload-placeholder svg { color:var(--or-gold);opacity:.3; }
 .id-upload-placeholder span { font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;color:var(--or-silk-3);text-align:center; }
@@ -2465,12 +2648,29 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .di__preco { font-family:var(--or-font-num);font-size:11px;color:var(--or-gold); }
 .di__remover { background:none;border:none;color:var(--or-silk-4);cursor:pointer;padding:2px;display:flex;transition:color .25s;align-self:flex-start;margin-top:2px; }
 .di__remover:hover { color:rgba(220,80,80,.7); }
-.di__mover { display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;margin-top:6px;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:color .25s;color:var(--or-gold);opacity:.7; }
+.di__mover { display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;margin-top:0;font-family:var(--font-sans);font-size:8px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:color .25s;color:var(--or-gold);opacity:.7; }
 .di__mover:hover { opacity:1; }
+.di__actions { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.di__action { display:flex; align-items:center; gap:4px; background:none; border:none; padding:0; cursor:pointer; font-family:var(--font-sans); font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--or-silk-3); transition:color .2s; }
+.di__action:hover { color:var(--or-gold); }
 .drawer__footer { padding:18px 32px 26px;border-top:0.5px solid var(--or-hair-2);flex-shrink:0;background:var(--or-void);position:relative;z-index:1; }
+.drawer__cupom { margin-bottom:14px; }
+.cupom-row { display:flex; gap:8px; }
+.cupom-input { flex:1; background:transparent; border:0.5px solid var(--or-hair-2); padding:9px 12px; font-family:var(--font-sans); font-size:11px; color:var(--or-silk); outline:none; transition:border-color .25s; }
+.cupom-input:focus { border-color:var(--or-gold); }
+.cupom-input::placeholder { color:var(--or-silk-4); }
+.cupom-btn { background:none; border:0.5px solid var(--or-gold); color:var(--or-gold); padding:0 16px; font-family:var(--font-sans); font-size:8px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer; transition:all .25s; display:flex; align-items:center; justify-content:center; }
+.cupom-btn:hover:not(:disabled) { background:var(--or-gold); color:var(--or-void); }
+.cupom-btn:disabled { opacity:.4; cursor:not-allowed; }
+.cupom-aplicado { display:flex; align-items:center; justify-content:space-between; gap:8px; background:rgba(34,197,94,.06); border:0.5px solid rgba(34,197,94,.3); padding:8px 12px; }
+.cupom-aplicado__txt { display:flex; align-items:center; gap:7px; font-family:var(--font-sans); font-size:10px; color:rgba(34,197,94,.9); }
+.cupom-aplicado__txt svg { flex-shrink:0; }
+.cupom-aplicado__remover { background:none; border:none; color:rgba(34,197,94,.6); cursor:pointer; font-size:10px; }
+.cupom-erro { font-family:var(--font-sans); font-size:9px; color:rgba(239,68,68,.8); margin-top:6px; }
 .drawer__totais { margin-bottom:14px; }
 .dt-row { display:flex;justify-content:space-between;align-items:center;font-family:var(--font-sans);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--or-silk-3);margin-bottom:8px;padding-bottom:8px; }
 .dt-row span:last-child { font-family:var(--or-font-num);letter-spacing:.08em;text-transform:none;font-size:14px;color:var(--or-gold); }
+.dt-row--total span:last-child { font-size:16px!important;font-weight:600; }
 .drawer__checkout { width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:transparent;color:var(--or-gold);font-family:var(--font-sans);font-size:8px;letter-spacing:.55em;text-transform:uppercase;padding:14px;border:0.5px solid var(--or-gold);cursor:pointer;margin-bottom:10px;transition:color .45s;position:relative;overflow:hidden;z-index:0; }
 .drawer__checkout::before { content:'';position:absolute;inset:0;background:var(--or-gold);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--or-easing);z-index:-1; }
 .drawer__checkout:hover:not(:disabled)::before { transform:scaleX(1); }
@@ -2520,75 +2720,4 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 }
 body.light-mode .af-linha input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
 body.light-mode .nb-search-field input:-webkit-autofill { -webkit-box-shadow:0 0 0 1000px #ffffff inset!important;-webkit-text-fill-color:#0a0a1e!important; }
-
-/* ── BOTÃO SIMULAR ENVIO (DEV) ── */
-.id-simular-wrap {
-  margin: 4px 0 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.id-simular-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-}
-.id-simular-divider::before,
-.id-simular-divider::after {
-  content: '';
-  flex: 1;
-  height: 0.5px;
-  background: var(--or-hair-2, rgba(237,232,224,0.07));
-}
-.id-simular-divider span {
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 8px;
-  letter-spacing: .4em;
-  text-transform: uppercase;
-  color: var(--or-silk-4, rgba(237,232,224,0.10));
-  white-space: nowrap;
-}
-.id-simular-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 14px;
-  background: rgba(245,166,35,0.04);
-  border: 0.5px dashed rgba(245,166,35,0.25);
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 8px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: rgba(245,166,35,0.5);
-  cursor: pointer;
-  transition: all .25s;
-}
-.id-simular-btn:hover {
-  background: rgba(245,166,35,0.08);
-  border-color: rgba(245,166,35,0.5);
-  color: var(--or-gold, #F5A623);
-}
-.id-simular-btn svg { flex-shrink: 0; }
-.id-simular-tag {
-  font-size: 7px;
-  letter-spacing: .3em;
-  font-weight: 700;
-  background: rgba(245,166,35,0.15);
-  color: var(--or-gold, #F5A623);
-  padding: 2px 6px;
-  border-radius: 2px;
-  margin-left: auto;
-}
-.id-simular-note {
-  font-family: var(--font-sans, 'Syne', sans-serif);
-  font-size: 9px;
-  letter-spacing: .06em;
-  color: var(--or-silk-4, rgba(237,232,224,0.10));
-  text-align: center;
-  line-height: 1.5;
-}
 </style>
