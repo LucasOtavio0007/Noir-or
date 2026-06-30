@@ -76,23 +76,29 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // Registro
-  // CORRIGIDO: backend espera "password", não "senha"; e recebe nome/sobrenome separados
-  const register = async (nome, sobrenome, email, senha) => {
-    loading.value = true
-    error.value   = null
-    try {
-      const { data } = await api.post('/auth/register', { nome, sobrenome, email, password: senha })
-      token.value = data.token
-      user.value  = data.user
-      setAuthHeader(data.token)
-      return { ok: true }
-    } catch (err) {
-      error.value = err.response?.data?.message || err.response?.data?.msg || 'Erro ao registrar'
-      throw new Error(error.value)
-    } finally {
-      loading.value = false
-    }
+// CORRIGIDO: backend espera "password", não "senha"; e recebe nome/sobrenome separados
+const register = async (nome, sobrenome, email, senha, dadosExtras = {}) => {
+  loading.value = true
+  error.value   = null
+  try {
+    const { data } = await api.post('/auth/register', {
+      nome,
+      sobrenome,
+      email,
+      password: senha,
+      ...dadosExtras   // cpf, nascimento, rg, orgaoEmissor, identidadeVerificada
+    })
+    token.value = data.token
+    user.value  = data.user
+    setAuthHeader(data.token)
+    return { ok: true }
+  } catch (err) {
+    error.value = err.response?.data?.message || err.response?.data?.msg || 'Erro ao registrar'
+    throw new Error(error.value)
+  } finally {
+    loading.value = false
   }
+}
 
   // Login com Google
   const loginGoogle = async (dadosGoogle) => {

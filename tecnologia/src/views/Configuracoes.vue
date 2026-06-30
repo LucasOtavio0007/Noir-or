@@ -1485,9 +1485,9 @@ const confirmarCancelamento = async () => {
 const perfil = ref({
   nome:'', sobrenome:'', email:'', telefone:'', bio:'',
   cep:'', cidade:'', uf:'', bairro:'', endereco:'', numero:'', complemento:'',
+  cpf:'', nascimento:'', rg:'', orgaoEmissor:'',
   avatar:null
 })
-
 // ── Senha — stepper ──────────────────────────────────
 const etapasSenha    = [{ id:'verificar', label:'Verificar' }, { id:'confirmar', label:'Confirmar' }, { id:'nova', label:'Nova Senha' }, { id:'concluido', label:'Concluído' }]
 const etapaSenha     = ref(0)
@@ -1754,8 +1754,10 @@ const salvar = async () => {
         cep:perfil.value.cep, cidade:perfil.value.cidade,
         uf:perfil.value.uf, bairro:perfil.value.bairro,
         endereco:perfil.value.endereco, numero:perfil.value.numero,
-        complemento:perfil.value.complemento,
-        avatar:perfil.value.avatar
+        complemento:perfil.value.complemento, cpf:perfil.value.cpf,
+        nascimento:perfil.value.nascimento, rg:perfil.value.rg,
+        orgaoEmissor:perfil.value.orgaoEmissor,
+         avatar:perfil.value.avatar
       })
       mostrarToast('Perfil atualizado!', '', 'sucesso')
     }
@@ -1776,10 +1778,14 @@ const descartar = () => {
       telefone:u.telefone||'', bio:u.bio||'',
       cep:u.cep||'', cidade:u.cidade||'', uf:u.uf||'',
       bairro:u.bairro||'', endereco:u.endereco||'',
-      numero:u.numero||'', complemento:u.complemento||'',
-      avatar:u.avatar||null
-    })
-  }
+      numero:u.numero||'', complemento: u.complemento || u.endereco?.complemento || perfil.value.complemento || '',
+    cpf:          u.cpf || perfil.value.cpf || '',
+    nascimento:   u.nascimento || u.dataNascimento || perfil.value.nascimento || '',
+    rg:           u.rg || perfil.value.rg || '',
+    orgaoEmissor: u.orgaoEmissor || perfil.value.orgaoEmissor || '',
+    avatar:      u.avatar || u.foto || u.photoURL || perfil.value.avatar || null,
+  })
+}
   temAlteracoes.value = false
   mostrarToast('Alterações descartadas','','info')
 }

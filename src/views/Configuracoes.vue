@@ -410,17 +410,33 @@
               <input id="p-email" :value="perfil.email" disabled/>
             </div>
             <div class="cfg-campo">
-              <label for="p-tel">Telefone</label>
-              <input id="p-tel" v-model="perfil.telefone" autocomplete="tel"
-                placeholder="(11) 99999-9999"
-                @input="e => { perfil.telefone = mascaraTel(e.target.value); marcarAlterado() }"
-                maxlength="15"/>
-            </div>
-            <div class="cfg-campo cfg-col-2">
-              <label for="p-bio">Bio</label>
-              <textarea id="p-bio" v-model="perfil.bio" rows="2"
-                placeholder="Conta um pouco sobre você…" @input="marcarAlterado"></textarea>
-            </div>
+  <label for="p-tel">Telefone</label>
+  <input id="p-tel" v-model="perfil.telefone" autocomplete="tel"
+    placeholder="(11) 99999-9999"
+    @input="e => { perfil.telefone = mascaraTel(e.target.value); marcarAlterado() }"
+    maxlength="15"/>
+</div>
+<div class="cfg-campo">
+  <label for="p-cpf">CPF</label>
+  <input id="p-cpf" :value="perfil.cpf" disabled/>
+</div>
+<div class="cfg-campo">
+  <label for="p-nasc">Data de Nascimento</label>
+  <input id="p-nasc" :value="perfil.nascimento" disabled/>
+</div>
+<div class="cfg-campo">
+  <label for="p-rg">RG</label>
+  <input id="p-rg" :value="perfil.rg" disabled/>
+</div>
+<div class="cfg-campo">
+  <label for="p-orgao">Órgão Emissor</label>
+  <input id="p-orgao" :value="perfil.orgaoEmissor" disabled/>
+</div>
+<div class="cfg-campo cfg-col-2">
+  <label for="p-bio">Bio</label>
+  <textarea id="p-bio" v-model="perfil.bio" rows="2"
+    placeholder="Conta um pouco sobre você…" @input="marcarAlterado"></textarea>
+</div>
           </div>
         </div>
 
@@ -1489,6 +1505,7 @@ const confirmarCancelamento = async () => {
 const perfil = ref({
   nome:'', sobrenome:'', email:'', telefone:'', bio:'',
   cep:'', cidade:'', uf:'', bairro:'', endereco:'', numero:'', complemento:'',
+  cpf:'', nascimento:'', rg:'', orgaoEmissor:'',
   avatar:null
 })
 
@@ -1508,7 +1525,11 @@ const preencherPerfilDoLogin = (u) => {
     bairro:      u.bairro || u.endereco?.bairro || perfil.value.bairro || '',
     endereco:    u.endereco?.logradouro || u.logradouro || (typeof u.endereco === 'string' ? u.endereco : perfil.value.endereco) || '',
     numero:      u.numero || u.endereco?.numero || perfil.value.numero || '',
-    complemento: u.complemento || u.endereco?.complemento || perfil.value.complemento || '',
+   complemento: u.complemento || u.endereco?.complemento || perfil.value.complemento || '',
+    cpf:          u.cpf || perfil.value.cpf || '',
+    nascimento:   u.nascimento || u.dataNascimento || perfil.value.nascimento || '',
+    rg:           u.rg || perfil.value.rg || '',
+    orgaoEmissor: u.orgaoEmissor || perfil.value.orgaoEmissor || '',
     avatar:      u.avatar || u.foto || u.photoURL || perfil.value.avatar || null,
   })
 }
