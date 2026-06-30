@@ -123,7 +123,7 @@
 
           <button class="nb-icon nb-cart" @click="abrirCarrinho" aria-label="Carrinho de compras">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span v-if="auth.isLogado && totalItens > 0" class="nb-cart__badge" :class="{ 'is-bounce': cartBounce }">{{ totalItens > 9 ? '9+' : totalItens }}</span>
+            <span v-if="totalItens > 0" class="nb-cart__badge" :class="{ 'is-bounce': cartBounce }">{{ totalItens > 9 ? '9+' : totalItens }}</span>
           </button>
 
           <div class="nb-acess-wrap">
@@ -381,11 +381,11 @@
       </transition>
 
       <!-- ══════════════════════════════════════════
-           MODAL AUTH — LOGIN + CADASTRO COM VERIFICAÇÃO
+           MODAL AUTH — LOGIN + RECUPERAR SENHA + CADASTRO COM VERIFICAÇÃO
       ══════════════════════════════════════════ -->
       <transition name="fade" appear>
         <div v-if="modalOpen" class="nb-overlay" @click.self="closeModal" role="dialog"
-          :aria-label="modalTab === 'login' ? 'Fazer login' : 'Criar conta'" aria-modal="true">
+          :aria-label="modalTab === 'login' ? (recuperarOpen ? 'Recuperar senha' : 'Fazer login') : 'Criar conta'" aria-modal="true">
           <div class="auth-modal">
 
             <!-- LATERAL ESQUERDA -->
@@ -396,13 +396,15 @@
               <p class="auth-brand"><span class="auth-brand__icon">⊕</span>Noir<em>&amp;</em>Or</p>
               <div class="auth-copy">
                 <h2 class="auth-titulo">
-                  <span v-if="modalTab === 'login'">Bem-vindo<br/><em>de volta</em></span>
+                  <span v-if="modalTab === 'login' && recuperarOpen">Recuperar<br/><em>acesso</em></span>
+                  <span v-else-if="modalTab === 'login'">Bem-vindo<br/><em>de volta</em></span>
                   <span v-else-if="cadastroStep === 1">Entre para o<br/><em>seleto círculo</em></span>
                   <span v-else-if="cadastroStep === 2">Verificação<br/><em>de identidade</em></span>
                   <span v-else>Reconhecimento<br/><em>facial</em></span>
                 </h2>
                 <p class="auth-desc">
-                  <span v-if="modalTab === 'login'">Acesse sua coleção com total segurança e exclusividade.</span>
+                  <span v-if="modalTab === 'login' && recuperarOpen">Informe o e-mail da sua conta e enviaremos as instruções para redefinir sua senha.</span>
+                  <span v-else-if="modalTab === 'login'">Acesse sua coleção com total segurança e exclusividade.</span>
                   <span v-else-if="cadastroStep === 1">Acesso a lançamentos, peças limitadas e benefícios VIP.</span>
                   <span v-else-if="cadastroStep === 2">Precisamos confirmar sua identidade com RG para garantir segurança e evitar fraudes.</span>
                   <span v-else>Tire uma selfie para confirmar que você é o titular do documento enviado.</span>
@@ -462,7 +464,7 @@
 
               <!-- Tentativas restantes -->
               <transition name="slide-down">
-                <div v-if="tentativasRestantes < 5 && tentativasRestantes > 0 && !loginBloqueado && modalTab === 'login'" class="auth-tentativas" role="status">
+                <div v-if="tentativasRestantes < 5 && tentativasRestantes > 0 && !loginBloqueado && modalTab === 'login' && !recuperarOpen" class="auth-tentativas" role="status">
                   <div class="tentativas-dots">
                     <span v-for="i in 5" :key="i" :class="['tentativa-dot', { 'used': i > tentativasRestantes }]"></span>
                   </div>
@@ -471,14 +473,14 @@
               </transition>
 
               <!-- TABS -->
-              <div class="auth-tabs" role="tablist">
+              <div class="auth-tabs" role="tablist" v-if="!recuperarOpen">
                 <button :class="['auth-tab', { 'is-active': modalTab === 'login' }]" @click="switchTab('login')" role="tab" :aria-selected="modalTab === 'login'">入る — Entrar</button>
                 <button :class="['auth-tab', { 'is-active': modalTab === 'cadastro' }]" @click="switchTab('cadastro')" role="tab" :aria-selected="modalTab === 'cadastro'">参加 — Cadastrar</button>
               </div>
 
-              <!-- ─── LOGIN ─── -->
+              <!-- ─── LOGIN / RECUPERAR SENHA ─── -->
               <transition name="slide" mode="out-in">
-                <div v-if="modalTab === 'login'" key="login" class="auth-form" role="tabpanel">
+                <div v-if="modalTab === 'login' && !recuperarOpen" key="login" class="auth-form" role="tabpanel">
                   <div class="af-campo">
                     <label for="l-email">E-mail</label>
                     <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email', 'af-linha--focus': focusField === 'email' }">
@@ -496,7 +498,7 @@
                     </div>
                   </div>
                   <div class="af-esqueceu">
-                    <router-link to="/redefinir-senha" @click="closeModal">Esqueceu a senha?</router-link>
+                    <button type="button" class="af-link-esqueceu" @click="abrirRecuperarSenha">Esqueceu a senha?</button>
                   </div>
                   <p v-if="formError" class="af-erro" role="alert">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -515,6 +517,60 @@
                     </button>
                   </div>
                   <p class="af-rodape">Não tem conta? <button type="button" @click="switchTab('cadastro')">Cadastre-se</button></p>
+                </div>
+
+                <!-- ─── RECUPERAR SENHA ─── -->
+                <div v-else-if="modalTab === 'login' && recuperarOpen" key="recuperar" class="auth-form" role="tabpanel">
+                  <div class="af-step-header">
+                    <button class="af-step-back" @click="voltarParaLogin" aria-label="Voltar para o login">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                      Voltar
+                    </button>
+                    <span class="af-step-title">Recuperar senha</span>
+                  </div>
+
+                  <template v-if="!recuperarEnviado">
+                    <div class="id-aviso id-aviso--info">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l9 6 9-6"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+                      <p>Informe o e-mail cadastrado na sua conta. Enviaremos um link para você criar uma nova senha.</p>
+                    </div>
+
+                    <div class="af-campo" style="margin-top:16px;">
+                      <label for="r-email">E-mail da conta</label>
+                      <div class="af-linha" :class="{ 'af-linha--erro': !!recuperarErro, 'af-linha--focus': focusField === 'r-email' }">
+                        <input id="r-email" v-model="recuperarEmail" type="email" placeholder="seu@email.com" autocomplete="email"
+                          @focus="focusField = 'r-email'" @blur="focusField = ''" @keydown.enter="enviarRecuperacao" />
+                      </div>
+                    </div>
+
+                    <p v-if="recuperarErro" class="af-erro" role="alert">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      {{ recuperarErro }}
+                    </p>
+
+                    <button type="button" class="af-submit" :disabled="recuperarLoading" @click="enviarRecuperacao">
+                      <span v-if="recuperarLoading" class="or-spinner-sm"></span>
+                      <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                      {{ recuperarLoading ? 'Enviando...' : 'Enviar link de recuperação' }}
+                    </button>
+                  </template>
+
+                  <template v-else>
+                    <div class="verif-checklist" style="margin-top:8px;">
+                      <p class="verif-checklist__titulo">E-mail enviado</p>
+                      <ul>
+                        <li class="verif-item verif-item--ok">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                          Enviamos as instruções para <strong>{{ recuperarEmail }}</strong>
+                        </li>
+                      </ul>
+                    </div>
+                    <p class="af-rodape" style="margin-top:14px;">Não recebeu? <button type="button" @click="enviarRecuperacao">Reenviar e-mail</button></p>
+                    <button type="button" class="af-submit" style="margin-top:14px;" @click="voltarParaLogin">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                      Voltar para o login
+                    </button>
+                  </template>
                 </div>
 
                 <!-- ─── CADASTRO MULTI-STEP ─── -->
@@ -546,13 +602,18 @@
                       <!-- CPF -->
                       <div class="af-campo">
                         <label for="c-cpf">CPF *</label>
-                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'cpf', 'af-linha--focus': focusField === 'cpf', 'af-linha--ok': cpfValido === true }">
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'cpf' || cpfDuplicado === true, 'af-linha--focus': focusField === 'cpf', 'af-linha--ok': cpfValido === true && cpfDuplicado === false }">
                           <input id="c-cpf" v-model="form.cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off"
                             @focus="focusField = 'cpf'" @blur="focusField = ''" @input="mascaraCPF" />
-                          <span v-if="cpfValido === true" class="af-field-ok" aria-label="CPF válido">✓</span>
-                          <span v-else-if="cpfValido === false && form.cpf.length >= 14" class="af-field-err" aria-label="CPF inválido">✗</span>
+                          <span v-if="verificandoCpf" class="or-spinner-sm" aria-label="Verificando CPF"></span>
+                          <span v-else-if="cpfValido === true && cpfDuplicado === false" class="af-field-ok" aria-label="CPF válido">✓</span>
+                          <span v-else-if="(cpfValido === false && form.cpf.length >= 14) || cpfDuplicado === true" class="af-field-err" aria-label="CPF inválido">✗</span>
                         </div>
                         <p v-if="cpfValido === false && form.cpf.length >= 14" class="af-campo-erro">CPF inválido</p>
+                        <p v-else-if="cpfDuplicado === true" class="af-campo-erro">
+                          Já existe uma conta cadastrada com este CPF.
+                          <button type="button" class="af-link-termos" @click="switchTab('login')">Entrar</button>
+                        </p>
                       </div>
 
                       <!-- Data de nascimento -->
@@ -568,9 +629,17 @@
 
                       <div class="af-campo">
                         <label for="c-email">E-mail *</label>
-                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email', 'af-linha--focus': focusField === 'c-email' }">
-                          <input id="c-email" v-model="form.email" type="email" placeholder="seu@email.com" autocomplete="email" required @focus="focusField = 'c-email'" @blur="focusField = ''" />
+                        <div class="af-linha" :class="{ 'af-linha--erro': campoErro === 'email' || emailDuplicado === true, 'af-linha--focus': focusField === 'c-email', 'af-linha--ok': emailDuplicado === false && form.email.includes('@') }">
+                          <input id="c-email" v-model="form.email" type="email" placeholder="seu@email.com" autocomplete="email" required
+                            @focus="focusField = 'c-email'" @blur="focusField = ''" @input="onEmailInput" />
+                          <span v-if="verificandoEmail" class="or-spinner-sm" aria-label="Verificando e-mail"></span>
+                          <span v-else-if="emailDuplicado === false && form.email.includes('@')" class="af-field-ok">✓</span>
+                          <span v-else-if="emailDuplicado === true" class="af-field-err">✗</span>
                         </div>
+                        <p v-if="emailDuplicado === true" class="af-campo-erro">
+                          Já existe uma conta com este e-mail.
+                          <button type="button" class="af-link-termos" @click="switchTab('login')">Entrar</button>
+                        </p>
                       </div>
 
                       <div class="af-campo">
@@ -886,7 +955,7 @@
                 <span class="drawer__kanji" aria-hidden="true">蔵</span>
                 <div>
                   <span class="drawer__titulo">Meu Atelier</span>
-                  <span v-if="auth.isLogado && totalItens > 0" class="drawer__qtd">{{ totalItens }} {{ totalItens === 1 ? 'item' : 'itens' }}</span>
+                  <span v-if="totalItens > 0" class="drawer__qtd">{{ totalItens }} {{ totalItens === 1 ? 'item' : 'itens' }}</span>
                 </div>
               </div>
             </div>
@@ -903,7 +972,7 @@
             <button :class="['drawer__tab', { 'is-active': drawerTab === 'carrinho' }]" @click="drawerTab = 'carrinho'" role="tab">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               Carrinho
-              <span v-if="auth.isLogado && totalItens > 0" class="drawer__tab-badge">{{ totalItens > 9 ? '9+' : totalItens }}</span>
+              <span v-if="totalItens > 0" class="drawer__tab-badge">{{ totalItens > 9 ? '9+' : totalItens }}</span>
             </button>
             <button :class="['drawer__tab', { 'is-active': drawerTab === 'futuras' }]" @click="drawerTab = 'futuras'" role="tab">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -913,13 +982,13 @@
           </div>
 
           <div class="drawer__items" role="list">
-            <div v-if="!auth.isLogado" class="drawer__vazio drawer__vazio--login">
-              <div class="drawer__vazio__ico"><span class="vazio-kanji">客</span></div>
-              <p class="drawer__vazio__titulo">Faça login para ver seu carrinho</p>
-              <p class="drawer__vazio__sub">Suas peças selecionadas ficam salvas em sua conta</p>
-              <button class="drawer__vazio__cta" @click="cartOpen = false; openModal('login', true)">Entrar na conta <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12.5 5l7 7-7 7"/></svg></button>
+            <!-- Aviso sutil de convidado (não bloqueia o uso do carrinho) -->
+            <div v-if="!auth.isLogado && cartItems.length" class="drawer__convidado" role="note">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+              <span>Você está como convidado. <button type="button" @click="cartOpen = false; openModal('login')">Entrar</button> para finalizar mais rápido.</span>
             </div>
-            <template v-else-if="drawerTab === 'carrinho'">
+
+            <template v-if="drawerTab === 'carrinho'">
               <div v-if="!cartItems.length" class="drawer__vazio">
                 <div class="drawer__vazio__ico"><span class="vazio-kanji">空</span></div>
                 <p class="drawer__vazio__titulo">Seu atelier está vazio</p>
@@ -993,13 +1062,13 @@
           </div>
 
           <footer class="drawer__footer">
-            <template v-if="auth.isLogado && cartItems.length && drawerTab === 'carrinho'">
+            <template v-if="cartItems.length && drawerTab === 'carrinho'">
               <div class="drawer__totais">
                 <div class="dt-row dt-row--total"><span>Total</span><span>R$ {{ totalPreco }}</span></div>
               </div>
             </template>
-            <button class="drawer__checkout" :disabled="!auth.isLogado || !cartItems.length" @click="irParaCheckout">
-              {{ !auth.isLogado ? 'Entre para finalizar' : 'Finalizar seleção' }}
+            <button class="drawer__checkout" :disabled="!cartItems.length" @click="irParaCheckout">
+              {{ !cartItems.length ? 'Carrinho vazio' : !auth.isLogado ? 'Entrar para finalizar' : 'Finalizar seleção' }}
             </button>
           </footer>
         </aside>
@@ -1122,7 +1191,7 @@ const campoErro      = ref('')
 const focusField     = ref('')
 const cartBounce     = ref(false)
 const loginNecessario = ref(false)
-const loginAvisoMsg   = ref('Faça login para adicionar ao carrinho')
+const loginAvisoMsg   = ref('Faça login para finalizar seu pedido')
 const acessOpen      = ref(false)
 const userDropOpen   = ref(false)
 const userDropRef    = ref(null)
@@ -1134,8 +1203,19 @@ const form = ref({ email: '', senha: '', senha2: '', nome: '', sobrenome: '', cp
 /* ── Multi-step cadastro ── */
 const cadastroStep  = ref(1)
 
+/* ── Recuperar senha ── */
+const recuperarOpen    = ref(false)
+const recuperarEmail   = ref('')
+const recuperarEnviado = ref(false)
+const recuperarLoading = ref(false)
+const recuperarErro    = ref('')
+
 /* ── Validações de identidade ── */
 const cpfValido     = ref(null)   // null | true | false
+const cpfDuplicado  = ref(null)   // null | true | false
+const verificandoCpf = ref(false)
+const emailDuplicado = ref(null)  // null | true | false
+const verificandoEmail = ref(false)
 const idadeValida   = ref(null)
 const verificandoDoc = ref(false)
 const dragFrente    = ref(false)
@@ -1146,6 +1226,8 @@ const rgFrentePreview = ref('')
 const rgVersoPreview  = ref('')
 const fileInputFrente = ref(null)
 const fileInputVerso  = ref(null)
+let emailCheckTimer  = null
+let cpfCheckTimer    = null
 
 /* ── Reconhecimento facial ── */
 const cameraAtiva   = ref(false)
@@ -1265,7 +1347,10 @@ const allLinks = [
   { label: 'Contato', to: '/contato' },
 ]
 
-/* ── Carrinho ── */
+/* ── Carrinho ──
+   O carrinho funciona tanto para visitantes (convidado, salvo localmente
+   pela própria store) quanto para usuários logados. O login só é exigido
+   no momento de finalizar o pedido (ver irParaCheckout). */
 const cartItems  = computed(() => cart.items)
 const totalItens = computed(() => cart.totalItens)
 const totalPreco = computed(() => cart.totalBrutoFmt)
@@ -1333,6 +1418,48 @@ const forcaSenha = computed(() => {
 })
 
 /* ════════════════════════════════
+   RECUPERAR SENHA
+════════════════════════════════ */
+const abrirRecuperarSenha = () => {
+  recuperarOpen.value    = true
+  recuperarEnviado.value = false
+  recuperarErro.value    = ''
+  recuperarEmail.value   = form.value.email || ''
+  formError.value = ''; campoErro.value = ''
+}
+const voltarParaLogin = () => {
+  recuperarOpen.value    = false
+  recuperarEnviado.value = false
+  recuperarErro.value    = ''
+  recuperarLoading.value = false
+}
+const enviarRecuperacao = async () => {
+  recuperarErro.value = ''
+  if (!recuperarEmail.value || !recuperarEmail.value.includes('@')) {
+    recuperarErro.value = 'Informe um e-mail válido.'
+    return
+  }
+  recuperarLoading.value = true
+  try {
+    if (typeof auth.recuperarSenha === 'function') {
+      // Conectar aqui ao endpoint real de recuperação de senha, ex:
+      // auth.recuperarSenha(email) -> POST /auth/recuperar-senha
+      await auth.recuperarSenha(recuperarEmail.value)
+    } else {
+      // Fallback simulado enquanto o endpoint não existe (dev/TCC)
+      await new Promise(r => setTimeout(r, 1200))
+    }
+    recuperarEnviado.value = true
+    addToast('E-mail enviado', recuperarEmail.value, 'success')
+  } catch (e) {
+    recuperarErro.value = auth.error || 'Não foi possível enviar o e-mail. Tente novamente.'
+    addToast('Erro ao enviar', recuperarErro.value, 'error')
+  } finally {
+    recuperarLoading.value = false
+  }
+}
+
+/* ════════════════════════════════
    VALIDAÇÕES DE IDENTIDADE
 ════════════════════════════════ */
 
@@ -1353,14 +1480,55 @@ const validarCPF = (cpf) => {
   return r === parseInt(c[10])
 }
 
+/* Verifica em tempo real (debounced) se já existe conta com este e-mail/CPF.
+   Ajuste a rota '/usuarios/verificar' para o endpoint real do backend. */
+const verificarDisponibilidade = async (campo, valor) => {
+  try {
+    const params = new URLSearchParams({ [campo]: valor })
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar?${params.toString()}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    // Espera-se um payload como { existe: true|false }
+    return !!(data?.existe ?? data?.disponivel === false)
+  } catch {
+    return null
+  }
+}
+
+const onEmailInput = () => {
+  emailDuplicado.value = null
+  clearTimeout(emailCheckTimer)
+  const email = form.value.email.trim()
+  if (!email.includes('@') || !email.includes('.')) return
+  emailCheckTimer = setTimeout(async () => {
+    verificandoEmail.value = true
+    const existe = await verificarDisponibilidade('email', email)
+    verificandoEmail.value = false
+    emailDuplicado.value = existe
+  }, 500)
+}
+
 const mascaraCPF = () => {
   let v = form.value.cpf.replace(/\D/g, '').substring(0, 11)
   if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4')
   else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3')
   else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2')
   form.value.cpf = v
-  if (v.replace(/\D/g, '').length === 11) cpfValido.value = validarCPF(v)
-  else cpfValido.value = null
+  cpfDuplicado.value = null
+  clearTimeout(cpfCheckTimer)
+  if (v.replace(/\D/g, '').length === 11) {
+    cpfValido.value = validarCPF(v)
+    if (cpfValido.value) {
+      cpfCheckTimer = setTimeout(async () => {
+        verificandoCpf.value = true
+        const existe = await verificarDisponibilidade('cpf', v.replace(/\D/g, ''))
+        verificandoCpf.value = false
+        cpfDuplicado.value = existe
+      }, 500)
+    }
+  } else {
+    cpfValido.value = null
+  }
 }
 
 const mascaraRG = () => {
@@ -1536,7 +1704,9 @@ const avancarStep1 = () => {
 
   if (!form.value.nome.trim())       { formError.value = 'Informe seu nome.'; campoErro.value = 'nome'; return }
   if (!form.value.email.includes('@')) { formError.value = 'E-mail inválido.'; campoErro.value = 'email'; return }
+  if (emailDuplicado.value === true) { formError.value = 'Já existe uma conta com este e-mail.'; campoErro.value = 'email'; return }
   if (!form.value.cpf || !validarCPF(form.value.cpf)) { formError.value = 'Informe um CPF válido.'; campoErro.value = 'cpf'; return }
+  if (cpfDuplicado.value === true)   { formError.value = 'Já existe uma conta com este CPF.'; campoErro.value = 'cpf'; return }
   if (!form.value.nascimento)        { formError.value = 'Informe sua data de nascimento.'; campoErro.value = 'nascimento'; return }
   if (idadeValida.value === false)   { formError.value = 'Você deve ter 18 anos ou mais.'; campoErro.value = 'nascimento'; return }
   if (!idadeValida.value)            { verificarIdade(); if (idadeValida.value === false) { formError.value = 'Você deve ter 18 anos ou mais.'; return } }
@@ -1644,10 +1814,11 @@ const handleOutsideClick = (e) => {
 const openModal = (tab, comAviso = false, mensagemAviso = '') => {
   modalTab.value = tab; formError.value = ''; campoErro.value = ''; focusField.value = ''
   loginNecessario.value = comAviso
-  loginAvisoMsg.value = mensagemAviso || 'Faça login para adicionar ao carrinho'
+  loginAvisoMsg.value = mensagemAviso || 'Faça login para finalizar seu pedido'
   cadastroStep.value = 1
+  recuperarOpen.value = false; recuperarEnviado.value = false; recuperarErro.value = ''
   form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' }
-  cpfValido.value = null; idadeValida.value = null
+  cpfValido.value = null; idadeValida.value = null; cpfDuplicado.value = null; emailDuplicado.value = null
   showPass.value = false; showPass2.value = false; aceitouTermos.value = false; termosOpen.value = false
   rgFrente.value = null; rgVerso.value = null; rgFrentePreview.value = ''; rgVersoPreview.value = ''
   faceCapturada.value = false; faceErro.value = ''; selfiePreview.value = ''
@@ -1656,12 +1827,14 @@ const openModal = (tab, comAviso = false, mensagemAviso = '') => {
 }
 const closeModal = () => {
   modalOpen.value = false; formError.value = ''; campoErro.value = ''; loginNecessario.value = false
+  recuperarOpen.value = false; recuperarEnviado.value = false
   pararCamera()
 }
 const switchTab = (tab) => {
   modalTab.value = tab; formError.value = ''; campoErro.value = ''; cadastroStep.value = 1
+  recuperarOpen.value = false; recuperarEnviado.value = false
   form.value = { email: '', senha: '', senha2: '', nome: '', sobrenome: '', cpf: '', nascimento: '', rg: '', orgaoEmissor: '' }
-  cpfValido.value = null; idadeValida.value = null; termosOpen.value = false
+  cpfValido.value = null; idadeValida.value = null; cpfDuplicado.value = null; emailDuplicado.value = null; termosOpen.value = false
 }
 
 /* ── AUTH ── */
@@ -1723,7 +1896,7 @@ const loginGoogle = () => {
 
 const fazerLogout = async () => {
   userDropOpen.value = false; sidebarOpen.value = false
-  await auth.logout(); cart.limpar(); router.push('/')
+  await auth.logout(); router.push('/')
   addToast('Até logo!', 'Sessão encerrada com segurança', 'info')
 }
 
@@ -1762,7 +1935,10 @@ const finalizarPedido = () => {
   window.dispatchEvent(new CustomEvent('abrir-checkout', { detail: items }))
 }
 
+/* O carrinho é livre para convidados; o login só é exigido aqui,
+   no momento de finalizar/enviar o pedido. */
 const irParaCheckout = () => {
+  if (!cartItems.value.length) return
   if (!auth.isLogado) {
     window.__noirRetomarCheckoutAposLogin = true
     cartOpen.value = false
@@ -1868,7 +2044,7 @@ const handleKeydown = (e) => {
 }
 
 const handleAuthExpirado = () => {
-  auth.user = null; auth.token = null; cart.limpar()
+  auth.user = null; auth.token = null
   modalOpen.value = false; cartOpen.value = false
   addToast('Sessão expirada', 'Por favor, faça login novamente', 'error')
 }
@@ -1883,6 +2059,8 @@ onMounted(() => {
   carregarSalvos()
   updateClock()
   clockInterval = setInterval(updateClock, 1000)
+  // Carrega o carrinho (convidado salvo localmente ou da conta, se logado)
+  cart.init()
 })
 
 onUnmounted(() => {
@@ -1892,15 +2070,23 @@ onUnmounted(() => {
   window.removeEventListener('auth:expirado', handleAuthExpirado)
   window.removeEventListener('precisa-login', handlePrecisaLogin)
   clearTimeout(searchTimer)
+  clearTimeout(emailCheckTimer)
+  clearTimeout(cpfCheckTimer)
   clearInterval(bloqueioInterval)
   clearInterval(clockInterval)
   pararCamera()
 })
 
+/* Ao logar, sincroniza/mescla o carrinho de convidado com a conta
+   (se a store de carrinho expuser um método para isso). Ao deslogar,
+   o carrinho de convidado é mantido — não é mais limpo automaticamente. */
 watch(
   () => auth.isLogado,
-  (logado) => { if (logado) cart.init(); else cart.limpar() },
-  { immediate: true }
+  (logado) => {
+    if (logado && typeof cart.sincronizarAoLogar === 'function') {
+      cart.sincronizarAoLogar()
+    }
+  }
 )
 </script>
 
