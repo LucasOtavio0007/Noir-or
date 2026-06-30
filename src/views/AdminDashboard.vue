@@ -174,10 +174,7 @@
                     <span>通知 · Notificações</span>
                     <button @click="marcarTodasLidas" class="adm-notif-panel__mark">Marcar lidas</button>
                   </div>
-                  <button class="btn btn--ghost btn--sm" @click="exportarRelatorioWord" :disabled="exportandoWord">
-  <span v-if="exportandoWord" class="adm-spinner adm-spinner--sm"></span>
-  {{ exportandoWord ? 'Gerando…' : '↓ Relatório Word' }}
-</button>
+                  
                   <div v-if="!notificacoes.length" class="adm-notif-panel__vazio">Nenhuma notificação</div>
                   <div v-for="n in notificacoes" :key="n.id"
                     :class="['adm-notif-item', { 'adm-notif-item--nova': !n.lida }]"
@@ -254,14 +251,16 @@
             <div class="adm-card">
               <div class="adm-card__topline"></div>
               <div class="adm-card__head">
-                <span class="adm-card__kanji">売</span>
-                <div><p class="adm-card__titulo">Receita Mensal</p><p class="adm-card__sub">{{ anoAtual }}</p></div>
-                <button class="btn btn--ghost btn--sm" style="margin-left:auto" @click="exportarReceitaCSV">↓ CSV</button>
-                <button class="btn btn--ghost btn--sm" style="margin-left:auto" @click="exportarReceitaCSV">↓ CSV</button>
-<button class="btn btn--ghost btn--sm" @click="exportarRelatorioWord" :disabled="exportandoWord">
-  {{ exportandoWord ? 'Gerando…' : '↓ Word' }}
-</button>
-              </div>
+  <span class="adm-card__kanji">売</span>
+  <div><p class="adm-card__titulo">Receita Mensal</p><p class="adm-card__sub">{{ anoAtual }}</p></div>
+  <div style="margin-left:auto; display:flex; gap:6px">
+    <button class="btn btn--ghost btn--sm" @click="exportarReceitaCSV">↓ CSV</button>
+    <button class="btn btn--ghost btn--sm" @click="exportarRelatorioWord" :disabled="exportandoWord">
+      <span v-if="exportandoWord" class="adm-spinner adm-spinner--sm"></span>
+      {{ exportandoWord ? 'Gerando…' : '↓ Word' }}
+    </button>
+  </div>
+</div>
               <div class="adm-card__body">
                 <div class="adm-bar">
                   <div v-for="(v, i) in revenueData" :key="i" class="adm-bar__col" :title="`${MESES[i]}: R$ ${fmtNum(v)}`">
