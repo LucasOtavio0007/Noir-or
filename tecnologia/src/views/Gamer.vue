@@ -303,7 +303,6 @@
   v-model.number="filtroPreco[1]" class="gm__sb-range"
   @input="clampPreco" aria-label="Preço máximo"/>
           </div>
-          <button class="gm__sb-apply" @click="pagina=1">適用 · Aplicar</button>
         </div>
 
         <div class="gm__sb-sep" aria-hidden="true">
@@ -524,9 +523,9 @@
                       <span class="gm__ping-dot"></span>
                     </div>
                     <button
+                      v-if="p.estoque"
                       class="gm__card-add"
                       :class="{ 'is-added': addedIds.includes(p.id) }"
-                      :disabled="!p.estoque"
                       @click.stop="addToCart(p)"
                       :aria-label="`Adicionar ${p.nome} ao carrinho`"
                     >
@@ -539,6 +538,19 @@
                       </svg>
                       <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </button>
+                    <button
+                      v-else
+                      class="gm__card-notify"
+                      :class="{ 'is-active': notifyList.includes(p.id) }"
+                      @click.stop="toggleNotify(p)"
+                      :aria-label="notifyList.includes(p.id) ? 'Cancelar aviso de estoque' : 'Avisar quando voltar ao estoque'"
+                      :title="notifyList.includes(p.id) ? 'Você será avisado' : 'Avisar quando voltar'"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                       </svg>
                     </button>
                   </div>
@@ -600,9 +612,9 @@
                   {{ p.estoque ? 'ONLINE' : 'OFFLINE' }}
                 </div>
                 <button
+                  v-if="p.estoque"
                   class="gm__kf-add"
                   :class="{ 'is-added': addedIds.includes(p.id) }"
-                  :disabled="!p.estoque"
                   @click="addToCart(p)"
                   :aria-label="`Adicionar ${p.nome}`"
                 >
@@ -613,6 +625,18 @@
                   </svg>
                   <svg v-else width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </button>
+                <button
+                  v-else
+                  class="gm__kf-add"
+                  :class="{ 'is-added': notifyList.includes(p.id) }"
+                  @click="toggleNotify(p)"
+                  :aria-label="notifyList.includes(p.id) ? 'Cancelar aviso' : 'Avisar quando voltar'"
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                   </svg>
                 </button>
                 <button
@@ -693,7 +717,10 @@
             <div class="gm__modal-layout">
               <!-- Col imagem -->
               <div class="gm__modal-img-col">
-                <div class="gm__modal-viewer">
+                <div class="gm__modal-viewer"
+                  @touchstart="onSwipeStart"
+                  @touchmove="onSwipeMove"
+                  @touchend="onSwipeEnd">
                   <div class="gm__modal-fallback" aria-hidden="true">
                     <span class="gm__mf-letra">{{ (produtoModal.nome||'?').charAt(0) }}</span>
                     <span class="gm__mf-kanji">{{ produtoModal.kanji || '装' }}</span>
@@ -705,12 +732,16 @@
                       :alt="`${produtoModal.nome} — ângulo ${anguloAtivo+1}`"
                       class="gm__modal-img"
                       :class="{ 'is-zoom': zoomAtivo }"
-                      @click="zoomAtivo=!zoomAtivo"
+                      @click="angulos.length > 1 ? null : (zoomAtivo=!zoomAtivo)"
                       @error="e=>e.target.style.display='none'"/>
                   </transition>
                   <div class="gm__modal-zoom-hint" v-if="imagemAtiva && !zoomAtivo" aria-hidden="true">
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
-                    拡大 · Ampliar
+                    {{ angulos.length > 1 ? '拡大 · Deslize para girar' : '拡大 · Ampliar' }}
+                  </div>
+                  <div v-if="angulos.length > 1" class="gm__modal-swipe-dots" aria-hidden="true">
+                    <span v-for="(ang, idx) in angulos" :key="idx"
+                      :class="['gm__modal-swipe-dot', { 'is-active': anguloAtivo===idx }]"></span>
                   </div>
                   <div class="gm__modal-badges">
                     <span v-if="produtoModal.destaque" class="gm__modal-badge gm__modal-badge--dest">◆ 選 Destaque</span>
@@ -843,20 +874,30 @@
                 <!-- Ações -->
                 <div class="gm__modal-actions">
                   <button
+                    v-if="produtoModal.estoque"
                     class="gm__modal-add"
                     :class="{ 'is-added': addedIds.includes(produtoModal.id) }"
-                    :disabled="!produtoModal.estoque"
                     @click="addToCart(produtoModal)"
                   >
                     <span class="gm__modal-add-shine" aria-hidden="true"></span>
-                    <span v-if="!produtoModal.estoque">売切 · Esgotado</span>
-                    <span v-else-if="addedIds.includes(produtoModal.id)" class="gm__modal-add-label">
+                    <span v-if="addedIds.includes(produtoModal.id)" class="gm__modal-add-label">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                       完了 · Adicionado
                     </span>
                     <span v-else class="gm__modal-add-label">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                       購入 · Adicionar ao Arsenal
+                    </span>
+                  </button>
+                  <button
+                    v-else
+                    class="gm__modal-add gm__modal-add--notify"
+                    :class="{ 'is-added': notifyList.includes(produtoModal.id) }"
+                    @click="toggleNotify(produtoModal)"
+                  >
+                    <span class="gm__modal-add-label">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                      {{ notifyList.includes(produtoModal.id) ? '通知設定済 · Você será avisado' : '売切 · Avisar quando voltar' }}
                     </span>
                   </button>
                   <button class="gm__modal-icon-btn"
@@ -1137,14 +1178,24 @@ const particlesCanvas = ref(null)
 const loading          = ref(true)
 const erro             = ref('')
 
-const busca            = ref('')
-const categoriasAtivas = ref([])
-const filtroPreco      = ref([0, 15000])
-const apenasEstoque    = ref(false)
-const ordenacao        = ref('relevancia')
+/* Filtros: valores default usados no reset/limpar e como fallback de carga */
+const FILTROS_DEFAULT = {
+  busca: '',
+  categoriasAtivas: [],
+  filtroPreco: [0, 15000],
+  apenasEstoque: false,
+  ordenacao: 'relevancia',
+}
+
+const busca            = ref(FILTROS_DEFAULT.busca)
+const categoriasAtivas = ref([...FILTROS_DEFAULT.categoriasAtivas])
+const filtroPreco      = ref([...FILTROS_DEFAULT.filtroPreco])
+const apenasEstoque    = ref(FILTROS_DEFAULT.apenasEstoque)
+const ordenacao        = ref(FILTROS_DEFAULT.ordenacao)
 const viewMode         = ref('grid')
 const wishlist         = ref([])
 const savedIds         = ref([])
+const notifyList       = ref([])
 const addedIds         = ref([])
 const pagina           = ref(1)
 const POR_PAGINA       = 8
@@ -1161,6 +1212,12 @@ const zoomAtivo      = ref(false)
 const qtd            = ref(1)
 const corSelecionada = ref('')
 
+/* Swipe do carrossel de imagens no modal (mobile) */
+const swipeStartX = ref(0)
+const swipeStartY = ref(0)
+const swipeDeltaX  = ref(0)
+const swiping      = ref(false)
+
 const toast = ref({ visivel: false, msg: '', tipo: 'success' })
 let toastTimer = null
 
@@ -1173,6 +1230,7 @@ let pingInterval       = null
 
 let particlesRAF        = null
 let canvasResizeHandler = null
+let filtrosCarregados    = false /* evita que o watch de persistência sobrescreva antes da leitura inicial */
 
 const heroCatsList = [
   { val: 'mouse',   label: 'Mouse',   kanji: '鼠' },
@@ -1407,14 +1465,45 @@ function toggleSaved(p) {
   }
 }
 
-/* FIX: compra liberada sem estar logado — login só é exigido no checkout final,
+/* Notificação de "voltou ao estoque" para itens esgotados */
+function toggleNotify(p) {
+  if (!p) return
+  const i = notifyList.value.indexOf(p.id)
+  if (i === -1) {
+    notifyList.value.push(p.id)
+    mostrarToast('通知 · Avisaremos quando voltar ao estoque')
+  } else {
+    notifyList.value.splice(i, 1)
+    mostrarToast('Aviso cancelado', 'info')
+  }
+}
+
+/* Compra liberada sem estar logado — login só é exigido no checkout final,
    que deve ser tratado no fluxo de finalização de pedido/carrinho, não aqui. */
 function addToCart(p) {
   if (!p?.estoque) return
   if (addedIds.value.includes(p.id)) return
   const quantidade = modalAberto.value ? qtd.value : 1
-  const item = { ...p, corNome: corSelecionada.value || '' }
-  for (let i = 0; i < quantidade; i++) cart.adicionar(item)
+
+  try {
+    const item = { ...p, corNome: corSelecionada.value || '' }
+    for (let i = 0; i < quantidade; i++) cart.adicionar(item)
+  } catch (e) {
+    mostrarToast('Não foi possível adicionar ao arsenal. Tente novamente.', 'error')
+    return
+  }
+
+  /* Reflete a baixa de estoque localmente para não mostrar quantidade desatualizada */
+  const alvo = todos.value.find(t => t.id === p.id)
+  if (alvo && typeof alvo.qtdEstoque === 'number') {
+    alvo.qtdEstoque = Math.max(0, alvo.qtdEstoque - quantidade)
+    if (alvo.qtdEstoque === 0) alvo.estoque = false
+  }
+  if (produtoModal.value && produtoModal.value.id === p.id && typeof produtoModal.value.qtdEstoque === 'number') {
+    produtoModal.value.qtdEstoque = Math.max(0, produtoModal.value.qtdEstoque - quantidade)
+    if (produtoModal.value.qtdEstoque === 0) produtoModal.value.estoque = false
+  }
+
   addedIds.value.push(p.id)
   mostrarToast(`${p.nome} adicionado ao arsenal ◆`)
   setTimeout(() => { window.dispatchEvent(new CustomEvent('abrir-carrinho')) }, 300)
@@ -1452,6 +1541,37 @@ function fecharModal() {
       modalEl.value.style.transform = ''
     }
   }, 300)
+}
+
+/* Swipe horizontal no visor da imagem para trocar de ângulo (mobile) */
+function onSwipeStart(e) {
+  if (angulos.value.length <= 1) return
+  const t = e.touches[0]
+  swipeStartX.value = t.clientX
+  swipeStartY.value = t.clientY
+  swipeDeltaX.value = 0
+  swiping.value = true
+}
+function onSwipeMove(e) {
+  if (!swiping.value || angulos.value.length <= 1) return
+  const t = e.touches[0]
+  const dx = t.clientX - swipeStartX.value
+  const dy = t.clientY - swipeStartY.value
+  if (Math.abs(dx) > Math.abs(dy)) {
+    swipeDeltaX.value = dx
+    e.preventDefault()
+  }
+}
+function onSwipeEnd() {
+  if (!swiping.value) return
+  const THRESHOLD = 40
+  if (swipeDeltaX.value <= -THRESHOLD) {
+    anguloAtivo.value = (anguloAtivo.value + 1) % angulos.value.length
+  } else if (swipeDeltaX.value >= THRESHOLD) {
+    anguloAtivo.value = (anguloAtivo.value - 1 + angulos.value.length) % angulos.value.length
+  }
+  swiping.value = false
+  swipeDeltaX.value = 0
 }
 
 const gsap = window.gsap || null
@@ -1614,10 +1734,14 @@ async function carregarProdutos() {
         preco:       Number(p.preco ?? p.price ?? 0),
       }))
 
-    filtroPreco.value = [0, Math.max(15000, ...todos.value.map(p => p.preco || 0))]
+    if (filtroPreco.value[1] === FILTROS_DEFAULT.filtroPreco[1] && !filtrosCarregados) {
+      filtroPreco.value = [0, Math.max(15000, ...todos.value.map(p => p.preco || 0))]
+    }
   } catch (e) {
     todos.value = [...PRODUTOS_MOCK]
-    filtroPreco.value = [0, Math.max(15000, ...PRODUTOS_MOCK.map(p => p.preco))]
+    if (!filtrosCarregados) {
+      filtroPreco.value = [0, Math.max(15000, ...PRODUTOS_MOCK.map(p => p.preco))]
+    }
     erro.value = ''
   } finally {
     loading.value = false
@@ -1631,10 +1755,33 @@ watch(produtosPaginados, async () => {
 })
 watch([busca, categoriasAtivas, filtroPreco, apenasEstoque, ordenacao], () => {
   pagina.value = 1
-})
+}, { deep: true })
 
 watch(wishlist, val => {
   try { localStorage.setItem('gm_wishlist', JSON.stringify(val)) } catch {}
+}, { deep: true })
+
+watch(savedIds, val => {
+  try { localStorage.setItem('gm_saved', JSON.stringify(val)) } catch {}
+}, { deep: true })
+
+watch(notifyList, val => {
+  try { localStorage.setItem('gm_notify', JSON.stringify(val)) } catch {}
+}, { deep: true })
+
+/* Persistência dos filtros — só grava depois que a leitura inicial já rodou,
+   pra não sobrescrever o que veio do localStorage com os defaults do ref() */
+watch([busca, categoriasAtivas, filtroPreco, apenasEstoque, ordenacao], val => {
+  if (!filtrosCarregados) return
+  try {
+    localStorage.setItem('gm_filtros', JSON.stringify({
+      busca: val[0],
+      categoriasAtivas: val[1],
+      filtroPreco: val[2],
+      apenasEstoque: val[3],
+      ordenacao: val[4],
+    }))
+  } catch {}
 }, { deep: true })
 
 const onScroll = () => { scrolled.value = window.scrollY > 60 }
@@ -1661,6 +1808,26 @@ onMounted(async () => {
     const r = localStorage.getItem('gm_wishlist')
     if (r) wishlist.value = JSON.parse(r)
   } catch {}
+  try {
+    const r = localStorage.getItem('gm_saved')
+    if (r) savedIds.value = JSON.parse(r)
+  } catch {}
+  try {
+    const r = localStorage.getItem('gm_notify')
+    if (r) notifyList.value = JSON.parse(r)
+  } catch {}
+  try {
+    const r = localStorage.getItem('gm_filtros')
+    if (r) {
+      const f = JSON.parse(r)
+      if (typeof f.busca === 'string') busca.value = f.busca
+      if (Array.isArray(f.categoriasAtivas)) categoriasAtivas.value = f.categoriasAtivas
+      if (Array.isArray(f.filtroPreco) && f.filtroPreco.length === 2) filtroPreco.value = f.filtroPreco
+      if (typeof f.apenasEstoque === 'boolean') apenasEstoque.value = f.apenasEstoque
+      if (typeof f.ordenacao === 'string') ordenacao.value = f.ordenacao
+    }
+  } catch {}
+  filtrosCarregados = true
 
   await carregarProdutos()
   window.addEventListener('scroll', onScroll, { passive: true })
@@ -1966,7 +2133,7 @@ onBeforeUnmount(() => {
 .gm__strip::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: .5px;
   background: linear-gradient(90deg, transparent, var(--gold2) 20%, var(--crimson-b) 50%, var(--gold2) 80%, transparent);
-  opacity: .3;
+  opacity: .3; pointer-events: none;
 }
 .gm__strip-item {
   display: flex; align-items: center; gap: 11px;
@@ -2393,9 +2560,9 @@ onBeforeUnmount(() => {
 .gm__ping-indicator { display: flex; align-items: center; }
 .gm__ping-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; animation: dotBlink 1.3s ease-in-out infinite; }
 
-/* Botão "Adicionar" do card do grid — deixei mais visível também (preenchido) */
+/* Botão "Adicionar" do card do grid — mais visível e com alvo de toque maior */
 .gm__card-add {
-  position: relative; overflow: hidden; width: 38px; height: 38px; flex-shrink: 0;
+  position: relative; overflow: hidden; width: 44px; height: 44px; flex-shrink: 0;
   background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-b) 60%, var(--ember2) 100%);
   border: none; color: var(--silk);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -2407,6 +2574,16 @@ onBeforeUnmount(() => {
 .gm__card-add.is-added { background: linear-gradient(135deg, #1b5e3a, #2ecc71); box-shadow: 0 3px 12px rgba(46,204,113,.4); }
 .gm__card-add:disabled { opacity: .25; cursor: not-allowed; box-shadow: none; }
 .gm__card-add svg { position: relative; z-index: 1; }
+
+.gm__card-notify {
+  width: 44px; height: 44px; flex-shrink: 0; background: rgba(200,160,64,.08);
+  border: .5px solid var(--gold-dim); color: var(--gold);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .25s;
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+}
+.gm__card-notify:hover { background: rgba(200,160,64,.16); }
+.gm__card-notify.is-active { background: rgba(200,160,64,.22); border-color: var(--gold); box-shadow: 0 0 0 1px rgba(200,160,64,.3) inset; }
 
 .gm__card--skel { pointer-events: none; animation: none !important; opacity: 1 !important; transform: none !important; border-right: .5px solid var(--hair-red2); border-bottom: .5px solid var(--hair-red2); }
 .gm__skel-img { aspect-ratio: 4/3; background: linear-gradient(90deg, rgba(180,30,30,.04) 25%, rgba(180,30,30,.09) 50%, rgba(180,30,30,.04) 75%); background-size: 200% 100%; animation: shimmerSkel 1.8s infinite; }
@@ -2474,7 +2651,7 @@ onBeforeUnmount(() => {
 .gm__kf-status--off .gm__kf-status-dot { background: rgba(239,68,68,.65); }
 .gm__kf-status--off { color: rgba(239,68,68,.5); }
 .gm__kf-add, .gm__kf-wish {
-  width: 32px; height: 32px; background: transparent; border: .5px solid var(--hair-red2);
+  width: 36px; height: 36px; background: transparent; border: .5px solid var(--hair-red2);
   color: var(--crimson-b); cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all .25s; position: relative; overflow: hidden;
 }
@@ -2557,7 +2734,7 @@ onBeforeUnmount(() => {
 .gm__modal-layout { display: grid; grid-template-columns: 50% 50%; position: relative; z-index: 1; min-height: 520px; }
 
 .gm__modal-img-col { display: flex; flex-direction: column; background: rgba(0,0,0,.18); border-right: .5px solid rgba(180,30,30,.08); }
-.gm__modal-viewer  { position: relative; flex: 1; min-height: 320px; overflow: hidden; background: var(--void); }
+.gm__modal-viewer  { position: relative; flex: 1; min-height: 320px; overflow: hidden; background: var(--void); touch-action: pan-y; }
 .gm__modal-fallback {
   position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   background: linear-gradient(135deg, var(--void) 0%, rgba(139,14,14,.03) 60%, rgba(200,160,64,.015) 100%); pointer-events: none;
@@ -2569,6 +2746,9 @@ onBeforeUnmount(() => {
 .gm__modal-img { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: contain; padding: 14px; transition: transform .8s var(--ease); cursor: zoom-in; }
 .gm__modal-img.is-zoom { transform: scale(1.85); cursor: zoom-out; z-index: 5; }
 .gm__modal-zoom-hint { position: absolute; bottom: 10px; right: 10px; z-index: 6; font-family: var(--f-mono); font-size: 7px; letter-spacing: 2px; color: var(--silk4); background: rgba(0,0,0,.65); padding: 3px 8px; display: flex; align-items: center; gap: 4px; opacity: .65; pointer-events: none; }
+.gm__modal-swipe-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 6; display: flex; gap: 5px; }
+.gm__modal-swipe-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(235,228,218,.22); transition: background .25s, transform .25s; }
+.gm__modal-swipe-dot.is-active { background: var(--crimson-b); transform: scale(1.3); }
 .gm__modal-badges { position: absolute; top: 12px; left: 12px; z-index: 6; display: flex; flex-direction: column; gap: 4px; }
 .gm__modal-badge { font-family: var(--f-title); font-size: 6.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; }
 .gm__modal-badge--dest { background: var(--crimson); color: var(--silk); border-left: 2px solid var(--gold); }
@@ -2666,8 +2846,7 @@ onBeforeUnmount(() => {
 
 /* ══════════════════════════════════════════════════════
    BOTÃO "ADICIONAR AO ARSENAL" — redesenhado
-   Antes: outline fino que só preenchia no hover (quase invisível).
-   Agora: preenchido por padrão, com brilho/glow e mais peso visual,
+   Preenchido por padrão, com brilho/glow e mais peso visual,
    além de virar full-width e sticky-friendly no mobile.
 ══════════════════════════════════════════════════════ */
 .gm__modal-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -2701,6 +2880,16 @@ onBeforeUnmount(() => {
 .gm__modal-add.is-added {
   background: linear-gradient(135deg, #1b5e3a 0%, #2ecc71 100%);
   box-shadow: 0 8px 24px rgba(46,204,113,.4), 0 0 0 1px rgba(46,204,113,.3) inset;
+}
+.gm__modal-add--notify {
+  background: linear-gradient(135deg, var(--ash2) 0%, var(--ash) 100%);
+  box-shadow: 0 8px 20px rgba(0,0,0,.35), 0 0 0 1px rgba(200,160,64,.35) inset;
+  color: var(--gold);
+}
+.gm__modal-add--notify:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.45), 0 0 0 1px rgba(200,160,64,.55) inset; }
+.gm__modal-add--notify.is-added {
+  background: linear-gradient(135deg, rgba(200,160,64,.18), rgba(200,160,64,.28));
+  color: var(--gold2);
 }
 .gm__modal-icon-btn {
   width: 48px; flex-shrink: 0; background: rgba(180,30,30,.06); border: .5px solid var(--hair-red2);
@@ -2779,6 +2968,9 @@ onBeforeUnmount(() => {
   .gm__strip-item:nth-child(3) { border-top: .5px solid var(--hair-red2); }
   .gm__toolbar-inner { padding: 9px 14px; flex-direction: column; align-items: stretch; }
   .gm__search-wrap { max-width: 100%; }
+  /* FIX: font-size 16px evita zoom automático do Safari/iOS ao focar inputs */
+  .gm__search-wrap input,
+  .gm__toolbar-select { font-size: 16px; }
   .gm__toolbar-right { width: 100%; justify-content: space-between; margin-left: 0; }
   .gm__catalogo { padding: 18px; }
   .gm__modal-rel-grid { grid-template-columns: 1fr 1fr; }
@@ -2789,6 +2981,10 @@ onBeforeUnmount(() => {
   .gm__modal-actions { flex-direction: column; }
   .gm__modal-icon-btn { width: 100%; height: 46px; }
   .gm__modal-add { font-size: 8.5px; padding: 15px 16px; }
+  /* FIX: alvo de toque maior para o slider de preço no mobile */
+  .gm__sb-ranges { height: 36px; }
+  .gm__sb-range::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: 2px; }
+  .gm__sb-range::-moz-range-thumb { width: 22px; height: 22px; }
 }
 @media (max-width:480px) {
   .gm__hero { padding: calc(var(--navbar-h) + 24px) 16px 0; }
@@ -2800,10 +2996,19 @@ onBeforeUnmount(() => {
   .gm__hud-bar { grid-template-columns: 1fr 1fr; }
   .gm__modal-bg { padding: 0; align-items: flex-end; }
   .gm__modal { max-height: 96vh; clip-path: none; border-radius: 10px 10px 0 0; }
-  .gm__modal-info { padding: 20px 16px 90px; }
+  .gm__modal-info { padding: 20px 16px 20px; }
   .gm__modal-preco { font-size: clamp(1.5rem,7vw,2rem); }
   .gm__spec-k { width: 74px; }
   .gm__qty-btn { width: 38px; height: 38px; }
+  /* FIX: botão de compra fixo ao rolar o modal no mobile */
+  .gm__modal-actions {
+    position: sticky; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, var(--deep) 65%, transparent);
+    padding: 14px 0 6px; margin: 16px -16px -20px; padding-inline: 16px;
+    z-index: 20;
+  }
+  /* FIX: toast não estoura a largura da tela em telas muito estreitas */
+  .gm-toast { left: 12px; right: 12px; min-width: 0; max-width: none; bottom: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .gm__t-main, .gm__modal-preco em, .gm__lat-ticker-track, .gm__kamon,
