@@ -104,7 +104,10 @@
                       <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                     </div>
                     <div class="search-result__info">
-                      <span class="search-result__nome">{{ prod.nome }}</span>
+                      <span class="search-result__nome">
+                        {{ prod.nome }}
+                        <span v-if="prod.cor" class="search-result__cor-dot" :style="{ background: prod.corHex || prod.cor }" :title="prod.cor"></span>
+                      </span>
                       <span class="search-result__preco">R$ {{ fmt(prod.preco) }}</span>
                     </div>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
@@ -1004,6 +1007,10 @@
                 <div class="di__info">
                   <span class="di__cat">{{ item.categoria }}</span>
                   <p class="di__nome">{{ item.nome }}</p>
+                  <span v-if="item.cor" class="di__cor">
+                    <span class="di__cor-dot" :style="{ background: item.corHex || item.cor }" aria-hidden="true"></span>
+                    {{ item.cor }}
+                  </span>
                   <div class="di__foot">
                     <div class="di__qty">
                       <button @click="changeQty(item, -1)">−</button>
@@ -1045,6 +1052,10 @@
                 </div>
                 <div class="di__info">
                   <p class="di__nome">{{ item.nome }}</p>
+                  <span v-if="item.cor" class="di__cor">
+                    <span class="di__cor-dot" :style="{ background: item.corHex || item.cor }" aria-hidden="true"></span>
+                    {{ item.cor }}
+                  </span>
                   <div class="di__foot"><span class="di__preco">R$ {{ fmt(item.preco) }}</span></div>
                   <div class="di__actions">
                     <button class="di__action" @click="verDetalhesItem(item)" title="Ver detalhes">
@@ -2409,6 +2420,38 @@ body.light-mode {
 }
 body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3:rgba(200,80,20,0.06);--or-hair:rgba(200,80,20,0.12); }
 
+/* ── ACESSIBILIDADE: ALTO CONTRASTE / FOCO VISÍVEL / REDUÇÃO DE MOVIMENTO ──
+   Sugestão: o painel já tem os toggles "Alto contraste", "Foco visível" e
+   "Reduzir animações", mas o navbar não tinha as regras correspondentes.
+   Garanta que body.alto-contraste / body.foco-visivel sejam as mesmas
+   classes que a store `site.js` aplica via setAcess(). */
+body.alto-contraste {
+  --or-hair: rgba(245,166,35,0.45);
+  --or-hair-2: rgba(237,232,224,0.35);
+  --or-silk-2: rgba(237,232,224,0.85);
+  --or-silk-3: rgba(237,232,224,0.65);
+}
+body.foco-visivel *:focus-visible {
+  outline: 2px solid var(--or-gold) !important;
+  outline-offset: 2px !important;
+}
+body.cursor-grande, body.cursor-grande * { cursor: pointer; }
+
+/* Respeita "Reduzir animações" e a preferência do sistema operacional */
+body.reduzir-animacoes *,
+body.reduzir-animacoes *::before,
+body.reduzir-animacoes *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .age-modal__orb, .auth-orb, .face-scan-line, .nb-cart__badge.is-bounce,
+  .face-dot-live, .or-spinner-sm { animation: none !important; }
+  * { transition-duration: 0.001ms !important; }
+}
+
 /* ── PANEL ORNAMENTOS ── */
 .or-panel-border { position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,var(--or-gold) 20%,rgba(245,166,35,0.8) 50%,var(--or-gold) 80%,transparent);opacity:0.7;z-index:2;pointer-events:none; }
 .or-panel-kamon { position:absolute;top:14px;right:16px;font-family:'Noto Serif JP','Yu Mincho','Hiragino Mincho Pro',serif;font-size:9px;letter-spacing:.15em;color:var(--or-gold);opacity:0.18;pointer-events:none;z-index:1;line-height:1; }
@@ -2582,6 +2625,25 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .af-eye:hover { color:var(--or-gold); }
 .af-campo-erro { font-family:var(--font-sans);font-size:9px;letter-spacing:.1em;color:rgba(239,68,68,.8);margin-top:5px; }
 .af-esqueceu { text-align:right;margin:-6px 0 16px; }
+
+/* CORREÇÃO: botão "Esqueceu a senha?" estava herdando estilo padrão do
+   navegador (preto) porque a classe usada no template (.af-link-esqueceu)
+   não existia no CSS — só havia regra para ".af-esqueceu a". */
+.af-link-esqueceu {
+  background:none;
+  border:none;
+  padding:0;
+  font-family:var(--font-sans);
+  font-size:9px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--or-silk);
+  cursor:pointer;
+  transition:color .25s;
+}
+.af-link-esqueceu:hover,
+.af-link-esqueceu:focus-visible { color:var(--or-gold); }
+
 .af-esqueceu a { font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--or-silk-3);text-decoration:none;transition:color .25s; }
 .af-esqueceu a:hover { color:var(--or-gold); }
 .af-forca { display:flex;align-items:center;gap:12px;margin-top:8px; }
@@ -2729,7 +2791,8 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .search-result.is-focused::before,.search-result:hover::before { opacity:.7; }
 .search-result__img { width:40px;height:40px;background:rgba(245,166,35,0.04);border:0.5px solid var(--or-hair-2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0; }
 .search-result__img img { width:100%;height:100%;object-fit:cover; }
-.search-result__nome { display:block;font-family:var(--font-sans);font-size:12px;color:var(--or-silk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.search-result__nome { display:flex;align-items:center;gap:6px;font-family:var(--font-sans);font-size:12px;color:var(--or-silk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.search-result__cor-dot { width:7px;height:7px;border-radius:50%;border:0.5px solid var(--or-hair-2);flex-shrink:0;display:inline-block; }
 .search-result__preco { display:block;font-family:var(--or-font-num);font-size:10px;color:var(--or-gold);opacity:.8; }
 .search-empty { padding:20px 16px;font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;color:var(--or-silk-3);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px; }
 .search-empty-kanji { font-family:'Noto Serif JP',serif;font-size:24px;color:var(--or-gold);opacity:.2;line-height:1; }
@@ -2761,6 +2824,36 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .drawer__tab-badge { background:var(--or-gold);color:var(--or-void);font-family:var(--or-font-num);font-size:8px;font-weight:900;min-width:15px;height:15px;border-radius:2px;display:flex;align-items:center;justify-content:center;padding:0 3px; }
 .drawer__tab-badge--saved { background:rgba(245,166,35,0.2);color:var(--or-gold); }
 .drawer__items { flex:1;overflow-y:auto;padding:4px 0;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:var(--or-hair) transparent;position:relative;z-index:1; }
+
+/* CORREÇÃO: classe usada no template mas sem regra correspondente */
+.drawer__convidado {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 32px 12px;
+  padding:10px 14px;
+  background:rgba(245,166,35,0.04);
+  border-left:0.5px solid var(--or-gold);
+  font-family:var(--font-sans);
+  font-size:10px;
+  letter-spacing:.04em;
+  color:var(--or-silk-3);
+  line-height:1.5;
+}
+.drawer__convidado svg { color:var(--or-gold); opacity:.7; flex-shrink:0; }
+.drawer__convidado button {
+  background:none;
+  border:none;
+  padding:0;
+  color:var(--or-gold);
+  cursor:pointer;
+  font-size:10px;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.drawer__convidado button:hover,
+.drawer__convidado button:focus-visible { opacity:.8; }
+
 .drawer__vazio { flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:52px 40px;text-align:center; }
 .drawer__vazio__ico { width:64px;height:64px;border:0.5px solid var(--or-hair);display:flex;align-items:center;justify-content:center;position:relative; }
 .drawer__vazio__ico::before { content:'';position:absolute;top:-1px;left:-1px;width:10px;height:10px;border-top:.5px solid var(--or-gold);border-left:.5px solid var(--or-gold); }
@@ -2783,6 +2876,27 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
 .di__info { display:flex;flex-direction:column;gap:4px;min-width:0; }
 .di__cat { font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:var(--or-gold);opacity:.65;font-family:var(--font-sans); }
 .di__nome { font-size:12px;font-weight:300;letter-spacing:.06em;color:var(--or-silk);font-family:var(--font-sans);line-height:1.4; }
+
+/* NOVO: cor do item selecionado, exibida no carrinho */
+.di__cor {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--font-sans);
+  font-size:9px;
+  letter-spacing:.1em;
+  color:var(--or-silk-3);
+  margin-top:2px;
+}
+.di__cor-dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  border:0.5px solid var(--or-hair-2);
+  flex-shrink:0;
+  box-shadow:0 0 0 1px rgba(0,0,0,.15) inset;
+}
+
 .di__foot { display:flex;align-items:center;justify-content:space-between;margin-top:10px; }
 .di__qty { display:flex;align-items:center;border:0.5px solid var(--or-hair-2); }
 .di__qty button { background:none;border:none;color:var(--or-silk-2);width:22px;height:22px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .25s;line-height:1; }
@@ -2848,6 +2962,7 @@ body.gamer-mode { --or-gold:#C85014;--or-gold-2:rgba(200,80,20,0.14);--or-gold-3
   .di { padding:14px 20px;grid-template-columns:22px 52px 1fr auto;gap:10px; }
   .drawer__header { padding:20px 20px 14px; }
   .drawer__footer { padding:14px 20px 22px; }
+  .drawer__convidado { margin:0 20px 12px; }
   .pref-panel { right:16px;left:16px;width:auto;top:calc(var(--navbar-h,48px) + 12px); }
   .nb-search-panel { right:-40px;width:calc(100vw - 32px);max-width:340px; }
   .toast-container { bottom:16px;right:16px;left:16px; }
